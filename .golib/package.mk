@@ -1,6 +1,4 @@
 GO ?= go
-GLIPPY_VERSION ?= v0.1.1-0.20260821090210-724d8a26eec0
-GLIPPY ?= $(GO) run github.com/faustbrian/glippy/cmd/glippy@$(GLIPPY_VERSION)
 GOLANGCI_LINT ?= $(GO) run github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.12.2
 STATICCHECK ?= $(GO) run honnef.co/go/tools/cmd/staticcheck@v0.7.0
 GOVULNCHECK ?= $(GO) run golang.org/x/vuln/cmd/govulncheck@v1.6.0
@@ -23,10 +21,10 @@ api:
 		test ! -s "$$output" || { cat "$$output"; exit 1; }
 
 format:
-	GOWORK=off $(GLIPPY) fmt --write .
+	gofmt -w .
 
 format-check:
-	GOWORK=off $(GLIPPY) fmt --check .
+	test -z "$$(gofmt -l .)"
 
 tidy-check:
 	GOWORK=off $(GO) mod tidy -diff
