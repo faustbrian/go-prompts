@@ -8,6 +8,8 @@ All notable changes follow Keep a Changelog and Semantic Versioning.
 
 - Use the canonical Go formatter so formatting and lint gates enforce one
   compatible source layout.
+- Align the comparison module with the current standalone root archive
+  checksum used by repository-local and CI verification.
 
 - Exclude intentional nested modules from root local-proxy archives so local,
   bootstrap, CI, and public module checksums describe the same source
