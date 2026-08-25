@@ -62,7 +62,7 @@ license:
 	GOWORK=off $(GO_LICENSES) check ./...
 
 mutation:
-	$$(git rev-parse --show-toplevel)/scripts/check-mutation.sh .
+	$$(git rev-parse --show-toplevel)/.golib/scripts/check-mutation.sh .
 
 reproducible:
 	./scripts/check-reproducible-source.sh
