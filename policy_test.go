@@ -7,7 +7,7 @@ import (
 	"io"
 	"testing"
 
-	prompts "github.com/faustbrian/golib/pkg/prompts"
+	prompts "github.com/faustbrian/go-prompts"
 )
 
 type rejectingReader struct {

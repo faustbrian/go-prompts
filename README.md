@@ -1,10 +1,20 @@
 # prompts
 
+[![CI](https://github.com/faustbrian/go-prompts/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/faustbrian/go-prompts/actions/workflows/ci.yml)
+[![CodeQL](https://img.shields.io/badge/CodeQL-required-blue)](https://github.com/faustbrian/go-prompts/actions/workflows/ci.yml)
+[![Coverage](https://img.shields.io/badge/coverage-100%25_required-blue)](CONTRIBUTING.md#verification)
+[![Mutation](https://img.shields.io/badge/mutation-100%25_required-blue)](CONTRIBUTING.md#verification)
+[![Documentation](https://img.shields.io/badge/docs-checked_in_CI-blue)](docs/)
+[![Go Reference](https://pkg.go.dev/badge/github.com/faustbrian/go-prompts.svg)](https://pkg.go.dev/github.com/faustbrian/go-prompts)
+[![Release](https://img.shields.io/github/v/release/faustbrian/go-prompts?sort=semver)](https://github.com/faustbrian/go-prompts/releases)
+[![Go](https://img.shields.io/badge/go-1.26.6-00ADD8?logo=go)](https://go.dev/)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 `prompts` is an explicit, typed foundation for interactive terminal
 prompts and deterministic non-interactive fallbacks. Callers own the context,
 streams, terminal capabilities, interaction authority, and lifecycle.
 
-The package is a pre-v1 release candidate. Its automated prompt, rendering,
+The package has a stable v1 API. Its automated prompt, rendering,
 terminal, headless, security, test, and release contracts are implemented and
 remain subject to compatibility review. A stable release is still blocked on
 the recorded manual terminal and assistive-technology matrix; see

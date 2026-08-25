@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/creack/pty"
-	prompts "github.com/faustbrian/golib/pkg/prompts"
+	prompts "github.com/faustbrian/go-prompts"
 	"golang.org/x/term"
 )
 

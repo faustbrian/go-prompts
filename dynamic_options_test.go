@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	prompts "github.com/faustbrian/golib/pkg/prompts"
+	prompts "github.com/faustbrian/go-prompts"
 )
 
 func TestDynamicOptionsDebouncesBoundsAndCopies(t *testing.T) {

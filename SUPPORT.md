@@ -1,9 +1,13 @@
 # Support
 
-Use GitHub issues for reproducible bugs and focused feature proposals. Include
-the Go version, operating system, terminal and version, capability values,
-interaction policy, prompt kind, and a minimal virtual-terminal reproduction.
-Remove credentials and secret values from every capture.
+Use GitHub issues for reproducible defects, documentation gaps, and bounded
+feature proposals. Include the module path and version, Go version, platform,
+minimal reproduction, expected behavior, actual behavior, and relevant
+non-secret logs.
 
-Use private vulnerability reporting for security issues. This project does not
-provide private implementation consulting or production incident response.
+Use GitHub Discussions for adoption questions and design exploration. Use the
+private process in [`SECURITY.md`](SECURITY.md) for vulnerabilities.
+
+Support covers released module versions according to
+[`COMPATIBILITY.md`](COMPATIBILITY.md). Unreleased main-branch behavior may
+change while remediation gates are incomplete.

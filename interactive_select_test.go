@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	prompts "github.com/faustbrian/golib/pkg/prompts"
+	prompts "github.com/faustbrian/go-prompts"
 )
 
 func TestInteractiveSelectSkipsDisabledOptions(t *testing.T) {

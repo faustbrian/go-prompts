@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "repository": "github.com/faustbrian/go-prompts",
+  "packages": [
+    {
+      "module_directory": ".",
+      "directory": ".",
+      "name": "prompts",
+      "import_path": "github.com/faustbrian/go-prompts",
+      "kind": "public",
+      "production": true,
+      "executable": true,
+      "coverage_required": true,
+      "build_required": true,
+      "build_tags": []
+    },
+    {
+      "module_directory": "benchmarks/comparison",
+      "directory": "cmd/bubbles",
+      "name": "main",
+      "import_path": "github.com/faustbrian/go-prompts/benchmarks/comparison/cmd/bubbles",
+      "kind": "harness",
+      "production": false,
+      "executable": true,
+      "coverage_required": false,
+      "build_required": true,
+      "build_tags": []
+    },
+    {
+      "module_directory": "benchmarks/comparison",
+      "directory": "cmd/go-prompts",
+      "name": "main",
+      "import_path": "github.com/faustbrian/go-prompts/benchmarks/comparison/cmd/go-prompts",
+      "kind": "harness",
+      "production": false,
+      "executable": true,
+      "coverage_required": false,
+      "build_required": true,
+      "build_tags": []
+    },
+    {
+      "module_directory": "benchmarks/comparison",
+      "directory": "cmd/huh",
+      "name": "main",
+      "import_path": "github.com/faustbrian/go-prompts/benchmarks/comparison/cmd/huh",
+      "kind": "harness",
+      "production": false,
+      "executable": true,
+      "coverage_required": false,
+      "build_required": true,
+      "build_tags": []
+    },
+    {
+      "module_directory": "benchmarks/comparison",
+      "directory": "cmd/promptui",
+      "name": "main",
+      "import_path": "github.com/faustbrian/go-prompts/benchmarks/comparison/cmd/promptui",
+      "kind": "harness",
+      "production": false,
+      "executable": true,
+      "coverage_required": false,
+      "build_required": true,
+      "build_tags": []
+    },
+    {
+      "module_directory": "benchmarks/comparison",
+      "directory": "cmd/survey",
+      "name": "main",
+      "import_path": "github.com/faustbrian/go-prompts/benchmarks/comparison/cmd/survey",
+      "kind": "harness",
+      "production": false,
+      "executable": true,
+      "coverage_required": false,
+      "build_required": true,
+      "build_tags": []
+    },
+    {
+      "module_directory": ".",
+      "directory": "scripts",
+      "name": "main",
+      "import_path": "github.com/faustbrian/go-prompts/scripts",
+      "kind": "tooling",
+      "production": false,
+      "executable": false,
+      "coverage_required": false,
+      "build_required": false,
+      "build_tags": []
+    },
+    {
+      "module_directory": ".",
+      "directory": "terminal",
+      "name": "terminal",
+      "import_path": "github.com/faustbrian/go-prompts/terminal",
+      "kind": "public",
+      "production": true,
+      "executable": true,
+      "coverage_required": true,
+      "build_required": true,
+      "build_tags": []
+    }
+  ]
+}

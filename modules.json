@@ -1,0 +1,280 @@
+{
+  "schema_version": 1,
+  "repository": "github.com/faustbrian/go-prompts",
+  "go_version": "1.26.6",
+  "modules": [
+    {
+      "directory": ".",
+      "module_path": "github.com/faustbrian/go-prompts",
+      "go_version": "1.26.6",
+      "packages": [
+        {
+          "module_directory": ".",
+          "directory": ".",
+          "name": "prompts",
+          "import_path": "github.com/faustbrian/go-prompts",
+          "kind": "public",
+          "production": true,
+          "executable": true,
+          "coverage_required": true,
+          "build_required": true,
+          "build_tags": []
+        },
+        {
+          "module_directory": ".",
+          "directory": "scripts",
+          "name": "main",
+          "import_path": "github.com/faustbrian/go-prompts/scripts",
+          "kind": "tooling",
+          "production": false,
+          "executable": false,
+          "coverage_required": false,
+          "build_required": false,
+          "build_tags": []
+        },
+        {
+          "module_directory": ".",
+          "directory": "terminal",
+          "name": "terminal",
+          "import_path": "github.com/faustbrian/go-prompts/terminal",
+          "kind": "public",
+          "production": true,
+          "executable": true,
+          "coverage_required": true,
+          "build_required": true,
+          "build_tags": []
+        }
+      ],
+      "purpose": "`prompts` is an explicit, typed foundation for interactive terminal prompts and deterministic non-interactive fallbacks. Callers own the context, streams, terminal capabilities, interaction authority, and lifecycle.",
+      "lifecycle": "stable",
+      "kind": "public library",
+      "releasable": true,
+      "family": "tooling",
+      "family_label": "Tooling",
+      "family_description": "Static policy, command construction, and interactive terminal behavior.",
+      "family_order": 9,
+      "version": "v1.0.0",
+      "tag_prefix": "v",
+      "owned_dependencies": [],
+      "reverse_owned_dependencies": [
+        "github.com/faustbrian/go-prompts/benchmarks/comparison"
+      ],
+      "external_runtime_dependencies": [
+        "github.com/creack/pty",
+        "github.com/rivo/uniseg",
+        "golang.org/x/sys",
+        "golang.org/x/term",
+        "golang.org/x/text"
+      ],
+      "required_services": [],
+      "build_tags": [],
+      "test_tags": [],
+      "interoperability_tools": [],
+      "specifications": [],
+      "conformance_corpora": [],
+      "provenance": [],
+      "goal_files": [
+        ".ai/GOAL.md",
+        ".ai/GOAL_HARDEN.md"
+      ],
+      "goal_status": "implementation-evidence-inventoried",
+      "goal_evidence": [
+        {
+          "file": ".ai/GOAL.md",
+          "requirements_sha256": "137ead011c8462236fad247c01ec4985bf14d6ae4cc63cf44f8399e0c3089e47",
+          "implementation_evidence": [
+            "CHANGELOG.md",
+            "README.md",
+            "docs/api.md",
+            "docs/architecture.md",
+            "docs/compatibility.md",
+            "docs/security.md"
+          ],
+          "verification_gates": [
+            "format-check",
+            "tidy-check",
+            "safety",
+            "vet",
+            "test",
+            "race",
+            "coverage",
+            "lint",
+            "staticcheck",
+            "vulnerability",
+            "secrets",
+            "licenses",
+            "sbom",
+            "fuzz",
+            "mutation",
+            "nilaway",
+            "docs",
+            "api",
+            "conformance",
+            "interoperability",
+            "benchmark"
+          ],
+          "implementation_status": "implemented-requires-fresh-verification"
+        },
+        {
+          "file": ".ai/GOAL_HARDEN.md",
+          "requirements_sha256": "0d39d447cb7dcff41125d006647954894c1c60df36de4b8bc4a26dc29128c098",
+          "implementation_evidence": [
+            "CHANGELOG.md",
+            "README.md",
+            "docs/api.md",
+            "docs/architecture.md",
+            "docs/compatibility.md",
+            "docs/security.md"
+          ],
+          "verification_gates": [
+            "format-check",
+            "tidy-check",
+            "safety",
+            "vet",
+            "test",
+            "race",
+            "coverage",
+            "lint",
+            "staticcheck",
+            "vulnerability",
+            "secrets",
+            "licenses",
+            "sbom",
+            "fuzz",
+            "mutation",
+            "nilaway",
+            "docs",
+            "api",
+            "conformance",
+            "interoperability",
+            "benchmark"
+          ],
+          "implementation_status": "implemented-requires-fresh-verification"
+        }
+      ],
+      "gates": {
+        "api_compatibility": true,
+        "benchmarks": true,
+        "conformance": false,
+        "coverage": true,
+        "documentation": true,
+        "fuzz": true,
+        "lint": true,
+        "mutation": true,
+        "race": true,
+        "security": true,
+        "tests": true
+      }
+    },
+    {
+      "directory": "benchmarks/comparison",
+      "module_path": "github.com/faustbrian/go-prompts/benchmarks/comparison",
+      "go_version": "1.26.6",
+      "packages": [
+        {
+          "module_directory": "benchmarks/comparison",
+          "directory": "cmd/bubbles",
+          "name": "main",
+          "import_path": "github.com/faustbrian/go-prompts/benchmarks/comparison/cmd/bubbles",
+          "kind": "harness",
+          "production": false,
+          "executable": true,
+          "coverage_required": false,
+          "build_required": true,
+          "build_tags": []
+        },
+        {
+          "module_directory": "benchmarks/comparison",
+          "directory": "cmd/go-prompts",
+          "name": "main",
+          "import_path": "github.com/faustbrian/go-prompts/benchmarks/comparison/cmd/go-prompts",
+          "kind": "harness",
+          "production": false,
+          "executable": true,
+          "coverage_required": false,
+          "build_required": true,
+          "build_tags": []
+        },
+        {
+          "module_directory": "benchmarks/comparison",
+          "directory": "cmd/huh",
+          "name": "main",
+          "import_path": "github.com/faustbrian/go-prompts/benchmarks/comparison/cmd/huh",
+          "kind": "harness",
+          "production": false,
+          "executable": true,
+          "coverage_required": false,
+          "build_required": true,
+          "build_tags": []
+        },
+        {
+          "module_directory": "benchmarks/comparison",
+          "directory": "cmd/promptui",
+          "name": "main",
+          "import_path": "github.com/faustbrian/go-prompts/benchmarks/comparison/cmd/promptui",
+          "kind": "harness",
+          "production": false,
+          "executable": true,
+          "coverage_required": false,
+          "build_required": true,
+          "build_tags": []
+        },
+        {
+          "module_directory": "benchmarks/comparison",
+          "directory": "cmd/survey",
+          "name": "main",
+          "import_path": "github.com/faustbrian/go-prompts/benchmarks/comparison/cmd/survey",
+          "kind": "harness",
+          "production": false,
+          "executable": true,
+          "coverage_required": false,
+          "build_required": true,
+          "build_tags": []
+        }
+      ],
+      "purpose": "See the module README and goal files.",
+      "lifecycle": "internal",
+      "kind": "benchmark harness",
+      "releasable": false,
+      "version": "unreleased",
+      "tag_prefix": "benchmarks/comparison/v",
+      "owned_dependencies": [
+        "github.com/faustbrian/go-prompts"
+      ],
+      "reverse_owned_dependencies": [],
+      "external_runtime_dependencies": [
+        "charm.land/bubbles/v2",
+        "charm.land/bubbletea/v2",
+        "charm.land/huh/v2",
+        "github.com/AlecAivazis/survey/v2",
+        "github.com/Netflix/go-expect",
+        "github.com/creack/pty",
+        "github.com/hinshun/vt10x",
+        "github.com/manifoldco/promptui"
+      ],
+      "required_services": [],
+      "build_tags": [],
+      "test_tags": [],
+      "interoperability_tools": [],
+      "specifications": [],
+      "conformance_corpora": [],
+      "provenance": [],
+      "goal_files": [],
+      "goal_status": "not-applicable",
+      "goal_evidence": [],
+      "gates": {
+        "api_compatibility": false,
+        "benchmarks": false,
+        "conformance": false,
+        "coverage": false,
+        "documentation": true,
+        "fuzz": false,
+        "lint": true,
+        "mutation": false,
+        "race": false,
+        "security": true,
+        "tests": true
+      }
+    }
+  ]
+}

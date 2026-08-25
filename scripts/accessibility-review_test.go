@@ -7,7 +7,7 @@ import (
 	"errors"
 	"testing"
 
-	prompts "github.com/faustbrian/golib/pkg/prompts"
+	prompts "github.com/faustbrian/go-prompts"
 )
 
 func TestReviewNamePromptAllowsRepeatedCorrection(t *testing.T) {

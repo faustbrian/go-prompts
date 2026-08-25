@@ -13,8 +13,8 @@ import (
 	"time"
 
 	"github.com/creack/pty"
-	prompts "github.com/faustbrian/golib/pkg/prompts"
-	"github.com/faustbrian/golib/pkg/prompts/terminal"
+	prompts "github.com/faustbrian/go-prompts"
+	"github.com/faustbrian/go-prompts/terminal"
 	"golang.org/x/sys/unix"
 	"golang.org/x/term"
 )

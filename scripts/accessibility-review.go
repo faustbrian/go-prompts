@@ -9,8 +9,8 @@ import (
 	"os"
 	"strings"
 
-	prompts "github.com/faustbrian/golib/pkg/prompts"
-	"github.com/faustbrian/golib/pkg/prompts/terminal"
+	prompts "github.com/faustbrian/go-prompts"
+	"github.com/faustbrian/go-prompts/terminal"
 )
 
 func main() {

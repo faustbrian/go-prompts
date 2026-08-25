@@ -4,12 +4,15 @@ All notable changes follow Keep a Changelog and Semantic Versioning.
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-08-25
+
 ### Documentation
 
 - Link the package README to the repository-wide Golib documentation portal.
 
 ### Changed
 
+- Publish the module from its standalone `github.com/faustbrian/go-prompts` identity while preserving its documented API and behavior.
 - Adopt Glippy as the sole formatter authority for module source, checks, and
   contributor workflows, replacing gofmt and goimports formatting passes.
 - Accept repeated owned hyperlink wrappers in the hostile-input fuzz oracle so
@@ -180,3 +183,6 @@ All notable changes follow Keep a Changelog and Semantic Versioning.
 - Removed Windows terminal support, Windows-specific adapter code, Windows CI,
   and the Narrator review requirement. Supported platforms are Linux and
   macOS.
+
+[Unreleased]: https://github.com/faustbrian/go-prompts/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/faustbrian/go-prompts/releases/tag/v1.0.0

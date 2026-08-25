@@ -10,7 +10,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	prompts "github.com/faustbrian/golib/pkg/prompts"
+	prompts "github.com/faustbrian/go-prompts"
 )
 
 func FuzzSanitizeNeutralizesTerminalControls(fuzz *testing.F) {

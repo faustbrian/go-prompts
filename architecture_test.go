@@ -23,7 +23,7 @@ func TestCoreDependencyAndRuntimeBoundaries(t *testing.T) {
 	content := string(module)
 	declaration, _, _ := strings.Cut(content, "\n")
 	if strings.TrimSuffix(declaration, "\r") !=
-		"module github.com/faustbrian/golib/pkg/prompts" {
+		"module github.com/faustbrian/go-prompts" {
 		t.Fatalf("unexpected module declaration: %q", content)
 	}
 	for _, dependency := range

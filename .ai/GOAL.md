@@ -69,7 +69,7 @@ live in a dependency-isolated nested module.
 
 The core module path MUST be:
 
-`github.com/faustbrian/golib/pkg/prompts`
+`github.com/faustbrian/go-prompts`
 
 ## Prompt Model
 

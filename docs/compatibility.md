@@ -20,6 +20,6 @@ Unix PTY tests exercise raw acquisition, echo changes, failure paths, and
 restoration. Builds on any other operating system are outside the compatibility
 contract even when the semantic core happens to compile there.
 
-Pre-v1 public compatibility is documented in the changelog and enforced by an
+Public compatibility is documented in the changelog and enforced by an
 exact exported-API baseline. A released v1 will retain semantic import
 compatibility and compare changes against the last published line.

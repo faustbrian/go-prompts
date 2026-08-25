@@ -10,7 +10,7 @@ import (
 	"sync"
 	"time"
 
-	prompts "github.com/faustbrian/golib/pkg/prompts"
+	prompts "github.com/faustbrian/go-prompts"
 	"golang.org/x/term"
 )
 

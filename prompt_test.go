@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	prompts "github.com/faustbrian/golib/pkg/prompts"
+	prompts "github.com/faustbrian/go-prompts"
 )
 
 func TestTextDefinitionRequiresStableIdentityAndLabel(t *testing.T) {

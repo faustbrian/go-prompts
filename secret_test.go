@@ -10,7 +10,7 @@ import (
 	"sync"
 	"testing"
 
-	prompts "github.com/faustbrian/golib/pkg/prompts"
+	prompts "github.com/faustbrian/go-prompts"
 )
 
 const secretCanary = "secret-canary-7c3e99"

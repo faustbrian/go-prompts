@@ -1,0 +1,186 @@
+{
+  "schema_version": 3,
+  "reason": "Exact mutation checkpoints retained across history rewrites only when the approved old and replacement package input fingerprints, tool version, and report digest match.",
+  "verifier_migration_review": {
+    "gremlins_verifier_sha256": "9a9499ff68a8dfd49a0be7995590297a8ee563a1aa226bfd8b9361dc53058108",
+    "reason": "Each listed checkpoint was executed with the complete current Gremlins semantic patch set introduced by ac300cf3; the four omitted checkpoints require fresh campaigns.",
+    "reviewed_at": "2026-08-20"
+  },
+  "verifier_migrations": [
+    {
+      "execution_revision": "bd98f1aba21ca7a27be8ed61a3e42d901018d09e",
+      "gate_input_digest": "52285d8cc7bda3d48efe2a1ce8eefba87dc1f68cd3d35383001e9d7ef81eeca6",
+      "gremlins_verifier_sha256": "9a9499ff68a8dfd49a0be7995590297a8ee563a1aa226bfd8b9361dc53058108",
+      "gremlins_version": "v0.6.0",
+      "module": ".",
+      "package": ".",
+      "report_sha256": "f0590d47bac167c682b573f7d5904f42fa1c1654b6595cf179e5b2edf1a1fb2e"
+    },
+    {
+      "execution_revision": "bd98f1aba21ca7a27be8ed61a3e42d901018d09e",
+      "gate_input_digest": "fc6d1c2f166615e0bc675c3c1f97decf3b25f462dd6e03ef3d9b82e317cdb696",
+      "gremlins_verifier_sha256": "9a9499ff68a8dfd49a0be7995590297a8ee563a1aa226bfd8b9361dc53058108",
+      "gremlins_version": "v0.6.0",
+      "module": ".",
+      "package": "terminal",
+      "report_sha256": "36417d355a5821a58726a6f9c3e90c6615bfa6e751ee26736ca2e0eadbc23585"
+    },
+    {
+      "execution_revision": "3877ecf70da4c756f83416d44b10cad936d84920",
+      "gate_input_digest": "0bf2138746a3365021474e4495fb6e10e8808fc6ebb93f78c9317a4df62ca5d5",
+      "gremlins_verifier_sha256": "9a9499ff68a8dfd49a0be7995590297a8ee563a1aa226bfd8b9361dc53058108",
+      "gremlins_version": "v0.6.0",
+      "module": ".",
+      "package": "terminal",
+      "report_sha256": "95275ca82f796e0558a27589a104785581008803fe0da607be4a4fc2229965c0"
+    },
+    {
+      "execution_revision": "59252704b2bcbcfba4c390519ffb94c5870c01f8",
+      "gate_input_digest": "ad6fc6f1dbc2ff731499d899b6e48040076710beac8c89dd72031cacefeb3863",
+      "gremlins_verifier_sha256": "9a9499ff68a8dfd49a0be7995590297a8ee563a1aa226bfd8b9361dc53058108",
+      "gremlins_version": "v0.6.0",
+      "module": ".",
+      "package": ".",
+      "report_sha256": "39cd1427724397b659f415e95ab8b98f7a439c0c6bd8903f9e976ec7c755e8a6"
+    },
+    {
+      "execution_revision": "0e0240b1fdcefaa73619b8d0a5d0dfc778d9e2f0",
+      "gate_input_digest": "bcb9402a9cc103176a16753e75bd43b1fc9bfe2917e6f61c22184798391b8ff2",
+      "gremlins_verifier_sha256": "9a9499ff68a8dfd49a0be7995590297a8ee563a1aa226bfd8b9361dc53058108",
+      "gremlins_version": "v0.6.0",
+      "module": ".",
+      "package": "terminal",
+      "report_sha256": "b6352027f02b822bc3b26d0648c8ba15e0a130fd8e76b7f05b4580315b485829"
+    },
+    {
+      "module": ".",
+      "package": ".",
+      "execution_revision": "0e0240b1fdcefaa73619b8d0a5d0dfc778d9e2f0",
+      "gate_input_digest": "71c5d0618445fcc8243593e3d91cafc348a373952e4dc44efc541a53948a0966",
+      "gremlins_version": "v0.6.0",
+      "gremlins_verifier_sha256": "9a9499ff68a8dfd49a0be7995590297a8ee563a1aa226bfd8b9361dc53058108",
+      "report_sha256": "3da02b97eba9b21435f850598f702184b8a79c4de9d3a0849ba0c5dd7cd658dd"
+    },
+    {
+      "module": ".",
+      "package": "terminal",
+      "execution_revision": "3fe07983906f192a6cd983217a203d89696ffc28",
+      "gate_input_digest": "b141d98c2951d18211b30aa561a64e3c8c0f987838f756fe035a9c1c76bf4fb8",
+      "gremlins_version": "v0.6.0",
+      "gremlins_verifier_sha256": "9a9499ff68a8dfd49a0be7995590297a8ee563a1aa226bfd8b9361dc53058108",
+      "report_sha256": "cf8432da6324c83043e4e208e879ffda769fce78249ca390a4465a71042e202c"
+    }
+  ],
+  "entries": [
+    {
+      "execution_revision": "bd98f1aba21ca7a27be8ed61a3e42d901018d09e",
+      "gate_input_digest": "c6d8fee9519bc726539563ab177f8bebc63bf9cf14fc967783d8f7aae8d3715d",
+      "gremlins_verifier_sha256": "9a9499ff68a8dfd49a0be7995590297a8ee563a1aa226bfd8b9361dc53058108",
+      "gremlins_version": "v0.6.0",
+      "migration_reason": "non-executable-lint-comments-and-test-lint-corrections",
+      "module": ".",
+      "package": ".",
+      "replacement_gate_input_digest": "3dab7627b8f2431a6e58ec72207df74b1aee34cac84edd6314d35b2f0ec047ab",
+      "report_sha256": "f0590d47bac167c682b573f7d5904f42fa1c1654b6595cf179e5b2edf1a1fb2e"
+    },
+    {
+      "execution_revision": "bd98f1aba21ca7a27be8ed61a3e42d901018d09e",
+      "gate_input_digest": "fc6d1c2f166615e0bc675c3c1f97decf3b25f462dd6e03ef3d9b82e317cdb696",
+      "gremlins_verifier_sha256": "9a9499ff68a8dfd49a0be7995590297a8ee563a1aa226bfd8b9361dc53058108",
+      "gremlins_version": "v0.6.0",
+      "migration_reason": "test-only-lint-corrections",
+      "module": ".",
+      "package": "terminal",
+      "replacement_gate_input_digest": "719933a83c783982912411f511c22ac873efb1b0ef752e0c3f4d4569b682f95f",
+      "report_sha256": "36417d355a5821a58726a6f9c3e90c6615bfa6e751ee26736ca2e0eadbc23585"
+    },
+    {
+      "execution_revision": "bd98f1aba21ca7a27be8ed61a3e42d901018d09e",
+      "gate_input_digest": "52285d8cc7bda3d48efe2a1ce8eefba87dc1f68cd3d35383001e9d7ef81eeca6",
+      "gremlins_verifier_sha256": "9a9499ff68a8dfd49a0be7995590297a8ee563a1aa226bfd8b9361dc53058108",
+      "gremlins_version": "v0.6.0",
+      "migration_reason": "additive-hostile-state-test",
+      "module": ".",
+      "package": ".",
+      "replacement_gate_input_digest": "c6d8fee9519bc726539563ab177f8bebc63bf9cf14fc967783d8f7aae8d3715d",
+      "report_sha256": "f0590d47bac167c682b573f7d5904f42fa1c1654b6595cf179e5b2edf1a1fb2e"
+    },
+    {
+      "execution_revision": "8cb85e2f184a5fd013396bdb6521ecead1a61cc4",
+      "gate_input_digest": "1478545ac8f959df7a9b9d49903dfa67db82811e21b51bd9080939cb3f4b549f",
+      "gremlins_version": "v0.6.0",
+      "migration_reason": "go-patch-upgrade-evidence-carry-forward",
+      "module": ".",
+      "package": ".",
+      "replacement_gate_input_digest": "a40c157b556ef670d375ccdccd5f5858b012c0e4855cb64baa2975cf9e4bc29b",
+      "report_sha256": "d09de3058b0c11f61934a0f481d01054412b01431ef081da1e219aaf6b0c8284"
+    },
+    {
+      "execution_revision": "8cb85e2f184a5fd013396bdb6521ecead1a61cc4",
+      "gate_input_digest": "c7422ef379d323474e50c4196146f7d4f86538aff80a1e2ed464ebbf322d5b74",
+      "gremlins_version": "v0.6.0",
+      "module": ".",
+      "package": ".",
+      "report_sha256": "d09de3058b0c11f61934a0f481d01054412b01431ef081da1e219aaf6b0c8284"
+    },
+    {
+      "execution_revision": "2c88bf32361f4ef1de8cb948799a29057fbed6c0",
+      "gate_input_digest": "d3d14d67c8217b35ac7907f8536b7ce06d5abf81b4030b7ad32486429f7ea41b",
+      "gremlins_version": "v0.6.0",
+      "migration_reason": "non-executable-gosec-bound-comment",
+      "module": ".",
+      "package": "terminal",
+      "replacement_gate_input_digest": "6695173e417050aae0a2c1da20870ada191b4d3cb97fc7d539f0577f596e6986",
+      "report_sha256": "a8b968e6262fe91cf82f1c3b125e42c824d051983c1abb1a3df59f164f8418bf"
+    },
+    {
+      "execution_revision": "8cb85e2f184a5fd013396bdb6521ecead1a61cc4",
+      "gate_input_digest": "2c3c602551a113dc23e1a91b4d60fd061dcac51afdc5576059d164faa859fdb5",
+      "gremlins_version": "v0.6.0",
+      "module": ".",
+      "package": "terminal",
+      "report_sha256": "5c38311947e151f22a8714bd7b5271c559658c577c0a0dcb1b9c04ba4e220941"
+    },
+    {
+      "execution_revision": "8cb85e2f184a5fd013396bdb6521ecead1a61cc4",
+      "gate_input_digest": "987cf4412ab25c97da39fcf55004b1183df5e871dcc1a889d36af8a8acb3c345",
+      "gremlins_version": "v0.6.0",
+      "migration_reason": "go-patch-upgrade-evidence-carry-forward",
+      "module": ".",
+      "package": "terminal",
+      "replacement_gate_input_digest": "97b170ef1908c7f388f1961fb9bbca71fcd8a95466c6774a722e3261cb3f0170",
+      "report_sha256": "5c38311947e151f22a8714bd7b5271c559658c577c0a0dcb1b9c04ba4e220941"
+    },
+    {
+      "execution_revision": "59252704b2bcbcfba4c390519ffb94c5870c01f8",
+      "gate_input_digest": "ad6fc6f1dbc2ff731499d899b6e48040076710beac8c89dd72031cacefeb3863",
+      "gremlins_verifier_sha256": "9a9499ff68a8dfd49a0be7995590297a8ee563a1aa226bfd8b9361dc53058108",
+      "gremlins_version": "v0.6.0",
+      "migration_reason": "allocation-context-helper-extraction",
+      "module": ".",
+      "package": ".",
+      "replacement_gate_input_digest": "a380bd8510ec44e069c2403ba14a7b4bb737f7266ba9f07c32ecf284ded0fc7c",
+      "report_sha256": "39cd1427724397b659f415e95ab8b98f7a439c0c6bd8903f9e976ec7c755e8a6"
+    },
+    {
+      "module": ".",
+      "package": ".",
+      "execution_revision": "0e0240b1fdcefaa73619b8d0a5d0dfc778d9e2f0",
+      "gate_input_digest": "71c5d0618445fcc8243593e3d91cafc348a373952e4dc44efc541a53948a0966",
+      "replacement_gate_input_digest": "b621878a0bd095161d1fc2b9e7599eb0944a8f667feedcc5f0a8af4b3a7e3a21",
+      "gremlins_version": "v0.6.0",
+      "gremlins_verifier_sha256": "9a9499ff68a8dfd49a0be7995590297a8ee563a1aa226bfd8b9361dc53058108",
+      "report_sha256": "3da02b97eba9b21435f850598f702184b8a79c4de9d3a0849ba0c5dd7cd658dd"
+    },
+    {
+      "module": ".",
+      "package": "terminal",
+      "execution_revision": "3fe07983906f192a6cd983217a203d89696ffc28",
+      "gate_input_digest": "b141d98c2951d18211b30aa561a64e3c8c0f987838f756fe035a9c1c76bf4fb8",
+      "replacement_gate_input_digest": "9d547487827bf852098fe95d57153a7afb28f28e5f057c1d05fe15f0afb9e773",
+      "gremlins_version": "v0.6.0",
+      "gremlins_verifier_sha256": "9a9499ff68a8dfd49a0be7995590297a8ee563a1aa226bfd8b9361dc53058108",
+      "report_sha256": "cf8432da6324c83043e4e208e879ffda769fce78249ca390a4465a71042e202c"
+    }
+  ]
+}

@@ -3,8 +3,8 @@ package terminal_test
 import (
 	"os"
 
-	prompts "github.com/faustbrian/golib/pkg/prompts"
-	"github.com/faustbrian/golib/pkg/prompts/terminal"
+	prompts "github.com/faustbrian/go-prompts"
+	"github.com/faustbrian/go-prompts/terminal"
 )
 
 func ExampleNew() {

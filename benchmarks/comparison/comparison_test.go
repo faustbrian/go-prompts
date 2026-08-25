@@ -15,8 +15,8 @@ import (
 	"github.com/AlecAivazis/survey/v2"
 	expect "github.com/Netflix/go-expect"
 	"github.com/creack/pty"
-	prompts "github.com/faustbrian/golib/pkg/prompts"
-	terminaladapter "github.com/faustbrian/golib/pkg/prompts/terminal"
+	prompts "github.com/faustbrian/go-prompts"
+	terminaladapter "github.com/faustbrian/go-prompts/terminal"
 	"github.com/hinshun/vt10x"
 	"github.com/manifoldco/promptui"
 )

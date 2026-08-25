@@ -1,4 +1,4 @@
-module github.com/faustbrian/golib/pkg/prompts
+module github.com/faustbrian/go-prompts
 
 go 1.26.6
 
