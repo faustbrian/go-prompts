@@ -10,6 +10,7 @@ All notable changes follow Keep a Changelog and Semantic Versioning.
   compatible source layout.
 - Align the comparison module with the current standalone root archive
   checksum used by repository-local and CI verification.
+- Make CodeQL resolve the comparison module through that same root archive.
 
 - Exclude intentional nested modules from root local-proxy archives so local,
   bootstrap, CI, and public module checksums describe the same source
