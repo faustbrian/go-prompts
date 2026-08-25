@@ -4,6 +4,8 @@ All notable changes follow Keep a Changelog and Semantic Versioning.
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-08-25
+
 ### Changed
 
 - Use the canonical Go formatter so formatting and lint gates enforce one
@@ -26,8 +28,6 @@ All notable changes follow Keep a Changelog and Semantic Versioning.
 - Harden standalone documentation validation with deterministic spelling and
   link checks, package-specific documentation gates, and repository-local
   contributor guidance.
-
-## [1.0.0] - 2026-08-25
 
 ### Documentation
 
