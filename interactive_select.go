@@ -10,14 +10,14 @@ import (
 )
 
 type selectionState struct {
-	details selectionDetails
-	visible []int
-	focus int
+	details  selectionDetails
+	visible  []int
+	focus    int
 	selected map[string]bool
-	query lineEditor
-	message string
-	width int
-	height int
+	query    lineEditor
+	message  string
+	width    int
+	height   int
 	metadata int
 }
 
@@ -86,8 +86,7 @@ func runInteractiveSelection[T any](
 				event.Capabilities,
 				&state.width,
 				&state.height,
-			);
-				err != nil {
+			); err != nil {
 				var zero T
 				if errors.Is(err, ErrTerminalDetached) {
 					return zero, streamFailure(
@@ -107,7 +106,7 @@ func runInteractiveSelection[T any](
 		case EventPaste:
 			if details.searchPolicy == (SearchPolicy{}) ||
 				!utf8.ValidString(event.Text) ||
-				utf8.RuneCountInString(state.query.text()) +
+				utf8.RuneCountInString(state.query.text())+
 					utf8.RuneCountInString(event.Text) >
 					details.searchPolicy.MaxQueryRunes {
 				var zero T
@@ -195,7 +194,7 @@ func runInteractiveSelection[T any](
 			case KeyNewline:
 			// Newlines have no selection meaning unless rebound by the caller.
 			case KeyIgnored:
-			// An old chord for a rebound meaning is intentionally inert.
+				// An old chord for a rebound meaning is intentionally inert.
 			}
 		default:
 			var zero T
@@ -251,11 +250,11 @@ func runInteractiveSelection[T any](
 
 func newSelectionState(details selectionDetails, width, height int) selectionState {
 	state := selectionState{
-		details: details,
+		details:  details,
 		selected: make(map[string]bool),
-		width: width,
-		height: height,
-		query: lineEditor{maxBytes: max(1, details.searchPolicy.MaxQueryRunes * 4)},
+		width:    width,
+		height:   height,
+		query:    lineEditor{maxBytes: max(1, details.searchPolicy.MaxQueryRunes*4)},
 	}
 	for _, id := range details.initialIDs {
 		if id != "" {
@@ -324,7 +323,7 @@ func (state *selectionState) applyReplay(replay selectionReplay) {
 			state.selected[identity] = true
 		}
 	}
-	state.query = lineEditor{maxBytes: max(1, state.details.searchPolicy.MaxQueryRunes * 4)}
+	state.query = lineEditor{maxBytes: max(1, state.details.searchPolicy.MaxQueryRunes*4)}
 	_ = state.query.insert(replay.query, false)
 	state.filter()
 	if position, ok := state.visiblePosition(replay.focusID); ok {
@@ -458,7 +457,7 @@ func (state *selectionState) pageSize() int {
 	if state.message != "" {
 		reserved++
 	}
-	return max(1, state.height - reserved)
+	return max(1, state.height-reserved)
 }
 
 func writeSelection[T any](
@@ -476,14 +475,14 @@ func writeSelection[T any](
 	lines := []SemanticLine{Line(Text(RoleLabel, presentationLabel(definition)))}
 	lines = append(lines, presentationMetadata(definition)...)
 	if state.details.searchPolicy != (SearchPolicy{}) {
-		lines = append(lines, Line(Text(RoleHint, "search: " + state.query.text())))
+		lines = append(lines, Line(Text(RoleHint, "search: "+state.query.text())))
 	}
 	pageSize := state.pageSize()
 	start := 0
 	if state.focus >= pageSize {
 		start = (state.focus / pageSize) * pageSize
 	}
-	end := min(len(state.visible), start + pageSize)
+	end := min(len(state.visible), start+pageSize)
 	for position := start; position < end; position++ {
 		option := state.details.options[state.visible[position]]
 		segments := make([]Segment, 0, 2)
@@ -516,9 +515,9 @@ func writeSelection[T any](
 	output, err := renderer.Render(
 		NewFrame(lines...),
 		RenderOptions{
-			Width: state.width,
-			Color: execution.Capabilities.Color,
-			ASCIIOnly: !execution.Capabilities.Unicode,
+			Width:      state.width,
+			Color:      execution.Capabilities.Color,
+			ASCIIOnly:  !execution.Capabilities.Unicode,
 			Hyperlinks: execution.Capabilities.Hyperlinks,
 		},
 	)

@@ -15,9 +15,9 @@ func TestDynamicOptionsDebouncesBoundsAndCopies(t *testing.T) {
 	providerCalls := 0
 	dynamic, err := prompts.NewDynamicOptions(
 		prompts.DynamicOptionsConfig[int]{
-			Clock: clock,
-			Debounce: 50 * time.Millisecond,
-			MaxOptions: 2,
+			Clock:         clock,
+			Debounce:      50 * time.Millisecond,
+			MaxOptions:    2,
 			MaxQueryRunes: 4,
 			Provider: func(
 				ctx context.Context,
@@ -89,8 +89,7 @@ func TestDynamicOptionsDebouncesBoundsAndCopies(t *testing.T) {
 	if _, err := dynamic.Schedule("12345"); !errors.Is(err, prompts.ErrUnsupported) {
 		t.Fatalf("oversized Schedule() error = %v", err)
 	}
-	if _, err := dynamic.Schedule(string([]byte{0xff}));
-		!errors.Is(err, prompts.ErrUnsupported) {
+	if _, err := dynamic.Schedule(string([]byte{0xff})); !errors.Is(err, prompts.ErrUnsupported) {
 		t.Fatalf("invalid UTF-8 Schedule() error = %v", err)
 	}
 }
@@ -121,7 +120,7 @@ func TestDynamicOptionsRejectsStaleGeneration(t *testing.T) {
 					mustOption(
 						t,
 						prompts.OptionConfig[string]{
-							ID: query,
+							ID:    query,
 							Label: query,
 							Value: query,
 						},
@@ -137,7 +136,7 @@ func TestDynamicOptionsRejectsStaleGeneration(t *testing.T) {
 	type result struct {
 		options []prompts.Option[string]
 		applied bool
-		err error
+		err     error
 	}
 	oldResult := make(chan result, 1)
 	go func() {
@@ -173,36 +172,36 @@ func TestDynamicOptionsRejectsStaleGeneration(t *testing.T) {
 func TestDynamicOptionsReportsSafeProviderFailures(t *testing.T) {
 	tests := map[string]struct {
 		provider prompts.OptionProvider[int]
-		context func() context.Context
-		want error
+		context  func() context.Context
+		want     error
 	}{
 		"provider error": {
 			provider: func(context.Context, string) ([]prompts.Option[int], error) {
 				return nil, errors.New("unsafe\x1b[31m")
 			},
 			context: context.Background,
-			want: prompts.ErrAdapter,
+			want:    prompts.ErrAdapter,
 		},
 		"provider panic": {
 			provider: func(context.Context, string) ([]prompts.Option[int], error) {
 				panic("unsafe")
 			},
 			context: context.Background,
-			want: prompts.ErrAdapter,
+			want:    prompts.ErrAdapter,
 		},
 		"canceled": {
 			provider: func(context.Context, string) ([]prompts.Option[int], error) {
 				return nil, context.Canceled
 			},
 			context: context.Background,
-			want: prompts.ErrCanceled,
+			want:    prompts.ErrCanceled,
 		},
 		"invalid options": {
 			provider: func(context.Context, string) ([]prompts.Option[int], error) {
 				return []prompts.Option[int]{{}}, nil
 			},
 			context: context.Background,
-			want: prompts.ErrAdapter,
+			want:    prompts.ErrAdapter,
 		},
 	}
 	for name, test := range tests {
@@ -211,7 +210,7 @@ func TestDynamicOptionsReportsSafeProviderFailures(t *testing.T) {
 			func(t *testing.T) {
 				dynamic, err := prompts.NewDynamicOptions(
 					prompts.DynamicOptionsConfig[int]{
-						Clock: prompts.NewVirtualClock(time.Time{}),
+						Clock:    prompts.NewVirtualClock(time.Time{}),
 						Provider: test.provider,
 					},
 				)
@@ -241,19 +240,17 @@ func TestDynamicOptionsValidatesDefinitionAndResults(t *testing.T) {
 		return nil, nil
 	}
 	validClock := prompts.NewVirtualClock(time.Time{})
-	for name, config := range
-		map[string]prompts.DynamicOptionsConfig[int]{
-			"provider": {Clock: validClock},
-			"clock": {Provider: provider},
-			"debounce": {Clock: validClock, Provider: provider, Debounce: -1},
-			"max options": {Clock: validClock, Provider: provider, MaxOptions: -1},
-			"max query": {Clock: validClock, Provider: provider, MaxQueryRunes: -1},
-		} {
+	for name, config := range map[string]prompts.DynamicOptionsConfig[int]{
+		"provider":    {Clock: validClock},
+		"clock":       {Provider: provider},
+		"debounce":    {Clock: validClock, Provider: provider, Debounce: -1},
+		"max options": {Clock: validClock, Provider: provider, MaxOptions: -1},
+		"max query":   {Clock: validClock, Provider: provider, MaxQueryRunes: -1},
+	} {
 		t.Run(
 			name,
 			func(t *testing.T) {
-				if _, err := prompts.NewDynamicOptions(config);
-					!errors.Is(err, prompts.ErrInvalidDefinition) {
+				if _, err := prompts.NewDynamicOptions(config); !errors.Is(err, prompts.ErrInvalidDefinition) {
 					t.Fatalf("NewDynamicOptions() error = %v", err)
 				}
 			},
@@ -265,11 +262,10 @@ func TestDynamicOptionsValidatesDefinitionAndResults(t *testing.T) {
 		mustOption(t, prompts.OptionConfig[int]{ID: "one", Label: "One", Value: 1}),
 		mustOption(t, prompts.OptionConfig[int]{ID: "two", Label: "Two", Value: 2}),
 	}
-	for name, options := range
-		map[string][]prompts.Option[int]{
-			"duplicate": {duplicate, duplicate},
-			"too many": tooMany,
-		} {
+	for name, options := range map[string][]prompts.Option[int]{
+		"duplicate": {duplicate, duplicate},
+		"too many":  tooMany,
+	} {
 		t.Run(
 			name,
 			func(t *testing.T) {
@@ -279,7 +275,7 @@ func TestDynamicOptionsValidatesDefinitionAndResults(t *testing.T) {
 				}
 				dynamic, err := prompts.NewDynamicOptions(
 					prompts.DynamicOptionsConfig[int]{
-						Clock: validClock,
+						Clock:      validClock,
 						MaxOptions: maximum,
 						Provider: func(
 							context.Context,
@@ -296,8 +292,7 @@ func TestDynamicOptionsValidatesDefinitionAndResults(t *testing.T) {
 				if _, applied, err := dynamic.Resolve(
 					context.Background(),
 					generation,
-				);
-					applied || !errors.Is(err, prompts.ErrAdapter) {
+				); applied || !errors.Is(err, prompts.ErrAdapter) {
 					t.Fatalf("Resolve() = %t, %v", applied, err)
 				}
 			},
@@ -314,8 +309,7 @@ func TestDynamicOptionsValidatesDefinitionAndResults(t *testing.T) {
 			},
 		},
 	)
-	if _, applied, err := dynamic.Resolve(context.Background(), 99);
-		err != nil || applied || providerCalls != 0 {
+	if _, applied, err := dynamic.Resolve(context.Background(), 99); err != nil || applied || providerCalls != 0 {
 		t.Fatalf(
 			"unknown generation Resolve() = %t, %v; calls = %d",
 			applied,
@@ -325,13 +319,11 @@ func TestDynamicOptionsValidatesDefinitionAndResults(t *testing.T) {
 	}
 	canceled, cancel := context.WithCancel(context.Background())
 	cancel()
-	if _, applied, err := dynamic.Resolve(canceled, 0);
-		applied || !errors.Is(err, prompts.ErrCanceled) {
+	if _, applied, err := dynamic.Resolve(canceled, 0); applied || !errors.Is(err, prompts.ErrCanceled) {
 		t.Fatalf("canceled Resolve() = %t, %v", applied, err)
 	}
 	var nilContext context.Context
-	if _, applied, err := dynamic.Resolve(nilContext, 0);
-		applied || !errors.Is(err, prompts.ErrInvalidDefinition) {
+	if _, applied, err := dynamic.Resolve(nilContext, 0); applied || !errors.Is(err, prompts.ErrInvalidDefinition) {
 		t.Fatalf("nil context Resolve() = %t, %v", applied, err)
 	}
 }
@@ -339,8 +331,8 @@ func TestDynamicOptionsValidatesDefinitionAndResults(t *testing.T) {
 func containsUnsafe(value string) bool {
 	for _, fragment := range []string{"unsafe", "\x1b"} {
 		if len(value) >= len(fragment) {
-			for index := 0; index + len(fragment) <= len(value); index++ {
-				if value[index:index + len(fragment)] == fragment {
+			for index := 0; index+len(fragment) <= len(value); index++ {
+				if value[index:index+len(fragment)] == fragment {
 					return true
 				}
 			}

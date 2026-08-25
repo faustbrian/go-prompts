@@ -61,8 +61,7 @@ func TestReadWithoutDeadlineRejectsUnsafeAndFailedDescriptors(t *testing.T) {
 				time.Millisecond,
 				reader.Stat,
 				unix.Poll,
-			);
-				!errors.Is(err, context.Canceled) {
+			); !errors.Is(err, context.Canceled) {
 				t.Fatalf("canceled read error = %v", err)
 			}
 		},
@@ -86,8 +85,7 @@ func TestReadWithoutDeadlineRejectsUnsafeAndFailedDescriptors(t *testing.T) {
 				time.Millisecond,
 				reader.Stat,
 				unix.Poll,
-			);
-				!errors.Is(err, os.ErrClosed) {
+			); !errors.Is(err, os.ErrClosed) {
 				t.Fatalf("closed read error = %v", err)
 			}
 		},
@@ -112,8 +110,7 @@ func TestReadWithoutDeadlineRejectsUnsafeAndFailedDescriptors(t *testing.T) {
 					return nil, statFailure
 				},
 				unix.Poll,
-			);
-				!errors.Is(err, statFailure) {
+			); !errors.Is(err, statFailure) {
 				t.Fatalf("stat read error = %v", err)
 			}
 		},
@@ -138,8 +135,7 @@ func TestReadWithoutDeadlineRejectsUnsafeAndFailedDescriptors(t *testing.T) {
 				func([]unix.PollFd, int) (int, error) {
 					return 0, pollFailure
 				},
-			);
-				!errors.Is(err, pollFailure) {
+			); !errors.Is(err, pollFailure) {
 				t.Fatalf("poll read error = %v", err)
 			}
 		},
@@ -163,8 +159,7 @@ func TestReadWithoutDeadlineRejectsUnsafeAndFailedDescriptors(t *testing.T) {
 				func([]unix.PollFd, int) (int, error) {
 					return 0, nil
 				},
-			);
-				!errors.Is(err, os.ErrDeadlineExceeded) {
+			); !errors.Is(err, os.ErrDeadlineExceeded) {
 				t.Fatalf("poll timeout error = %v", err)
 			}
 		},
@@ -195,8 +190,7 @@ func TestReadWithoutDeadlineRejectsUnsafeAndFailedDescriptors(t *testing.T) {
 				time.Millisecond,
 				reader.Stat,
 				poll,
-			);
-				!errors.Is(err, os.ErrClosed) {
+			); !errors.Is(err, os.ErrClosed) {
 				t.Fatalf("invalid poll read error = %v", err)
 			}
 		},
@@ -204,16 +198,15 @@ func TestReadWithoutDeadlineRejectsUnsafeAndFailedDescriptors(t *testing.T) {
 }
 
 func TestPollBoundaryHelpers(t *testing.T) {
-	for _, test := range
-		[]struct {
-			descriptor uintptr
-			want bool
-		}{
-			{0, true},
-			{math.MaxInt32, true},
-			{math.MaxInt32 + 1, false},
-			{^uintptr(0), false},
-		} {
+	for _, test := range []struct {
+		descriptor uintptr
+		want       bool
+	}{
+		{0, true},
+		{math.MaxInt32, true},
+		{math.MaxInt32 + 1, false},
+		{^uintptr(0), false},
+	} {
 		if got := validPollDescriptor(test.descriptor); got != test.want {
 			t.Fatalf(
 				"validPollDescriptor(%d) = %v, want %v",
@@ -240,33 +233,31 @@ func TestPollBoundaryHelpers(t *testing.T) {
 	if got := boundedPollWait(laterContext, pollInterval, now); got != pollInterval {
 		t.Fatalf("later poll wait = %v, want %v", got, pollInterval)
 	}
-	for _, test := range
-		[]struct {
-			wait time.Duration
-			want int
-		}{
-			{0, 1},
-			{time.Nanosecond, 1},
-			{time.Millisecond, 1},
-			{time.Millisecond + time.Nanosecond, 2},
-		} {
+	for _, test := range []struct {
+		wait time.Duration
+		want int
+	}{
+		{0, 1},
+		{time.Nanosecond, 1},
+		{time.Millisecond, 1},
+		{time.Millisecond + time.Nanosecond, 2},
+	} {
 		if got := pollMilliseconds(test.wait); got != test.want {
 			t.Fatalf("pollMilliseconds(%v) = %d, want %d", test.wait, got, test.want)
 		}
 	}
-	for _, test := range
-		[]struct {
-			events int16
-			invalid bool
-			readable bool
-		}{
-			{0, false, false},
-			{unix.POLLNVAL, true, false},
-			{unix.POLLIN, false, true},
-			{unix.POLLHUP, false, true},
-			{unix.POLLERR, false, true},
-			{unix.POLLIN | unix.POLLHUP | unix.POLLERR, false, true},
-		} {
+	for _, test := range []struct {
+		events   int16
+		invalid  bool
+		readable bool
+	}{
+		{0, false, false},
+		{unix.POLLNVAL, true, false},
+		{unix.POLLIN, false, true},
+		{unix.POLLHUP, false, true},
+		{unix.POLLERR, false, true},
+		{unix.POLLIN | unix.POLLHUP | unix.POLLERR, false, true},
+	} {
 		if got := invalidPollEvents(test.events); got != test.invalid {
 			t.Fatalf(
 				"invalidPollEvents(%d) = %v, want %v",
@@ -287,12 +278,11 @@ func TestPollBoundaryHelpers(t *testing.T) {
 }
 
 func TestReadWithoutDeadlineUsesBoundedWaitAndRelevantEvents(t *testing.T) {
-	for name, events := range
-		map[string]int16{
-			"input": unix.POLLIN,
-			"hangup": unix.POLLHUP,
-			"error": unix.POLLERR,
-		} {
+	for name, events := range map[string]int16{
+		"input":  unix.POLLIN,
+		"hangup": unix.POLLHUP,
+		"error":  unix.POLLERR,
+	} {
 		t.Run(
 			name,
 			func(t *testing.T) {
@@ -312,7 +302,7 @@ func TestReadWithoutDeadlineUsesBoundedWaitAndRelevantEvents(t *testing.T) {
 					internalTestContext(t),
 					reader,
 					make([]byte, 1),
-					1500 * time.Microsecond,
+					1500*time.Microsecond,
 					reader.Stat,
 					func(fds []unix.PollFd, milliseconds int) (int, error) {
 						pollCalls++

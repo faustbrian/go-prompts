@@ -21,8 +21,8 @@ func ExampleParse() {
 func ExampleRun_headlessFallback() {
 	prompt, err := prompts.NewText(
 		prompts.TextConfig{
-			ID: "region",
-			Label: "Region",
+			ID:       "region",
+			Label:    "Region",
 			Headless: prompts.HeadlessUseFallback,
 			Fallback: prompts.Some("eu-west-1"),
 		},
@@ -47,25 +47,24 @@ func ExampleRun_virtualTerminal() {
 		panic(err)
 	}
 	terminal := prompts.NewVirtualTerminal(80, 24)
-	if err := terminal.Push(prompts.PasteEvent("yes"), prompts.KeyEvent(prompts.KeyEnter));
-		err != nil {
+	if err := terminal.Push(prompts.PasteEvent("yes"), prompts.KeyEvent(prompts.KeyEnter)); err != nil {
 		panic(err)
 	}
 	answer, err := prompts.Run(
 		context.Background(),
 		prompt,
 		prompts.Execution{
-			Events: terminal,
+			Events:   terminal,
 			Terminal: terminal,
-			Output: terminal,
+			Output:   terminal,
 			Capabilities: prompts.Capabilities{
-				InputTerminal: true,
+				InputTerminal:  true,
 				OutputTerminal: true,
-				Width: 80,
-				Height: 24,
+				Width:          80,
+				Height:         24,
 			},
 			Policy: prompts.InteractionPolicy{
-				Mode: prompts.InteractiveRequired,
+				Mode:              prompts.InteractiveRequired,
 				PermitInteraction: true,
 			},
 		},
@@ -77,8 +76,8 @@ func ExampleRun_virtualTerminal() {
 func ExampleRunForm() {
 	name, err := prompts.NewText(
 		prompts.TextConfig{
-			ID: "name",
-			Label: "Name",
+			ID:       "name",
+			Label:    "Name",
 			Headless: prompts.HeadlessUseFallback,
 			Fallback: prompts.Some("Brian"),
 		},
@@ -88,7 +87,7 @@ func ExampleRunForm() {
 	}
 	form, err := prompts.NewForm(
 		prompts.FormConfig{
-			ID: "profile",
+			ID:     "profile",
 			Fields: []prompts.FormField{prompts.AsField(name)},
 		},
 	)
@@ -118,8 +117,7 @@ func ExampleProgress() {
 		panic(err)
 	}
 	progress.Complete("done")
-	if err := progress.Render(context.Background(), prompts.Execution{Output: os.Stdout});
-		err != nil {
+	if err := progress.Render(context.Background(), prompts.Execution{Output: os.Stdout}); err != nil {
 		panic(err)
 	}
 	// Output: success: Upload: 2/2 (100%) - done
@@ -130,7 +128,7 @@ func ExampleWriteTable() {
 		context.Background(),
 		prompts.Table{
 			Headers: []string{"Name", "State"},
-			Rows: [][]string{{"api", "ready"}},
+			Rows:    [][]string{{"api", "ready"}},
 		},
 		prompts.Execution{Output: os.Stdout},
 	)

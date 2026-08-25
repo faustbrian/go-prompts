@@ -14,7 +14,7 @@ func TestTypedPromptParsersAndResults(t *testing.T) {
 
 	tests := []struct {
 		name string
-		run func(*testing.T)
+		run  func(*testing.T)
 	}{
 		{"text", testTextParsing},
 		{"multiline", testMultilineParsing},
@@ -88,7 +88,7 @@ func testDurationParsing(t *testing.T) {
 	if err != nil {
 		t.Fatalf("NewDuration() error = %v", err)
 	}
-	if got := parseValue(t, prompt, "1h30m"); got != 90 * time.Minute {
+	if got := parseValue(t, prompt, "1h30m"); got != 90*time.Minute {
 		t.Fatalf("Parse() = %s", got)
 	}
 	assertInvalidSubmission(t, prompt, "one hour")
@@ -151,8 +151,8 @@ func testConfirmationParsing(t *testing.T) {
 
 	prompt, err := prompts.NewConfirm(
 		prompts.ConfirmConfig{
-			ID: "continue",
-			Label: "Continue?",
+			ID:     "continue",
+			Label:  "Continue?",
 			Accept: []string{"ja"},
 			Reject: []string{"nej"},
 		},
@@ -175,19 +175,19 @@ func TestPromptDescriptorContainsExecutionContract(t *testing.T) {
 	prompt := newTextPrompt(
 		t,
 		prompts.TextConfig{
-			ID: "name",
-			Label: "Name",
+			ID:          "name",
+			Label:       "Name",
 			Description: "Account holder",
 			Placeholder: "Ada",
-			Hint: "Public name",
-			Help: "Shown on invoices",
-			Headless: prompts.HeadlessUseFallback,
-			Retry: prompts.RetryPolicy{MaxAttempts: 5},
-			Cancel: prompts.CancelUseDefault,
-			EndOfInput: prompts.EOFUseFallback,
-			Secret: prompts.SecretNone,
+			Hint:        "Public name",
+			Help:        "Shown on invoices",
+			Headless:    prompts.HeadlessUseFallback,
+			Retry:       prompts.RetryPolicy{MaxAttempts: 5},
+			Cancel:      prompts.CancelUseDefault,
+			EndOfInput:  prompts.EOFUseFallback,
+			Secret:      prompts.SecretNone,
 			Accessibility: prompts.Accessibility{
-				Label: "Account holder name",
+				Label:       "Account holder name",
 				Description: "Public",
 				TextualHint: "Enter text",
 			},
@@ -221,11 +221,11 @@ func TestPromptDescriptorAcceptsMaximumExecutionBehaviorValues(t *testing.T) {
 	prompt := newTextPrompt(
 		t,
 		prompts.TextConfig{
-			ID: "name",
-			Label: "Name",
-			Cancel: prompts.CancelUseFallback,
+			ID:         "name",
+			Label:      "Name",
+			Cancel:     prompts.CancelUseFallback,
 			EndOfInput: prompts.EOFUseFallback,
-			Secret: prompts.SecretOther,
+			Secret:     prompts.SecretOther,
 		},
 	)
 	descriptor := prompt.Describe()
@@ -241,7 +241,7 @@ func TestInvalidTypedDefinitionsAreRejected(t *testing.T) {
 
 	_, err := prompts.NewText(
 		prompts.TextConfig{
-			ID: "name",
+			ID:    "name",
 			Label: "Name",
 			Retry: prompts.RetryPolicy{Unlimited: true, MaxAttempts: 1},
 		},
@@ -251,8 +251,8 @@ func TestInvalidTypedDefinitionsAreRejected(t *testing.T) {
 	}
 	_, err = prompts.NewConfirm(
 		prompts.ConfirmConfig{
-			ID: "continue",
-			Label: "Continue?",
+			ID:     "continue",
+			Label:  "Continue?",
 			Accept: []string{"same"},
 			Reject: []string{"SAME"},
 		},
@@ -268,8 +268,8 @@ func TestInvalidTypedDefinitionsAreRejected(t *testing.T) {
 	}
 	_, err = prompts.NewConfirm(
 		prompts.ConfirmConfig{
-			ID: "continue",
-			Label: "Continue?",
+			ID:     "continue",
+			Label:  "Continue?",
 			Accept: []string{"yes", "YES"},
 			Reject: []string{"no"},
 		},
@@ -288,38 +288,37 @@ func TestTypedConstructorValidationAndDefensiveCopies(t *testing.T) {
 	}
 
 	invalidPre := prompts.IntegerConfig{
-		ID: "count",
-		Label: "Count",
+		ID:          "count",
+		Label:       "Count",
 		PreValidate: []prompts.Validator[int64]{nil},
 	}
 	invalidTransform := prompts.IntegerConfig{
-		ID: "count",
-		Label: "Count",
+		ID:        "count",
+		Label:     "Count",
 		Transform: []prompts.Transformer[int64]{nil},
 	}
 	invalidPost := prompts.IntegerConfig{
-		ID: "count",
-		Label: "Count",
+		ID:           "count",
+		Label:        "Count",
 		PostValidate: []prompts.Validator[int64]{nil},
 	}
 	invalidCancel := prompts.IntegerConfig{
-		ID: "count",
-		Label: "Count",
+		ID:     "count",
+		Label:  "Count",
 		Cancel: prompts.CancelBehavior(200),
 	}
 	invalidEOF := prompts.IntegerConfig{
-		ID: "count",
-		Label: "Count",
+		ID:         "count",
+		Label:      "Count",
 		EndOfInput: prompts.EOFBehavior(200),
 	}
-	for _, config := range
-		[]prompts.IntegerConfig{
-			invalidPre,
-			invalidTransform,
-			invalidPost,
-			invalidCancel,
-			invalidEOF,
-		} {
+	for _, config := range []prompts.IntegerConfig{
+		invalidPre,
+		invalidTransform,
+		invalidPost,
+		invalidCancel,
+		invalidEOF,
+	} {
 		_, err := prompts.NewInteger(config)
 		if !errors.Is(err, prompts.ErrInvalidDefinition) {
 			t.Fatalf("invalid integer config error = %v", err)
@@ -328,8 +327,8 @@ func TestTypedConstructorValidationAndDefensiveCopies(t *testing.T) {
 
 	_, err = prompts.NewMultiline(
 		prompts.MultilineConfig{
-			ID: "bio",
-			Label: "Biography",
+			ID:        "bio",
+			Label:     "Biography",
 			Transform: []prompts.Transformer[string]{nil},
 		},
 	)
@@ -341,8 +340,8 @@ func TestTypedConstructorValidationAndDefensiveCopies(t *testing.T) {
 	reject := []string{"no"}
 	prompt, err := prompts.NewConfirm(
 		prompts.ConfirmConfig{
-			ID: "continue",
-			Label: "Continue?",
+			ID:     "continue",
+			Label:  "Continue?",
 			Accept: accept,
 			Reject: reject,
 		},
@@ -368,21 +367,20 @@ func TestConfirmationDefaultsAndInvalidVocabulary(t *testing.T) {
 		t.Fatal("default confirmation vocabulary did not parse")
 	}
 
-	for _, config := range
-		[]prompts.ConfirmConfig{
-			{
-				ID: "empty-accept",
-				Label: "Continue?",
-				Accept: []string{" "},
-				Reject: []string{"no"},
-			},
-			{
-				ID: "empty-reject",
-				Label: "Continue?",
-				Accept: []string{"yes"},
-				Reject: []string{" "},
-			},
-		} {
+	for _, config := range []prompts.ConfirmConfig{
+		{
+			ID:     "empty-accept",
+			Label:  "Continue?",
+			Accept: []string{" "},
+			Reject: []string{"no"},
+		},
+		{
+			ID:     "empty-reject",
+			Label:  "Continue?",
+			Accept: []string{"yes"},
+			Reject: []string{" "},
+		},
+	} {
 		_, err := prompts.NewConfirm(config)
 		if !errors.Is(err, prompts.ErrInvalidDefinition) {
 			t.Fatalf("NewConfirm(%q) error = %v", config.ID, err)
@@ -399,8 +397,7 @@ func TestValueTypeCanonicalBoundaries(t *testing.T) {
 	if err != nil {
 		t.Fatalf("NewDecimal() error = %v", err)
 	}
-	for input, want := range
-		map[string]string{"0": "0", "-0.000": "0", "+12": "12", "0.00120": "0.0012"} {
+	for input, want := range map[string]string{"0": "0", "-0.000": "0", "+12": "12", "0.00120": "0.0012"} {
 		if got := parseValue(t, decimalPrompt, input).String(); got != want {
 			t.Fatalf("Parse(%q) = %q, want %q", input, got, want)
 		}
@@ -427,9 +424,9 @@ func TestValueTypeCanonicalBoundaries(t *testing.T) {
 	assertInvalidSubmission(t, pathPrompt, "")
 	directoryPrompt, err := prompts.NewPath(
 		prompts.PathConfig{
-			ID: "directory",
+			ID:    "directory",
 			Label: "Directory",
-			Kind: prompts.PathDirectory,
+			Kind:  prompts.PathDirectory,
 		},
 	)
 	if err != nil || parseValue(t, directoryPrompt, "/tmp").Kind() != prompts.PathDirectory {

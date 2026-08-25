@@ -9,8 +9,8 @@ import (
 
 // Decimal is a canonical exact base-10 value.
 type Decimal struct {
-	digits string
-	scale uint
+	digits   string
+	scale    uint
 	negative bool
 }
 
@@ -41,9 +41,9 @@ func (decimal Decimal) Scale() uint {
 
 // Date is a calendar date without a time zone or time of day.
 type Date struct {
-	year int
+	year  int
 	month time.Month
-	day int
+	day   int
 }
 
 func (date Date) String() string {
@@ -67,9 +67,9 @@ func (date Date) Day() int {
 
 // TimeOfDay is a wall-clock time without a date or time zone.
 type TimeOfDay struct {
-	hour int
-	minute int
-	second int
+	hour       int
+	minute     int
+	second     int
 	nanosecond int
 }
 
@@ -117,7 +117,7 @@ const (
 // Path is an unverified filesystem path with explicit caller intent.
 type Path struct {
 	value string
-	kind PathKind
+	kind  PathKind
 }
 
 func (path Path) String() string {
@@ -157,7 +157,7 @@ func parseDecimal(input string) (Decimal, error) {
 	if len(parts) == 2 {
 		fraction = strings.TrimRight(parts[1], "0")
 	}
-	digits := strings.TrimLeft(integer + fraction, "0")
+	digits := strings.TrimLeft(integer+fraction, "0")
 	if digits == "" {
 		digits = "0"
 		negative = false
@@ -181,9 +181,9 @@ func parseTimeOfDay(input string) (TimeOfDay, error) {
 		parsed, err := time.Parse(layout, input)
 		if err == nil {
 			return TimeOfDay{
-				hour: parsed.Hour(),
-				minute: parsed.Minute(),
-				second: parsed.Second(),
+				hour:       parsed.Hour(),
+				minute:     parsed.Minute(),
+				second:     parsed.Second(),
 				nanosecond: parsed.Nanosecond(),
 			}, nil
 		}
@@ -193,7 +193,7 @@ func parseTimeOfDay(input string) (TimeOfDay, error) {
 }
 
 func parseIssue(kind string) error {
-	return NewValidationIssue("invalid_" + kind, "Invalid " + kind + " value")
+	return NewValidationIssue("invalid_"+kind, "Invalid "+kind+" value")
 }
 
 func parseInteger(input string) (int64, error) {

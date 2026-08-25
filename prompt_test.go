@@ -27,9 +27,9 @@ func TestTextDefinitionHasStableIdentityAndExplicitOptionalValues(t *testing.T) 
 	prompt := newTextPrompt(
 		t,
 		prompts.TextConfig{
-			ID: "name",
-			Label: "Name",
-			Default: prompts.Some(""),
+			ID:       "name",
+			Label:    "Name",
+			Default:  prompts.Some(""),
 			Fallback: prompts.Some("batch-name"),
 		},
 	)

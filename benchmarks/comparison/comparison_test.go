@@ -66,7 +66,7 @@ func runWithPTY(run func(*os.File) (string, error)) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	done := startTerminalReactor(primary, benchmarkAnswer + "\r")
+	done := startTerminalReactor(primary, benchmarkAnswer+"\r")
 	defer func() {
 		_ = replica.Close()
 		_ = primary.Close()
@@ -90,7 +90,7 @@ func startTerminalReactor(primary *os.File, input string) <-chan struct{} {
 		for {
 			count, err := primary.Read(buffer)
 			if count > 0 {
-				chunk := make([]byte, 0, len(tail) + count)
+				chunk := make([]byte, 0, len(tail)+count)
 				chunk = append(chunk, tail...)
 				chunk = append(chunk, buffer[:count]...)
 				if bytes.Contains(chunk, []byte("\x1b[6n")) {
@@ -103,7 +103,7 @@ func startTerminalReactor(primary *os.File, input string) <-chan struct{} {
 				if len(chunk) >= len(prompt) {
 					tail = append(
 						tail[:0],
-						chunk[len(chunk) - len(prompt) + 1:]...,
+						chunk[len(chunk)-len(prompt)+1:]...,
 					)
 				} else {
 					tail = append(tail[:0], chunk...)
@@ -132,13 +132,13 @@ func runGoPrompts(file *os.File) (string, error) {
 		context.Background(),
 		prompt,
 		prompts.Execution{
-			Output: file,
-			Error: file,
-			Events: adapter,
-			Terminal: adapter,
+			Output:       file,
+			Error:        file,
+			Events:       adapter,
+			Terminal:     adapter,
 			Capabilities: adapter.Capabilities(),
 			Policy: prompts.InteractionPolicy{
-				Mode: prompts.InteractiveRequired,
+				Mode:              prompts.InteractiveRequired,
 				PermitInteraction: true,
 			},
 		},

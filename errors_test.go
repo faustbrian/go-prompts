@@ -13,14 +13,13 @@ func TestErrorClassificationAndSafeFormatting(t *testing.T) {
 
 	cause := errors.New("unsafe cause containing a secret")
 	err := &prompts.Error{
-		Kind: prompts.ErrorReader,
+		Kind:      prompts.ErrorReader,
 		Operation: "read\x1b input",
-		PromptID: "name\rforged",
-		Cause: cause,
+		PromptID:  "name\rforged",
+		Cause:     cause,
 	}
 
-	if got, want := err.Error(), "read� input: reader_failure (prompt \"name�forged\")";
-		got != want {
+	if got, want := err.Error(), "read� input: reader_failure (prompt \"name�forged\")"; got != want {
 		t.Fatalf("Error() = %q, want %q", got, want)
 	}
 	if errors.Is(err, prompts.ErrWriter) {
@@ -55,7 +54,7 @@ func TestStableErrorSentinels(t *testing.T) {
 	t.Parallel()
 
 	tests := []struct {
-		kind prompts.ErrorKind
+		kind     prompts.ErrorKind
 		sentinel error
 	}{
 		{prompts.ErrorInteractionNotPermitted, prompts.ErrInteractionNotPermitted},

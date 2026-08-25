@@ -143,8 +143,8 @@ func TestInteractiveFormRetainsTextSelectionAndByteSecretDrafts(t *testing.T) {
 	}
 	selection, err := prompts.NewSelect(
 		prompts.SelectConfig[string]{
-			ID: "environment",
-			Label: "Environment",
+			ID:      "environment",
+			Label:   "Environment",
 			Options: []prompts.Option[string]{option},
 		},
 	)
@@ -189,8 +189,7 @@ func TestInteractiveFormRetainsTextSelectionAndByteSecretDrafts(t *testing.T) {
 	if err != nil {
 		t.Fatalf("RunForm() error = %v", err)
 	}
-	if environment, ok := prompts.FormValue[string](result, "environment");
-		!ok || environment != "production" {
+	if environment, ok := prompts.FormValue[string](result, "environment"); !ok || environment != "production" {
 		t.Fatalf("environment = %q, %v", environment, ok)
 	}
 	token, ok := prompts.FormValue[*prompts.SecretBytes](result, "token")
@@ -266,11 +265,11 @@ func TestFormSkipsFalseConditionAndDefensivelyCopiesResults(t *testing.T) {
 	}
 	selectMany, err := prompts.NewMultiSelect(
 		prompts.MultiSelectConfig[string]{
-			ID: "many",
-			Label: "Many",
-			Options: []prompts.Option[string]{optionA},
+			ID:          "many",
+			Label:       "Many",
+			Options:     []prompts.Option[string]{optionA},
 			FallbackIDs: prompts.Some([]string{"a"}),
-			Headless: prompts.HeadlessUseFallback,
+			Headless:    prompts.HeadlessUseFallback,
 		},
 	)
 	if err != nil {
@@ -294,7 +293,7 @@ func TestFormSkipsFalseConditionAndDefensivelyCopiesResults(t *testing.T) {
 	if err != nil {
 		t.Fatalf("NewForm() error = %v", err)
 	}
-	ctx, cancel := context.WithTimeout(t.Context(), 100 * time.Millisecond)
+	ctx, cancel := context.WithTimeout(t.Context(), 100*time.Millisecond)
 	defer cancel()
 	result, err := prompts.RunForm(
 		ctx,
@@ -330,9 +329,9 @@ func TestFormValidationIdentifiesFieldsAndRedactsSecrets(t *testing.T) {
 
 	secret, err := prompts.NewSecret(
 		prompts.SecretConfig{
-			ID: "token",
-			Label: "Token",
-			Class: prompts.SecretToken,
+			ID:       "token",
+			Label:    "Token",
+			Class:    prompts.SecretToken,
 			Fallback: prompts.Some(prompts.NewSecretValue(secretCanary)),
 			Headless: prompts.HeadlessUseFallback,
 		},
@@ -342,7 +341,7 @@ func TestFormValidationIdentifiesFieldsAndRedactsSecrets(t *testing.T) {
 	}
 	form, err := prompts.NewForm(
 		prompts.FormConfig{
-			ID: "secure",
+			ID:     "secure",
 			Fields: []prompts.FormField{prompts.AsField(secret)},
 			Validate: []prompts.FormValidator{
 				func(
@@ -391,13 +390,11 @@ func TestFormRejectsInvalidDefinitionsAndCallbackPanic(t *testing.T) {
 	validField := prompts.AsField(
 		newTextPrompt(t, prompts.TextConfig{ID: "field", Label: "Field"}),
 	)
-	for name, config := range
-		map[string]prompts.FormConfig{
-			"missing identity": {Fields: []prompts.FormField{validField}},
-			"missing fields": {ID: "empty"},
-		} {
-		if _, definitionErr := prompts.NewForm(config);
-			!errors.Is(definitionErr, prompts.ErrInvalidDefinition) {
+	for name, config := range map[string]prompts.FormConfig{
+		"missing identity": {Fields: []prompts.FormField{validField}},
+		"missing fields":   {ID: "empty"},
+	} {
+		if _, definitionErr := prompts.NewForm(config); !errors.Is(definitionErr, prompts.ErrInvalidDefinition) {
 			t.Fatalf("%s form error = %v", name, definitionErr)
 		}
 	}
@@ -417,15 +414,15 @@ func TestFormRejectsInvalidDefinitionsAndCallbackPanic(t *testing.T) {
 	field := newTextPrompt(
 		t,
 		prompts.TextConfig{
-			ID: "name",
-			Label: "Name",
+			ID:       "name",
+			Label:    "Name",
 			Fallback: prompts.Some("value"),
 			Headless: prompts.HeadlessUseFallback,
 		},
 	)
 	_, err = prompts.NewForm(
 		prompts.FormConfig{
-			ID: "duplicate",
+			ID:     "duplicate",
 			Fields: []prompts.FormField{prompts.AsField(field), prompts.AsField(field)},
 		},
 	)
@@ -466,23 +463,22 @@ func TestFormExecutionDependenciesOverrideDefinitionDependencies(t *testing.T) {
 	field := newTextPrompt(
 		t,
 		prompts.TextConfig{
-			ID: "name",
-			Label: "Name",
+			ID:       "name",
+			Label:    "Name",
 			Fallback: prompts.Some("Ada"),
 			Headless: prompts.HeadlessUseFallback,
 		},
 	)
-	for name, test := range
-		map[string]struct {
-			executionDependencies any
-			want string
-		}{
-			"definition fallback": {want: "definition"},
-			"execution override": {
-				executionDependencies: "execution",
-				want: "execution",
-			},
-		} {
+	for name, test := range map[string]struct {
+		executionDependencies any
+		want                  string
+	}{
+		"definition fallback": {want: "definition"},
+		"execution override": {
+			executionDependencies: "execution",
+			want:                  "execution",
+		},
+	} {
 		t.Run(
 			name,
 			func(t *testing.T) {
@@ -491,8 +487,8 @@ func TestFormExecutionDependenciesOverrideDefinitionDependencies(t *testing.T) {
 				var got any
 				form, err := prompts.NewForm(
 					prompts.FormConfig{
-						ID: "dependencies",
-						Fields: []prompts.FormField{prompts.AsField(field)},
+						ID:           "dependencies",
+						Fields:       []prompts.FormField{prompts.AsField(field)},
 						Dependencies: "definition",
 						Validate: []prompts.FormValidator{
 							func(
@@ -537,7 +533,7 @@ func TestRunFormPropagatesFieldAndMidExecutionCancellation(t *testing.T) {
 	field := newTextPrompt(t, prompts.TextConfig{ID: "name", Label: "Name"})
 	form, err := prompts.NewForm(
 		prompts.FormConfig{
-			ID: "failure",
+			ID:     "failure",
 			Fields: []prompts.FormField{prompts.AsField(field)},
 		},
 	)
@@ -587,8 +583,8 @@ func TestRunFormPropagatesFieldAndMidExecutionCancellation(t *testing.T) {
 					newTextPrompt(
 						t,
 						prompts.TextConfig{
-							ID: "value",
-							Label: "Value",
+							ID:       "value",
+							Label:    "Value",
 							Fallback: prompts.Some("ok"),
 							Headless: prompts.HeadlessUseFallback,
 						},
@@ -628,9 +624,9 @@ func TestFormValidationHandlesSafeErrorsAndByteSecrets(t *testing.T) {
 	secret := prompts.NewSecretBytes([]byte(secretCanary))
 	prompt, err := prompts.NewSecretBytesPrompt(
 		prompts.SecretBytesConfig{
-			ID: "token",
-			Label: "Token",
-			Class: prompts.SecretToken,
+			ID:       "token",
+			Label:    "Token",
+			Class:    prompts.SecretToken,
 			Fallback: prompts.Some(secret),
 			Headless: prompts.HeadlessUseFallback,
 		},
@@ -640,7 +636,7 @@ func TestFormValidationHandlesSafeErrorsAndByteSecrets(t *testing.T) {
 	}
 	form, err := prompts.NewForm(
 		prompts.FormConfig{
-			ID: "bytes",
+			ID:     "bytes",
 			Fields: []prompts.FormField{prompts.AsField(prompt)},
 			Validate: []prompts.FormValidator{
 				func(
@@ -669,7 +665,7 @@ func TestFormValidationHandlesSafeErrorsAndByteSecrets(t *testing.T) {
 	}
 	ownedForm, err := prompts.NewForm(
 		prompts.FormConfig{
-			ID: "owned",
+			ID:     "owned",
 			Fields: []prompts.FormField{prompts.AsField(prompt)},
 		},
 	)
@@ -699,15 +695,15 @@ func TestFormValidationHandlesSafeErrorsAndByteSecrets(t *testing.T) {
 	safe := newTextPrompt(
 		t,
 		prompts.TextConfig{
-			ID: "name",
-			Label: "Name",
+			ID:       "name",
+			Label:    "Name",
 			Fallback: prompts.Some("value"),
 			Headless: prompts.HeadlessUseFallback,
 		},
 	)
 	safeForm, err := prompts.NewForm(
 		prompts.FormConfig{
-			ID: "safe",
+			ID:     "safe",
 			Fields: []prompts.FormField{prompts.AsField(safe)},
 			Validate: []prompts.FormValidator{
 				func(
@@ -748,7 +744,7 @@ func TestRunFormRejectsNilAndCanceledContexts(t *testing.T) {
 	field := newTextPrompt(t, prompts.TextConfig{ID: "name", Label: "Name"})
 	form, err := prompts.NewForm(
 		prompts.FormConfig{
-			ID: "setup",
+			ID:     "setup",
 			Fields: []prompts.FormField{prompts.AsField(field)},
 		},
 	)

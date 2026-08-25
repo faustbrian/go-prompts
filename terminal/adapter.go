@@ -15,36 +15,36 @@ import (
 )
 
 const (
-	defaultReadBuffer = 4096
+	defaultReadBuffer                 = 4096
 	defaultPollInterval time.Duration = 50_000_000
-	maximumReadBuffer = 1 << 20
-	maximumPollInterval = time.Second
+	maximumReadBuffer                 = 1 << 20
+	maximumPollInterval               = time.Second
 )
 
 // Config bounds reads, cancellation polling, and byte decoding.
 type Config struct {
-	Decoder prompts.DecoderConfig
-	ReadBuffer int
+	Decoder      prompts.DecoderConfig
+	ReadBuffer   int
 	PollInterval time.Duration
 }
 
 // Adapter implements prompts.EventSource and prompts.TerminalController for
 // explicit files. A single prompt execution owns an Adapter at a time.
 type Adapter struct {
-	mutex sync.Mutex
-	input *os.File
-	output *os.File
-	decoder *prompts.Decoder
-	readBuffer int
+	mutex        sync.Mutex
+	input        *os.File
+	output       *os.File
+	decoder      *prompts.Decoder
+	readBuffer   int
 	pollInterval time.Duration
-	state *term.State
-	acquired bool
-	queued []prompts.InputEvent
-	eof bool
-	read func([]byte) (int, error)
-	setDeadline func(time.Time) error
-	setOutput func(uintptr) error
-	restore func(int, *term.State) error
+	state        *term.State
+	acquired     bool
+	queued       []prompts.InputEvent
+	eof          bool
+	read         func([]byte) (int, error)
+	setDeadline  func(time.Time) error
+	setOutput    func(uintptr) error
+	restore      func(int, *term.State) error
 }
 
 // New constructs an inert adapter without reading or mutating either file.
@@ -68,15 +68,15 @@ func New(input, output *os.File, config Config) (*Adapter, error) {
 	}
 
 	return &Adapter{
-		input: input,
-		output: output,
-		decoder: decoder,
-		readBuffer: config.ReadBuffer,
+		input:        input,
+		output:       output,
+		decoder:      decoder,
+		readBuffer:   config.ReadBuffer,
 		pollInterval: config.PollInterval,
-		read: input.Read,
-		setDeadline: input.SetReadDeadline,
-		setOutput: setOutputProcessing,
-		restore: term.Restore,
+		read:         input.Read,
+		setDeadline:  input.SetReadDeadline,
+		setOutput:    setOutputProcessing,
+		restore:      term.Restore,
 	}, nil
 }
 
@@ -91,13 +91,13 @@ func (adapter *Adapter) Capabilities() prompts.Capabilities {
 	}
 
 	return prompts.Capabilities{
-		InputTerminal: inputTerminal,
+		InputTerminal:  inputTerminal,
 		OutputTerminal: outputTerminal,
-		Width: width,
-		Height: height,
+		Width:          width,
+		Height:         height,
 		CursorMovement: outputTerminal,
-		Animation: outputTerminal,
-		Unicode: true,
+		Animation:      outputTerminal,
+		Unicode:        true,
 	}
 }
 
@@ -221,8 +221,7 @@ func (adapter *Adapter) Next(ctx context.Context) (prompts.InputEvent, error) {
 				)
 			}
 		} else if err != nil {
-			if failure := adapter.readFailure("set terminal deadline", err);
-				errors.Is(failure, prompts.ErrTerminalDetached) {
+			if failure := adapter.readFailure("set terminal deadline", err); errors.Is(failure, prompts.ErrTerminalDetached) {
 				return prompts.InputEvent{}, failure
 			}
 			return prompts.InputEvent{}, adapterFailure(
@@ -301,8 +300,8 @@ func hasReadBytes(count int) bool {
 func (adapter *Adapter) dequeue() prompts.InputEvent {
 	event := adapter.queued[0]
 	copy(adapter.queued, adapter.queued[1:])
-	adapter.queued[len(adapter.queued) - 1] = prompts.InputEvent{}
-	adapter.queued = adapter.queued[:len(adapter.queued) - 1]
+	adapter.queued[len(adapter.queued)-1] = prompts.InputEvent{}
+	adapter.queued = adapter.queued[:len(adapter.queued)-1]
 
 	return event
 }

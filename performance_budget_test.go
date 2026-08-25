@@ -35,8 +35,7 @@ func TestAllocationBudgets(t *testing.T) {
 							Width: 80,
 							Color: prompts.ColorANSI256,
 						},
-					);
-						err != nil {
+					); err != nil {
 						panic(err)
 					}
 				},
@@ -68,8 +67,7 @@ func TestAllocationBudgets(t *testing.T) {
 					)
 					execution := unboundedInteractiveExecution(terminal)
 					execution.Output = io.Discard
-					if _, err := prompts.Run(ctx, prompt, execution);
-						err != nil {
+					if _, err := prompts.Run(ctx, prompt, execution); err != nil {
 						panic(err)
 					}
 				},
@@ -84,7 +82,7 @@ func TestAllocationBudgets(t *testing.T) {
 			for index := range options {
 				option, err := prompts.NewOption(
 					prompts.OptionConfig[int]{
-						ID: fmt.Sprintf("option-%05d", index),
+						ID:    fmt.Sprintf("option-%05d", index),
 						Label: fmt.Sprintf("Option %05d", index),
 						Value: index,
 					},
@@ -102,12 +100,11 @@ func TestAllocationBudgets(t *testing.T) {
 						options,
 						"option 099",
 						prompts.SearchPolicy{
-							MaxOptions: 10_000,
-							MaxResults: 50,
+							MaxOptions:    10_000,
+							MaxResults:    50,
 							MaxQueryRunes: 64,
 						},
-					);
-						err != nil {
+					); err != nil {
 						panic(err)
 					}
 				},
@@ -120,8 +117,8 @@ func TestAllocationBudgets(t *testing.T) {
 		func(t *testing.T) {
 			progress, err := prompts.NewProgress(
 				prompts.ProgressConfig{
-					ID: "items",
-					Label: "Items",
+					ID:              "items",
+					Label:           "Items",
 					AllowRegression: true,
 				},
 			)
@@ -140,8 +137,7 @@ func TestAllocationBudgets(t *testing.T) {
 					if err := progress.Render(
 						context.Background(),
 						prompts.Execution{Output: io.Discard},
-					);
-						err != nil {
+					); err != nil {
 						panic(err)
 					}
 				},
@@ -156,14 +152,14 @@ func TestAllocationBudgets(t *testing.T) {
 			prompt, err := prompts.NewSearchSelect(
 				prompts.SearchSelectConfig[int]{
 					Select: prompts.SelectConfig[int]{
-						ID: "option",
-						Label: "Option",
-						Options: options,
+						ID:         "option",
+						Label:      "Option",
+						Options:    options,
 						MaxOptions: len(options),
 					},
 					Search: prompts.SearchPolicy{
-						MaxOptions: len(options),
-						MaxResults: 100,
+						MaxOptions:    len(options),
+						MaxResults:    100,
 						MaxQueryRunes: 64,
 					},
 				},
@@ -184,8 +180,7 @@ func TestAllocationBudgets(t *testing.T) {
 					)
 					execution := unboundedInteractiveExecution(terminal)
 					execution.Output = io.Discard
-					if _, err := prompts.Run(ctx, prompt, execution);
-						err != nil {
+					if _, err := prompts.Run(ctx, prompt, execution); err != nil {
 						panic(err)
 					}
 				},
@@ -231,8 +226,7 @@ func TestAllocationBudgets(t *testing.T) {
 					)
 					execution := unboundedInteractiveExecution(terminal)
 					execution.Output = io.Discard
-					if _, err := prompts.RunForm(ctx, form, execution);
-						err != nil {
+					if _, err := prompts.RunForm(ctx, form, execution); err != nil {
 						panic(err)
 					}
 				},
@@ -286,7 +280,7 @@ func assertAllocationBudget(t *testing.T, maximum float64, operation func()) {
 func assertBoundedAllocationBudget(t *testing.T, maximum float64, operation func(context.Context)) {
 	t.Helper()
 
-	contexts, cancels := newAllocationContexts(t.Context(), allocationBudgetRuns + 1)
+	contexts, cancels := newAllocationContexts(t.Context(), allocationBudgetRuns+1)
 	t.Cleanup(
 		func() {
 			for _, cancel := range cancels {
@@ -307,7 +301,7 @@ func assertBoundedAllocationBudget(t *testing.T, maximum float64, operation func
 }
 
 func newAllocationContext(parent context.Context) (context.Context, context.CancelFunc) {
-	return context.WithTimeout(parent, 5 * time.Second)
+	return context.WithTimeout(parent, 5*time.Second)
 }
 
 func newAllocationContexts(
@@ -318,7 +312,7 @@ func newAllocationContexts(
 		return nil, nil
 	}
 
-	contexts, cancels := newAllocationContexts(parent, count - 1)
+	contexts, cancels := newAllocationContexts(parent, count-1)
 	ctx, cancel := newAllocationContext(parent)
 
 	return append(contexts, ctx), append(cancels, cancel)

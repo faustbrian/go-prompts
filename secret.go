@@ -57,15 +57,15 @@ func (SecretValue) LogValue() slog.Value {
 // SecretConfig defines a string-backed secret prompt.
 type SecretConfig struct {
 	ID, Label, Description, Placeholder, Hint, Help string
-	Default, Fallback Optional[SecretValue]
-	Headless HeadlessBehavior
-	Accessibility Accessibility
-	PreValidate, PostValidate []Validator[SecretValue]
-	Transform []Transformer[SecretValue]
-	Retry RetryPolicy
-	Cancel CancelBehavior
-	EndOfInput EOFBehavior
-	Class SecretClass
+	Default, Fallback                               Optional[SecretValue]
+	Headless                                        HeadlessBehavior
+	Accessibility                                   Accessibility
+	PreValidate, PostValidate                       []Validator[SecretValue]
+	Transform                                       []Transformer[SecretValue]
+	Retry                                           RetryPolicy
+	Cancel                                          CancelBehavior
+	EndOfInput                                      EOFBehavior
+	Class                                           SecretClass
 }
 
 // NewSecret creates a classified redacting string secret prompt.
@@ -107,8 +107,8 @@ func NewSecret(config SecretConfig) (Prompt[SecretValue], error) {
 
 // SecretBytes owns mutable secret bytes that can be overwritten with Destroy.
 type SecretBytes struct {
-	mu sync.RWMutex
-	value []byte
+	mu        sync.RWMutex
+	value     []byte
 	destroyed bool
 }
 
@@ -199,15 +199,15 @@ func (secret *SecretBytes) clone() *SecretBytes {
 // SecretBytesConfig defines a cleanup-capable byte secret prompt.
 type SecretBytesConfig struct {
 	ID, Label, Description, Placeholder, Hint, Help string
-	Default, Fallback Optional[*SecretBytes]
-	Headless HeadlessBehavior
-	Accessibility Accessibility
-	PreValidate, PostValidate []Validator[*SecretBytes]
-	Transform []Transformer[*SecretBytes]
-	Retry RetryPolicy
-	Cancel CancelBehavior
-	EndOfInput EOFBehavior
-	Class SecretClass
+	Default, Fallback                               Optional[*SecretBytes]
+	Headless                                        HeadlessBehavior
+	Accessibility                                   Accessibility
+	PreValidate, PostValidate                       []Validator[*SecretBytes]
+	Transform                                       []Transformer[*SecretBytes]
+	Retry                                           RetryPolicy
+	Cancel                                          CancelBehavior
+	EndOfInput                                      EOFBehavior
+	Class                                           SecretClass
 }
 
 // NewSecretBytesPrompt creates a classified cleanup-capable secret prompt.

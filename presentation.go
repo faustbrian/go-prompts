@@ -20,7 +20,7 @@ const (
 
 // Message is a caller-localized note or status message.
 type Message struct {
-	Kind MessageKind
+	Kind        MessageKind
 	Title, Body string
 }
 
@@ -51,8 +51,8 @@ func WriteMessage(ctx context.Context, message Message, execution Execution) err
 
 // Table is a bounded rectangular display model.
 type Table struct {
-	Headers []string
-	Rows [][]string
+	Headers             []string
+	Rows                [][]string
 	MaxRows, MaxColumns int
 }
 
@@ -106,9 +106,9 @@ func tableLine(values []string, widths []int, role Role, asciiOnly bool) Semanti
 	for index, value := range values {
 		value = renderText(value, asciiOnly)
 		output.WriteString(value)
-		output.WriteString(strings.Repeat(" ", widths[index] - uniseg.StringWidth(value)))
+		output.WriteString(strings.Repeat(" ", widths[index]-uniseg.StringWidth(value)))
 		output.WriteString(" |")
-		if index + 1 < len(values) {
+		if index+1 < len(values) {
 			output.WriteByte(' ')
 		}
 	}
@@ -136,7 +136,7 @@ func WriteSummary(ctx context.Context, values []KeyValue, execution Execution) e
 		}
 		lines = append(
 			lines,
-			Line(Text(RoleLabel, value.Key + ": "), Text(RoleValue, value.Value)),
+			Line(Text(RoleLabel, value.Key+": "), Text(RoleValue, value.Value)),
 		)
 	}
 	return renderOutput(ctx, "summary", NewFrame(lines...), execution)

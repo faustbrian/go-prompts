@@ -41,12 +41,12 @@ func TestInteractiveTextDoesNotEnableKernelEcho(t *testing.T) {
 		testContext(t),
 		prompt,
 		prompts.Execution{
-			Output: replica,
-			Events: observer,
-			Terminal: adapter,
+			Output:       replica,
+			Events:       observer,
+			Terminal:     adapter,
 			Capabilities: adapter.Capabilities(),
 			Policy: prompts.InteractionPolicy{
-				Mode: prompts.InteractiveRequired,
+				Mode:              prompts.InteractiveRequired,
 				PermitInteraction: true,
 			},
 		},
@@ -87,9 +87,9 @@ func TestEchoObserverRetriesInterruptedPoll(t *testing.T) {
 type echoObserver struct {
 	*terminal.Adapter
 	primary *os.File
-	poll func([]unix.PollFd, int) (int, error)
-	wrote bool
-	echoed []byte
+	poll    func([]unix.PollFd, int) (int, error)
+	wrote   bool
+	echoed  []byte
 }
 
 func (observer *echoObserver) Next(ctx context.Context) (prompts.InputEvent, error) {
@@ -141,7 +141,7 @@ func (observer *echoObserver) readAvailable() ([]byte, error) {
 		}
 		break
 	}
-	if ready == 0 || poll[0].Revents & unix.POLLIN == 0 {
+	if ready == 0 || poll[0].Revents&unix.POLLIN == 0 {
 		return nil, nil
 	}
 	buffer := make([]byte, 4096)
@@ -172,7 +172,7 @@ func TestAdapterPreservesTerminalOutputLineEndings(t *testing.T) {
 	if _, err := replica.Write([]byte("label\n")); err != nil {
 		t.Fatalf("Write() error = %v", err)
 	}
-	buffer := readExactPTY(t, primary, len("label\r\n"), 2 * time.Second)
+	buffer := readExactPTY(t, primary, len("label\r\n"), 2*time.Second)
 	if got, want := string(buffer), "label\r\n"; got != want {
 		t.Fatalf("terminal output = %q, want %q", got, want)
 	}
@@ -194,7 +194,7 @@ func readExactPTY(t *testing.T, file *os.File, size int, timeout time.Duration) 
 		poll := []unix.PollFd{{Fd: int32(file.Fd()), Events: unix.POLLIN}}
 		ready, err := unix.Poll(
 			poll,
-			int((remaining + time.Millisecond - 1) / time.Millisecond),
+			int((remaining+time.Millisecond-1)/time.Millisecond),
 		)
 		if errors.Is(err, unix.EINTR) {
 			continue
@@ -202,7 +202,7 @@ func readExactPTY(t *testing.T, file *os.File, size int, timeout time.Duration) 
 		if err != nil {
 			t.Fatalf("Poll() error = %v", err)
 		}
-		if ready != 1 || poll[0].Revents & unix.POLLIN == 0 {
+		if ready != 1 || poll[0].Revents&unix.POLLIN == 0 {
 			t.Fatalf(
 				"Poll() = %d, %#v after %d of %d bytes",
 				ready,
@@ -298,12 +298,12 @@ func TestAdapterRestoresSecretPTYAfterWriterFailure(t *testing.T) {
 		testContext(t),
 		prompt,
 		prompts.Execution{
-			Output: terminalErrorWriter{},
-			Events: adapter,
-			Terminal: adapter,
+			Output:       terminalErrorWriter{},
+			Events:       adapter,
+			Terminal:     adapter,
 			Capabilities: adapter.Capabilities(),
 			Policy: prompts.InteractionPolicy{
-				Mode: prompts.InteractiveRequired,
+				Mode:              prompts.InteractiveRequired,
 				PermitInteraction: true,
 			},
 		},
@@ -326,11 +326,10 @@ func (terminalErrorWriter) Write([]byte) (int, error) {
 func TestAdapterRestoresByteSecretPromptPTY(t *testing.T) {
 	t.Parallel()
 
-	for name, input := range
-		map[string][]byte{
-			"submit": []byte("\x1b[200~secret-value\x1b[201~\r"),
-			"cancel": {0x03},
-		} {
+	for name, input := range map[string][]byte{
+		"submit": []byte("\x1b[200~secret-value\x1b[201~\r"),
+		"cancel": {0x03},
+	} {
 		t.Run(
 			name,
 			func(t *testing.T) {
@@ -357,7 +356,7 @@ func TestAdapterRestoresByteSecretPromptPTY(t *testing.T) {
 				}
 				prompt, err := prompts.NewSecretBytesPrompt(
 					prompts.SecretBytesConfig{
-						ID: "token",
+						ID:    "token",
 						Label: "Token",
 						Class: prompts.SecretToken,
 					},
@@ -383,19 +382,19 @@ func TestAdapterRestoresByteSecretPromptPTY(t *testing.T) {
 				}()
 				runContext, cancelRun := context.WithTimeout(
 					context.Background(),
-					2 * time.Second,
+					2*time.Second,
 				)
 				result, runErr := prompts.Run(
 					runContext,
 					prompt,
 					prompts.Execution{
-						Output: replica,
-						Error: replica,
-						Events: adapter,
-						Terminal: adapter,
+						Output:       replica,
+						Error:        replica,
+						Events:       adapter,
+						Terminal:     adapter,
 						Capabilities: adapter.Capabilities(),
 						Policy: prompts.InteractionPolicy{
-							Mode: prompts.InteractiveRequired,
+							Mode:              prompts.InteractiveRequired,
 							PermitInteraction: true,
 						},
 					},

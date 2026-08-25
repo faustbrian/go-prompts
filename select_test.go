@@ -15,39 +15,39 @@ func TestSelectPreservesStableIdentitySeparateFromLabelsAndValues(t *testing.T) 
 		mustOption(
 			t,
 			prompts.OptionConfig[int]{
-				ID: "primary",
-				Label: "Same",
+				ID:          "primary",
+				Label:       "Same",
 				Description: "First",
-				Value: 10,
+				Value:       10,
 			},
 		),
 		mustOption(
 			t,
 			prompts.OptionConfig[int]{
-				ID: "secondary",
-				Label: "Same",
+				ID:          "secondary",
+				Label:       "Same",
 				Description: "Second",
-				Value: 10,
+				Value:       10,
 			},
 		),
 		mustOption(
 			t,
 			prompts.OptionConfig[int]{
-				ID: "legacy",
-				Label: "Legacy\x1b",
-				Value: 30,
+				ID:       "legacy",
+				Label:    "Legacy\x1b",
+				Value:    30,
 				Disabled: true,
 			},
 		),
 	}
 	prompt, err := prompts.NewSelect(
 		prompts.SelectConfig[int]{
-			ID: "account",
-			Label: "Account",
-			Options: options,
-			DefaultID: prompts.Some("primary"),
+			ID:         "account",
+			Label:      "Account",
+			Options:    options,
+			DefaultID:  prompts.Some("primary"),
 			FallbackID: prompts.Some("secondary"),
-			Headless: prompts.HeadlessUseFallback,
+			Headless:   prompts.HeadlessUseFallback,
 		},
 	)
 	if err != nil {
@@ -91,8 +91,8 @@ func TestSelectRejectsInvalidOptionDefinitions(t *testing.T) {
 	duplicate := mustOption(t, prompts.OptionConfig[int]{ID: "same", Label: "One", Value: 1})
 	_, err = prompts.NewSelect(
 		prompts.SelectConfig[int]{
-			ID: "choice",
-			Label: "Choice",
+			ID:      "choice",
+			Label:   "Choice",
 			Options: []prompts.Option[int]{duplicate, duplicate},
 		},
 	)
@@ -111,12 +111,12 @@ func TestOptionAccessorsAreStableAndSanitizedAtRenderTime(t *testing.T) {
 	option := mustOption(
 		t,
 		prompts.OptionConfig[string]{
-			ID: "id",
-			Label: "Label\x1b",
+			ID:          "id",
+			Label:       "Label\x1b",
 			Description: "Description",
-			Group: "Group",
-			Value: "value",
-			Disabled: true,
+			Group:       "Group",
+			Value:       "value",
+			Disabled:    true,
 		},
 	)
 	if option.ID() != "id" ||
@@ -154,13 +154,13 @@ func TestMultiSelectEnforcesBoundsAndDeclarationOrder(t *testing.T) {
 	}
 	prompt, err := prompts.NewMultiSelect(
 		prompts.MultiSelectConfig[string]{
-			ID: "features",
-			Label: "Features",
-			Options: options,
-			Min: 1,
-			Max: 2,
+			ID:          "features",
+			Label:       "Features",
+			Options:     options,
+			Min:         1,
+			Max:         2,
 			FallbackIDs: prompts.Some([]string{"c", "a"}),
-			Headless: prompts.HeadlessUseFallback,
+			Headless:    prompts.HeadlessUseFallback,
 		},
 	)
 	if err != nil {
@@ -204,24 +204,24 @@ func TestMultiSelectRejectsInvalidBoundsAndDefaults(t *testing.T) {
 	option := mustOption(t, prompts.OptionConfig[int]{ID: "one", Label: "One", Value: 1})
 	tests := []prompts.MultiSelectConfig[int]{
 		{
-			ID: "choice",
-			Label: "Choice",
+			ID:      "choice",
+			Label:   "Choice",
 			Options: []prompts.Option[int]{option},
-			Min: 2,
-			Max: 1,
+			Min:     2,
+			Max:     1,
 		},
 		{ID: "choice", Label: "Choice", Options: []prompts.Option[int]{option}, Min: 2},
 		{
-			ID: "choice",
-			Label: "Choice",
-			Options: []prompts.Option[int]{option},
+			ID:         "choice",
+			Label:      "Choice",
+			Options:    []prompts.Option[int]{option},
 			DefaultIDs: prompts.Some([]string{"missing"}),
 		},
 		{
-			ID: "choice",
-			Label: "Choice",
-			Options: []prompts.Option[int]{option},
-			Min: 1,
+			ID:         "choice",
+			Label:      "Choice",
+			Options:    []prompts.Option[int]{option},
+			Min:        1,
 			DefaultIDs: prompts.Some([]string{}),
 		},
 	}
@@ -244,7 +244,7 @@ func TestSearchDefinesUnicodeRankingAndStableTies(t *testing.T) {
 		mustOption(
 			t,
 			prompts.OptionConfig[string]{
-				ID: "prefix",
+				ID:    "prefix",
 				Label: "Café racer",
 				Value: "prefix",
 			},
@@ -252,7 +252,7 @@ func TestSearchDefinesUnicodeRankingAndStableTies(t *testing.T) {
 		mustOption(
 			t,
 			prompts.OptionConfig[string]{
-				ID: "token",
+				ID:    "token",
 				Label: "Great cafe",
 				Value: "token",
 			},
@@ -260,10 +260,10 @@ func TestSearchDefinesUnicodeRankingAndStableTies(t *testing.T) {
 		mustOption(
 			t,
 			prompts.OptionConfig[string]{
-				ID: "description",
-				Label: "Other",
+				ID:          "description",
+				Label:       "Other",
 				Description: "A cafe option",
-				Value: "description",
+				Value:       "description",
 			},
 		),
 		mustOption(
@@ -309,12 +309,11 @@ func TestSearchBoundsWorkAndCopiesResults(t *testing.T) {
 		mustOption(t, prompts.OptionConfig[int]{ID: "a", Label: "Alpha", Value: 1}),
 		mustOption(t, prompts.OptionConfig[int]{ID: "b", Label: "Alphabet", Value: 2}),
 	}
-	for _, policy := range
-		[]prompts.SearchPolicy{
-			{MaxOptions: 1, MaxResults: 1, MaxQueryRunes: 10},
-			{MaxOptions: 2, MaxResults: 1, MaxQueryRunes: 2},
-			{MaxOptions: 2, MaxResults: 0, MaxQueryRunes: 10},
-		} {
+	for _, policy := range []prompts.SearchPolicy{
+		{MaxOptions: 1, MaxResults: 1, MaxQueryRunes: 10},
+		{MaxOptions: 2, MaxResults: 1, MaxQueryRunes: 2},
+		{MaxOptions: 2, MaxResults: 0, MaxQueryRunes: 10},
+	} {
 		_, err := prompts.Search(options, "alpha", policy)
 		if !errors.Is(err, prompts.ErrUnsupported) {
 			t.Fatalf("Search(%#v) error = %v", policy, err)
@@ -367,13 +366,13 @@ func TestSearchSelectValidatesPolicyAndRetainsSearchKind(t *testing.T) {
 	prompt, err := prompts.NewSearchSelect(
 		prompts.SearchSelectConfig[int]{
 			Select: prompts.SelectConfig[int]{
-				ID: "choice",
-				Label: "Choice",
+				ID:      "choice",
+				Label:   "Choice",
 				Options: []prompts.Option[int]{option},
 			},
 			Search: prompts.SearchPolicy{
-				MaxOptions: 10,
-				MaxResults: 5,
+				MaxOptions:    10,
+				MaxResults:    5,
 				MaxQueryRunes: 20,
 			},
 		},
@@ -386,8 +385,8 @@ func TestSearchSelectValidatesPolicyAndRetainsSearchKind(t *testing.T) {
 	_, err = prompts.NewSearchSelect(
 		prompts.SearchSelectConfig[int]{
 			Select: prompts.SelectConfig[int]{
-				ID: "choice",
-				Label: "Choice",
+				ID:      "choice",
+				Label:   "Choice",
 				Options: []prompts.Option[int]{option},
 			},
 			Search: prompts.SearchPolicy{MaxOptions: 1},
@@ -400,8 +399,8 @@ func TestSearchSelectValidatesPolicyAndRetainsSearchKind(t *testing.T) {
 		prompts.SearchSelectConfig[int]{
 			Select: prompts.SelectConfig[int]{ID: "choice", Label: "Choice"},
 			Search: prompts.SearchPolicy{
-				MaxOptions: 10,
-				MaxResults: 5,
+				MaxOptions:    10,
+				MaxResults:    5,
 				MaxQueryRunes: 20,
 			},
 		},
@@ -421,42 +420,42 @@ func TestSelectDefinitionEdgeCases(t *testing.T) {
 	disabled := mustOption(
 		t,
 		prompts.OptionConfig[int]{
-			ID: "disabled",
-			Label: "Disabled",
-			Value: 2,
+			ID:       "disabled",
+			Label:    "Disabled",
+			Value:    2,
 			Disabled: true,
 		},
 	)
 	tests := []prompts.SelectConfig[int]{
 		{
-			ID: "choice",
-			Label: "Choice",
-			Options: []prompts.Option[int]{enabled},
+			ID:         "choice",
+			Label:      "Choice",
+			Options:    []prompts.Option[int]{enabled},
 			MaxOptions: -1,
 		},
 		{
-			ID: "choice",
-			Label: "Choice",
-			Options: []prompts.Option[int]{enabled, disabled},
+			ID:         "choice",
+			Label:      "Choice",
+			Options:    []prompts.Option[int]{enabled, disabled},
 			MaxOptions: 1,
 		},
 		{ID: "choice", Label: "Choice", Options: []prompts.Option[int]{{}}},
 		{
-			ID: "choice",
-			Label: "Choice",
-			Options: []prompts.Option[int]{enabled},
+			ID:        "choice",
+			Label:     "Choice",
+			Options:   []prompts.Option[int]{enabled},
 			DefaultID: prompts.Some("missing"),
 		},
 		{
-			ID: "choice",
-			Label: "Choice",
-			Options: []prompts.Option[int]{enabled, disabled},
+			ID:         "choice",
+			Label:      "Choice",
+			Options:    []prompts.Option[int]{enabled, disabled},
 			FallbackID: prompts.Some("disabled"),
 		},
 		{
-			ID: "choice",
-			Label: "Choice",
-			Options: []prompts.Option[int]{enabled},
+			ID:        "choice",
+			Label:     "Choice",
+			Options:   []prompts.Option[int]{enabled},
 			InitialID: "missing",
 		},
 		{Label: "Choice", Options: []prompts.Option[int]{enabled}},
@@ -469,13 +468,12 @@ func TestSelectDefinitionEdgeCases(t *testing.T) {
 	}
 	if _, err := prompts.NewSelect(
 		prompts.SelectConfig[int]{
-			ID: "choice",
-			Label: "Choice",
-			Options: []prompts.Option[int]{enabled},
+			ID:        "choice",
+			Label:     "Choice",
+			Options:   []prompts.Option[int]{enabled},
 			InitialID: "enabled",
 		},
-	);
-		err != nil {
+	); err != nil {
 		t.Fatalf("valid initial selection error = %v", err)
 	}
 }
@@ -490,37 +488,37 @@ func TestMultiSelectDefinitionEdgeCases(t *testing.T) {
 	disabled := mustOption(
 		t,
 		prompts.OptionConfig[int]{
-			ID: "disabled",
-			Label: "Disabled",
-			Value: 2,
+			ID:       "disabled",
+			Label:    "Disabled",
+			Value:    2,
 			Disabled: true,
 		},
 	)
 	tests := []prompts.MultiSelectConfig[int]{
 		{ID: "choice", Label: "Choice"},
 		{
-			ID: "choice",
-			Label: "Choice",
-			Options: []prompts.Option[int]{enabled},
+			ID:          "choice",
+			Label:       "Choice",
+			Options:     []prompts.Option[int]{enabled},
 			FallbackIDs: prompts.Some([]string{"missing"}),
 		},
 		{
-			ID: "choice",
-			Label: "Choice",
-			Options: []prompts.Option[int]{enabled},
+			ID:         "choice",
+			Label:      "Choice",
+			Options:    []prompts.Option[int]{enabled},
 			InitialIDs: []string{"missing"},
 		},
 		{
-			ID: "choice",
-			Label: "Choice",
-			Options: []prompts.Option[int]{enabled, disabled},
+			ID:         "choice",
+			Label:      "Choice",
+			Options:    []prompts.Option[int]{enabled, disabled},
 			InitialIDs: []string{"disabled"},
 		},
 		{Label: "Choice", Options: []prompts.Option[int]{enabled}},
 		{
-			ID: "choice",
-			Label: "Choice",
-			Options: []prompts.Option[int]{enabled},
+			ID:          "choice",
+			Label:       "Choice",
+			Options:     []prompts.Option[int]{enabled},
 			PreValidate: []prompts.Validator[[]int]{nil},
 		},
 	}
@@ -533,10 +531,10 @@ func TestMultiSelectDefinitionEdgeCases(t *testing.T) {
 
 	prompt, err := prompts.NewMultiSelect(
 		prompts.MultiSelectConfig[int]{
-			ID: "choice",
-			Label: "Choice",
+			ID:      "choice",
+			Label:   "Choice",
 			Options: []prompts.Option[int]{enabled},
-			Min: 1,
+			Min:     1,
 			Transform: []prompts.Transformer[[]int]{
 				func(
 					context.Context,

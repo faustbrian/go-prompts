@@ -16,7 +16,7 @@ func TestMessagesAndNotesPreserveTextualMeaning(t *testing.T) {
 	terminal := prompts.NewVirtualTerminal(40, 8)
 	execution := prompts.Execution{Output: terminal}
 	messages := []struct {
-		kind prompts.MessageKind
+		kind   prompts.MessageKind
 		marker string
 	}{
 		{prompts.MessageInfo, "Note"},
@@ -36,14 +36,12 @@ func TestMessagesAndNotesPreserveTextualMeaning(t *testing.T) {
 				Body: "first\nsecond\x1b[31m",
 			},
 			execution,
-		);
-			err != nil {
+		); err != nil {
 			t.Fatalf("WriteMessage() error = %v", err)
 		}
 	}
 	output := terminal.Output()
-	for _, value := range
-		[]string{"Note", "warning:", "error:", "success:", "first", "second\\u{1B}[31m"} {
+	for _, value := range []string{"Note", "warning:", "error:", "success:", "first", "second\\u{1B}[31m"} {
 		if !strings.Contains(output, value) {
 			t.Fatalf("message output missing %q: %q", value, output)
 		}
@@ -54,9 +52,9 @@ func TestTableAndSummaryAreBoundedDeterministicAndEscaped(t *testing.T) {
 	t.Parallel()
 
 	table := prompts.Table{
-		Headers: []string{"Name", "State"},
-		Rows: [][]string{{"alpha", "ready"}, {"界", "bad\rvalue"}},
-		MaxRows: 4,
+		Headers:    []string{"Name", "State"},
+		Rows:       [][]string{{"alpha", "ready"}, {"界", "bad\rvalue"}},
+		MaxRows:    4,
 		MaxColumns: 2,
 	}
 	terminal := prompts.NewVirtualTerminal(80, 24)
@@ -64,16 +62,14 @@ func TestTableAndSummaryAreBoundedDeterministicAndEscaped(t *testing.T) {
 		context.Background(),
 		table,
 		prompts.Execution{
-			Output: terminal,
+			Output:       terminal,
 			Capabilities: prompts.Capabilities{Unicode: true},
 		},
-	);
-		err != nil {
+	); err != nil {
 		t.Fatalf("WriteTable() error = %v", err)
 	}
 	output := terminal.Output()
-	for _, value := range
-		[]string{"| Name  | State", "| alpha | ready", "| 界", "bad\\u{D}value"} {
+	for _, value := range []string{"| Name  | State", "| alpha | ready", "| 界", "bad\\u{D}value"} {
 		if !strings.Contains(output, value) {
 			t.Fatalf("table output missing %q: %q", value, output)
 		}
@@ -84,12 +80,10 @@ func TestTableAndSummaryAreBoundedDeterministicAndEscaped(t *testing.T) {
 		context.Background(),
 		table,
 		prompts.Execution{Output: terminal},
-	);
-		err != nil {
+	); err != nil {
 		t.Fatalf("ASCII WriteTable() error = %v", err)
 	}
-	if output := terminal.Output();
-		!strings.Contains(output, "| \\u{754C}") || strings.Contains(output, "界") {
+	if output := terminal.Output(); !strings.Contains(output, "| \\u{754C}") || strings.Contains(output, "界") {
 		t.Fatalf("ASCII table output = %q", output)
 	}
 
@@ -98,14 +92,12 @@ func TestTableAndSummaryAreBoundedDeterministicAndEscaped(t *testing.T) {
 		context.Background(),
 		[]prompts.KeyValue{{Key: "region", Value: "eu"}, {Key: "mode", Value: "safe"}},
 		prompts.Execution{Output: terminal},
-	);
-		err != nil {
+	); err != nil {
 		t.Fatalf("WriteSummary() error = %v", err)
 	}
-	if output := terminal.Output();
-		!strings.Contains(output, "region: eu") ||
-			!strings.Contains(output, "mode: safe") ||
-			strings.Index(output, "region") > strings.Index(output, "mode") {
+	if output := terminal.Output(); !strings.Contains(output, "region: eu") ||
+		!strings.Contains(output, "mode: safe") ||
+		strings.Index(output, "region") > strings.Index(output, "mode") {
 		t.Fatalf("summary output = %q", output)
 	}
 }
@@ -117,9 +109,9 @@ func TestTableAcceptsExactRowAndColumnLimits(t *testing.T) {
 	err := prompts.WriteTable(
 		context.Background(),
 		prompts.Table{
-			Headers: []string{"Column"},
-			Rows: [][]string{{"value"}},
-			MaxRows: 1,
+			Headers:    []string{"Column"},
+			Rows:       [][]string{{"value"}},
+			MaxRows:    1,
 			MaxColumns: 1,
 		},
 		prompts.Execution{Output: terminal},
@@ -127,8 +119,7 @@ func TestTableAcceptsExactRowAndColumnLimits(t *testing.T) {
 	if err != nil {
 		t.Fatalf("WriteTable() error = %v", err)
 	}
-	if got := terminal.Output();
-		!strings.Contains(got, "| Column |") || !strings.Contains(got, "| value  |") {
+	if got := terminal.Output(); !strings.Contains(got, "| Column |") || !strings.Contains(got, "| value  |") {
 		t.Fatalf("table output = %q", got)
 	}
 }
@@ -147,8 +138,7 @@ func TestPresentationRejectsInvalidDefinitionsAndPropagatesIO(t *testing.T) {
 			context.Background(),
 			table,
 			prompts.Execution{Output: io.Discard},
-		);
-			!errors.Is(err, prompts.ErrInvalidDefinition) {
+		); !errors.Is(err, prompts.ErrInvalidDefinition) {
 			t.Fatalf("WriteTable(%#v) error = %v", table, err)
 		}
 	}
@@ -156,40 +146,35 @@ func TestPresentationRejectsInvalidDefinitionsAndPropagatesIO(t *testing.T) {
 		context.Background(),
 		[]prompts.KeyValue{{}},
 		prompts.Execution{Output: io.Discard},
-	);
-		!errors.Is(err, prompts.ErrInvalidDefinition) {
+	); !errors.Is(err, prompts.ErrInvalidDefinition) {
 		t.Fatalf("invalid summary error = %v", err)
 	}
 	if err := prompts.WriteSummary(
 		context.Background(),
 		nil,
 		prompts.Execution{Output: io.Discard},
-	);
-		!errors.Is(err, prompts.ErrInvalidDefinition) {
+	); !errors.Is(err, prompts.ErrInvalidDefinition) {
 		t.Fatalf("empty summary error = %v", err)
 	}
 	if err := prompts.WriteMessage(
 		context.Background(),
 		prompts.Message{Kind: prompts.MessageKind(200), Title: "bad"},
 		prompts.Execution{Output: io.Discard},
-	);
-		!errors.Is(err, prompts.ErrInvalidDefinition) {
+	); !errors.Is(err, prompts.ErrInvalidDefinition) {
 		t.Fatalf("invalid message error = %v", err)
 	}
 	if err := prompts.WriteMessage(
 		context.Background(),
 		prompts.Message{Kind: prompts.MessageInfo},
 		prompts.Execution{Output: io.Discard},
-	);
-		!errors.Is(err, prompts.ErrInvalidDefinition) {
+	); !errors.Is(err, prompts.ErrInvalidDefinition) {
 		t.Fatalf("empty message error = %v", err)
 	}
 	if err := prompts.WriteMessage(
 		context.Background(),
 		prompts.Message{Kind: prompts.MessageInfo, Title: "note"},
 		prompts.Execution{Output: &failingWriter{err: io.ErrClosedPipe}},
-	);
-		!errors.Is(err, prompts.ErrWriter) {
+	); !errors.Is(err, prompts.ErrWriter) {
 		t.Fatalf("message writer error = %v", err)
 	}
 }

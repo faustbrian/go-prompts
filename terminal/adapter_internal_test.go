@@ -34,8 +34,7 @@ func TestAdapterRestoresWhenOutputConfigurationFails(t *testing.T) {
 	adapter.setOutput = func(uintptr) error {
 		return outputFailure
 	}
-	if err := adapter.Acquire(internalTestContext(t));
-		!errors.Is(err, prompts.ErrAdapter) || !errors.Is(err, outputFailure) {
+	if err := adapter.Acquire(internalTestContext(t)); !errors.Is(err, prompts.ErrAdapter) || !errors.Is(err, outputFailure) {
 		t.Fatalf("Acquire() error = %v", err)
 	}
 	after, err := term.GetState(int(replica.Fd()))
@@ -75,8 +74,7 @@ func TestAdapterPropagatesDecoderAndReaderFailures(t *testing.T) {
 	adapter.read = func([]byte) (int, error) {
 		return 0, readFailure
 	}
-	if _, err := adapter.Next(internalTestContext(t));
-		!errors.Is(err, prompts.ErrReader) || !errors.Is(err, readFailure) {
+	if _, err := adapter.Next(internalTestContext(t)); !errors.Is(err, prompts.ErrReader) || !errors.Is(err, readFailure) {
 		t.Fatalf("reader Next() error = %v", err)
 	}
 }
@@ -101,8 +99,7 @@ func TestAdapterRejectsUnsupportedDeadlineFailure(t *testing.T) {
 	adapter.read = func([]byte) (int, error) {
 		return 0, errors.New("unexpected read")
 	}
-	if _, err := adapter.Next(internalTestContext(t));
-		!errors.Is(err, prompts.ErrAdapter) || !errors.Is(err, deadlineFailure) {
+	if _, err := adapter.Next(internalTestContext(t)); !errors.Is(err, prompts.ErrAdapter) || !errors.Is(err, deadlineFailure) {
 		t.Fatalf("Next() error = %v", err)
 	}
 }
@@ -184,8 +181,7 @@ func TestAdapterSelectsBoundedReadDeadline(t *testing.T) {
 		context.Background(),
 		pollInterval,
 		now,
-	), now.Add(pollInterval);
-		!got.Equal(want) {
+	), now.Add(pollInterval); !got.Equal(want) {
 		t.Fatalf("background deadline = %v, want %v", got, want)
 	}
 	earlier := now.Add(time.Second)
@@ -197,8 +193,7 @@ func TestAdapterSelectsBoundedReadDeadline(t *testing.T) {
 	later := now.Add(3 * time.Second)
 	laterContext, cancelLater := context.WithDeadline(context.Background(), later)
 	defer cancelLater()
-	if got, want := nextReadDeadline(laterContext, pollInterval, now), now.Add(pollInterval);
-		!got.Equal(want) {
+	if got, want := nextReadDeadline(laterContext, pollInterval, now), now.Add(pollInterval); !got.Equal(want) {
 		t.Fatalf("later context deadline = %v, want %v", got, want)
 	}
 }
@@ -249,8 +244,7 @@ func TestAdapterReadLoopHandlesTimeoutAndEmptyProgress(t *testing.T) {
 				cancel()
 				return 0, testTimeoutError{}
 			}
-			if _, nextErr := adapter.Next(ctx);
-				!errors.Is(nextErr, context.Canceled) || reads != 1 {
+			if _, nextErr := adapter.Next(ctx); !errors.Is(nextErr, context.Canceled) || reads != 1 {
 				t.Fatalf("Next() error = %v after %d reads", nextErr, reads)
 			}
 		},
@@ -273,8 +267,7 @@ func TestAdapterReadLoopHandlesTimeoutAndEmptyProgress(t *testing.T) {
 				cancel()
 				return 0, nil
 			}
-			if _, nextErr := adapter.Next(ctx);
-				!errors.Is(nextErr, context.Canceled) || reads != 1 {
+			if _, nextErr := adapter.Next(ctx); !errors.Is(nextErr, context.Canceled) || reads != 1 {
 				t.Fatalf("Next() error = %v after %d reads", nextErr, reads)
 			}
 		},
@@ -293,7 +286,7 @@ func (testTimeoutError) Timeout() bool {
 
 func internalTestContext(t *testing.T) context.Context {
 	t.Helper()
-	ctx, cancel := context.WithTimeout(context.Background(), 2 * time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 	t.Cleanup(cancel)
 
 	return ctx

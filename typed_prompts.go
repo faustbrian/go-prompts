@@ -9,30 +9,30 @@ import (
 
 type stringDefinitionConfig struct {
 	id, label, description, placeholder, hint, help string
-	defaultValue, fallbackValue Optional[string]
-	headless HeadlessBehavior
-	accessibility Accessibility
-	pre []Validator[string]
-	transform []Transformer[string]
-	post []Validator[string]
-	retry RetryPolicy
-	cancel CancelBehavior
-	eof EOFBehavior
-	secret SecretClass
+	defaultValue, fallbackValue                     Optional[string]
+	headless                                        HeadlessBehavior
+	accessibility                                   Accessibility
+	pre                                             []Validator[string]
+	transform                                       []Transformer[string]
+	post                                            []Validator[string]
+	retry                                           RetryPolicy
+	cancel                                          CancelBehavior
+	eof                                             EOFBehavior
+	secret                                          SecretClass
 }
 
 // MultilineConfig defines a multiline text prompt.
 type MultilineConfig struct {
 	ID, Label, Description, Placeholder, Hint, Help string
-	Default, Fallback Optional[string]
-	Headless HeadlessBehavior
-	Accessibility Accessibility
-	PreValidate, PostValidate []Validator[string]
-	Transform []Transformer[string]
-	Retry RetryPolicy
-	Cancel CancelBehavior
-	EndOfInput EOFBehavior
-	Secret SecretClass
+	Default, Fallback                               Optional[string]
+	Headless                                        HeadlessBehavior
+	Accessibility                                   Accessibility
+	PreValidate, PostValidate                       []Validator[string]
+	Transform                                       []Transformer[string]
+	Retry                                           RetryPolicy
+	Cancel                                          CancelBehavior
+	EndOfInput                                      EOFBehavior
+	Secret                                          SecretClass
 }
 
 // NewMultiline creates a multiline text prompt.
@@ -120,25 +120,25 @@ func newStringPrompt(
 
 	return Prompt[string]{
 		definition: definition[string]{
-			kind: kind,
-			id: config.id,
-			label: config.label,
-			description: config.description,
-			placeholder: config.placeholder,
-			hint: config.hint,
-			help: config.help,
-			defaultValue: config.defaultValue,
+			kind:          kind,
+			id:            config.id,
+			label:         config.label,
+			description:   config.description,
+			placeholder:   config.placeholder,
+			hint:          config.hint,
+			help:          config.help,
+			defaultValue:  config.defaultValue,
 			fallbackValue: config.fallbackValue,
-			headless: config.headless,
+			headless:      config.headless,
 			accessibility: config.accessibility,
-			preValidate: append([]Validator[string](nil), config.pre...),
-			transform: append([]Transformer[string](nil), config.transform...),
-			postValidate: append([]Validator[string](nil), config.post...),
-			retry: retry,
-			cancel: config.cancel,
-			endOfInput: config.eof,
-			secret: config.secret,
-			parse: parser,
+			preValidate:   append([]Validator[string](nil), config.pre...),
+			transform:     append([]Transformer[string](nil), config.transform...),
+			postValidate:  append([]Validator[string](nil), config.post...),
+			retry:         retry,
+			cancel:        config.cancel,
+			endOfInput:    config.eof,
+			secret:        config.secret,
+			parse:         parser,
 		},
 	}, nil
 }
@@ -146,14 +146,14 @@ func newStringPrompt(
 // IntegerConfig defines a signed 64-bit integer prompt.
 type IntegerConfig struct {
 	ID, Label, Description, Placeholder, Hint, Help string
-	Default, Fallback Optional[int64]
-	Headless HeadlessBehavior
-	Accessibility Accessibility
-	PreValidate, PostValidate []Validator[int64]
-	Transform []Transformer[int64]
-	Retry RetryPolicy
-	Cancel CancelBehavior
-	EndOfInput EOFBehavior
+	Default, Fallback                               Optional[int64]
+	Headless                                        HeadlessBehavior
+	Accessibility                                   Accessibility
+	PreValidate, PostValidate                       []Validator[int64]
+	Transform                                       []Transformer[int64]
+	Retry                                           RetryPolicy
+	Cancel                                          CancelBehavior
+	EndOfInput                                      EOFBehavior
 }
 
 // NewInteger creates a signed 64-bit integer prompt.
@@ -185,14 +185,14 @@ func NewInteger(config IntegerConfig) (Prompt[int64], error) {
 // DecimalConfig defines an exact base-10 prompt.
 type DecimalConfig struct {
 	ID, Label, Description, Placeholder, Hint, Help string
-	Default, Fallback Optional[Decimal]
-	Headless HeadlessBehavior
-	Accessibility Accessibility
-	PreValidate, PostValidate []Validator[Decimal]
-	Transform []Transformer[Decimal]
-	Retry RetryPolicy
-	Cancel CancelBehavior
-	EndOfInput EOFBehavior
+	Default, Fallback                               Optional[Decimal]
+	Headless                                        HeadlessBehavior
+	Accessibility                                   Accessibility
+	PreValidate, PostValidate                       []Validator[Decimal]
+	Transform                                       []Transformer[Decimal]
+	Retry                                           RetryPolicy
+	Cancel                                          CancelBehavior
+	EndOfInput                                      EOFBehavior
 }
 
 // NewDecimal creates an exact base-10 decimal prompt.
@@ -224,14 +224,14 @@ func NewDecimal(config DecimalConfig) (Prompt[Decimal], error) {
 // DurationConfig defines a Go duration prompt.
 type DurationConfig struct {
 	ID, Label, Description, Placeholder, Hint, Help string
-	Default, Fallback Optional[time.Duration]
-	Headless HeadlessBehavior
-	Accessibility Accessibility
-	PreValidate, PostValidate []Validator[time.Duration]
-	Transform []Transformer[time.Duration]
-	Retry RetryPolicy
-	Cancel CancelBehavior
-	EndOfInput EOFBehavior
+	Default, Fallback                               Optional[time.Duration]
+	Headless                                        HeadlessBehavior
+	Accessibility                                   Accessibility
+	PreValidate, PostValidate                       []Validator[time.Duration]
+	Transform                                       []Transformer[time.Duration]
+	Retry                                           RetryPolicy
+	Cancel                                          CancelBehavior
+	EndOfInput                                      EOFBehavior
 }
 
 // NewDuration creates a Go duration prompt.
@@ -272,14 +272,14 @@ func NewDuration(config DurationConfig) (Prompt[time.Duration], error) {
 // DateConfig defines an ISO calendar-date prompt.
 type DateConfig struct {
 	ID, Label, Description, Placeholder, Hint, Help string
-	Default, Fallback Optional[Date]
-	Headless HeadlessBehavior
-	Accessibility Accessibility
-	PreValidate, PostValidate []Validator[Date]
-	Transform []Transformer[Date]
-	Retry RetryPolicy
-	Cancel CancelBehavior
-	EndOfInput EOFBehavior
+	Default, Fallback                               Optional[Date]
+	Headless                                        HeadlessBehavior
+	Accessibility                                   Accessibility
+	PreValidate, PostValidate                       []Validator[Date]
+	Transform                                       []Transformer[Date]
+	Retry                                           RetryPolicy
+	Cancel                                          CancelBehavior
+	EndOfInput                                      EOFBehavior
 }
 
 // NewDate creates an ISO calendar-date prompt.
@@ -311,14 +311,14 @@ func NewDate(config DateConfig) (Prompt[Date], error) {
 // TimeConfig defines a wall-clock time prompt.
 type TimeConfig struct {
 	ID, Label, Description, Placeholder, Hint, Help string
-	Default, Fallback Optional[TimeOfDay]
-	Headless HeadlessBehavior
-	Accessibility Accessibility
-	PreValidate, PostValidate []Validator[TimeOfDay]
-	Transform []Transformer[TimeOfDay]
-	Retry RetryPolicy
-	Cancel CancelBehavior
-	EndOfInput EOFBehavior
+	Default, Fallback                               Optional[TimeOfDay]
+	Headless                                        HeadlessBehavior
+	Accessibility                                   Accessibility
+	PreValidate, PostValidate                       []Validator[TimeOfDay]
+	Transform                                       []Transformer[TimeOfDay]
+	Retry                                           RetryPolicy
+	Cancel                                          CancelBehavior
+	EndOfInput                                      EOFBehavior
 }
 
 // NewTime creates a wall-clock time prompt.
@@ -350,15 +350,15 @@ func NewTime(config TimeConfig) (Prompt[TimeOfDay], error) {
 // PathConfig defines a path prompt without filesystem access.
 type PathConfig struct {
 	ID, Label, Description, Placeholder, Hint, Help string
-	Default, Fallback Optional[Path]
-	Headless HeadlessBehavior
-	Accessibility Accessibility
-	PreValidate, PostValidate []Validator[Path]
-	Transform []Transformer[Path]
-	Retry RetryPolicy
-	Cancel CancelBehavior
-	EndOfInput EOFBehavior
-	Kind PathKind
+	Default, Fallback                               Optional[Path]
+	Headless                                        HeadlessBehavior
+	Accessibility                                   Accessibility
+	PreValidate, PostValidate                       []Validator[Path]
+	Transform                                       []Transformer[Path]
+	Retry                                           RetryPolicy
+	Cancel                                          CancelBehavior
+	EndOfInput                                      EOFBehavior
+	Kind                                            PathKind
 }
 
 // NewPath creates a path prompt that performs no filesystem access.
@@ -405,15 +405,15 @@ func NewPath(config PathConfig) (Prompt[Path], error) {
 // ConfirmConfig defines a localized yes/no prompt.
 type ConfirmConfig struct {
 	ID, Label, Description, Placeholder, Hint, Help string
-	Default, Fallback Optional[bool]
-	Headless HeadlessBehavior
-	Accessibility Accessibility
-	PreValidate, PostValidate []Validator[bool]
-	Transform []Transformer[bool]
-	Retry RetryPolicy
-	Cancel CancelBehavior
-	EndOfInput EOFBehavior
-	Accept, Reject []string
+	Default, Fallback                               Optional[bool]
+	Headless                                        HeadlessBehavior
+	Accessibility                                   Accessibility
+	PreValidate, PostValidate                       []Validator[bool]
+	Transform                                       []Transformer[bool]
+	Retry                                           RetryPolicy
+	Cancel                                          CancelBehavior
+	EndOfInput                                      EOFBehavior
+	Accept, Reject                                  []string
 }
 
 // NewConfirm creates a localized yes/no prompt.
@@ -548,25 +548,25 @@ func newTypedPrompt[T any](
 
 	return Prompt[T]{
 		definition: definition[T]{
-			kind: kind,
-			id: id,
-			label: label,
-			description: description,
-			placeholder: placeholder,
-			hint: hint,
-			help: help,
-			defaultValue: defaultValue,
+			kind:          kind,
+			id:            id,
+			label:         label,
+			description:   description,
+			placeholder:   placeholder,
+			hint:          hint,
+			help:          help,
+			defaultValue:  defaultValue,
 			fallbackValue: fallbackValue,
-			headless: headless,
+			headless:      headless,
 			accessibility: accessibility,
-			preValidate: append([]Validator[T](nil), pre...),
-			transform: append([]Transformer[T](nil), transform...),
-			postValidate: append([]Validator[T](nil), post...),
-			retry: normalizedRetry,
-			cancel: cancel,
-			endOfInput: eof,
-			secret: secret,
-			parse: parser,
+			preValidate:   append([]Validator[T](nil), pre...),
+			transform:     append([]Transformer[T](nil), transform...),
+			postValidate:  append([]Validator[T](nil), post...),
+			retry:         normalizedRetry,
+			cancel:        cancel,
+			endOfInput:    eof,
+			secret:        secret,
+			parse:         parser,
 		},
 	}, nil
 }

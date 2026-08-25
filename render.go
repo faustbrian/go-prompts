@@ -14,14 +14,14 @@ import (
 type Role string
 
 const (
-	RoleLabel Role = "label"
-	RoleValue Role = "value"
-	RoleHint Role = "hint"
-	RoleHelp Role = "help"
-	RoleError Role = "error"
-	RoleSuccess Role = "success"
-	RoleWarning Role = "warning"
-	RoleFocus Role = "focus"
+	RoleLabel    Role = "label"
+	RoleValue    Role = "value"
+	RoleHint     Role = "hint"
+	RoleHelp     Role = "help"
+	RoleError    Role = "error"
+	RoleSuccess  Role = "success"
+	RoleWarning  Role = "warning"
+	RoleFocus    Role = "focus"
 	RoleSelected Role = "selected"
 	RoleDisabled Role = "disabled"
 	RoleProgress Role = "progress"
@@ -29,9 +29,9 @@ const (
 
 // Segment is a semantic unit of untrusted caller-facing text.
 type Segment struct {
-	Role Role
+	Role    Role
 	Content string
-	target string
+	target  string
 }
 
 // Text creates a semantic text segment.
@@ -115,9 +115,9 @@ func (frame Frame) Lines() []SemanticLine {
 
 // RenderOptions are explicit output capabilities.
 type RenderOptions struct {
-	Width int
-	Color ColorProfile
-	ASCIIOnly bool
+	Width      int
+	Color      ColorProfile
+	ASCIIOnly  bool
 	Hyperlinks bool
 }
 
@@ -148,8 +148,8 @@ func (renderer ANSIRenderer) Render(frame Frame, options RenderOptions) (string,
 }
 
 type renderCell struct {
-	text string
-	role Role
+	text   string
+	role   Role
 	target string
 }
 
@@ -162,9 +162,9 @@ func renderSemantic(
 ) (string, error) {
 	if options.Width < 0 || options.Color > ColorTrueColor {
 		return "", &Error{
-			Kind: ErrorRenderer,
+			Kind:      ErrorRenderer,
 			Operation: "render frame",
-			Cause: ErrRenderer,
+			Cause:     ErrRenderer,
 		}
 	}
 
@@ -252,7 +252,7 @@ func writeCells(
 			continue
 		}
 		cellWidth := uniseg.StringWidth(cell.text)
-		if options.Width > 0 && lineStarted && width + cellWidth > options.Width {
+		if options.Width > 0 && lineStarted && width+cellWidth > options.Width {
 			breakLine()
 		}
 		if hyperlinks && activeTarget != cell.target {
@@ -270,8 +270,7 @@ func writeCells(
 			if active != "" {
 				output.WriteString("\x1b[0m")
 			}
-			if prefix := ansiStyle(theme.Style(cell.role), options.Color);
-				prefix != "" {
+			if prefix := ansiStyle(theme.Style(cell.role), options.Color); prefix != "" {
 				output.WriteString(prefix)
 				active = cell.role
 			} else {

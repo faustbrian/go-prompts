@@ -9,11 +9,10 @@ func TestInteractionAllowedRequiresBothTerminals(t *testing.T) {
 	t.Parallel()
 
 	policy := InteractionPolicy{Mode: InteractiveRequired, PermitInteraction: true}
-	for name, capabilities := range
-		map[string]Capabilities{
-			"input only": {InputTerminal: true},
-			"output only": {OutputTerminal: true},
-		} {
+	for name, capabilities := range map[string]Capabilities{
+		"input only":  {InputTerminal: true},
+		"output only": {OutputTerminal: true},
+	} {
 		t.Run(
 			name,
 			func(t *testing.T) {

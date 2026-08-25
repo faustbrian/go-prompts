@@ -9,7 +9,7 @@ import (
 
 const (
 	bracketedPasteStart = "\x1b[200~"
-	bracketedPasteEnd = "\x1b[201~"
+	bracketedPasteEnd   = "\x1b[201~"
 )
 
 type escapeStatus uint8
@@ -22,21 +22,21 @@ const (
 
 // DecoderConfig bounds undecoded terminal bytes and bracketed paste content.
 type DecoderConfig struct {
-	MaxPasteBytes int
+	MaxPasteBytes  int
 	MaxBufferBytes int
-	ByteInput bool
+	ByteInput      bool
 }
 
 // Decoder incrementally translates common terminal byte sequences into
 // semantic events. It reads no stream and owns no goroutine or terminal state.
 type Decoder struct {
-	mutex sync.Mutex
-	buffer []byte
-	paste []byte
-	inPaste bool
+	mutex         sync.Mutex
+	buffer        []byte
+	paste         []byte
+	inPaste       bool
 	maxPasteBytes int
-	maxBuffer int
-	byteInput bool
+	maxBuffer     int
+	byteInput     bool
 }
 
 // NewDecoder creates a bounded, concurrent-safe incremental decoder.
@@ -64,8 +64,8 @@ func NewDecoder(config DecoderConfig) (*Decoder, error) {
 
 	return &Decoder{
 		maxPasteBytes: config.MaxPasteBytes,
-		maxBuffer: config.MaxBufferBytes,
-		byteInput: config.ByteInput,
+		maxBuffer:     config.MaxBufferBytes,
+		byteInput:     config.ByteInput,
 	}, nil
 }
 
@@ -77,7 +77,7 @@ func (decoder *Decoder) Feed(chunk []byte) ([]InputEvent, error) {
 	if len(chunk) == 0 {
 		return []InputEvent{}, nil
 	}
-	if len(decoder.buffer) + len(chunk) > decoder.maxBuffer {
+	if len(decoder.buffer)+len(chunk) > decoder.maxBuffer {
 		return nil, decoder.fail()
 	}
 	decoder.buffer = append(decoder.buffer, chunk...)
@@ -179,7 +179,7 @@ func (decoder *Decoder) decode() ([]InputEvent, error) {
 
 func (decoder *Decoder) decodePaste() (bool, InputEvent, error) {
 	if end := bytes.Index(decoder.buffer, []byte(bracketedPasteEnd)); end >= 0 {
-		if len(decoder.paste) + end > decoder.maxPasteBytes {
+		if len(decoder.paste)+end > decoder.maxPasteBytes {
 			return false, InputEvent{}, decoder.fail()
 		}
 		decoder.paste = append(decoder.paste, decoder.buffer[:end]...)
@@ -201,7 +201,7 @@ func (decoder *Decoder) decodePaste() (bool, InputEvent, error) {
 
 	keep := terminalPrefixSuffix(decoder.buffer, []byte(bracketedPasteEnd))
 	content := len(decoder.buffer) - keep
-	if len(decoder.paste) + content > decoder.maxPasteBytes {
+	if len(decoder.paste)+content > decoder.maxPasteBytes {
 		return false, InputEvent{}, decoder.fail()
 	}
 	decoder.paste = append(decoder.paste, decoder.buffer[:content]...)
@@ -215,7 +215,7 @@ func (decoder *Decoder) decodePaste() (bool, InputEvent, error) {
 func decodeEscape(input []byte) (InputEvent, int, escapeStatus) {
 	sequences := []struct {
 		value string
-		key Key
+		key   Key
 	}{
 		{"\x1b[A", KeyUp},
 		{"\x1b[B", KeyDown},
@@ -253,10 +253,10 @@ func decodeEscape(input []byte) (InputEvent, int, escapeStatus) {
 }
 
 func terminalPrefixSuffix(content, marker []byte) int {
-	maximum := min(len(content), len(marker) - 1)
+	maximum := min(len(content), len(marker)-1)
 	for offset := range maximum {
 		size := maximum - offset
-		if bytes.Equal(content[len(content) - size:], marker[:size]) {
+		if bytes.Equal(content[len(content)-size:], marker[:size]) {
 			return size
 		}
 	}

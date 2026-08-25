@@ -10,8 +10,7 @@ func TestOwnOptionsExactBoundsAndRequiredFields(t *testing.T) {
 	if err != nil || len(options) != 1 || byID["one"].value != 1 {
 		t.Fatalf("exact ownOptions() = %#v, %#v, %v", options, byID, err)
 	}
-	for name, option := range
-		map[string]Option[int]{"identity": {label: "One"}, "label": {id: "one"}} {
+	for name, option := range map[string]Option[int]{"identity": {label: "One"}, "label": {id: "one"}} {
 		if _, _, err := ownOptions([]Option[int]{option}, 1); err == nil {
 			t.Fatalf("%s ownOptions() returned nil error", name)
 		}
@@ -27,11 +26,11 @@ func TestMultiSelectAcceptsExactDeclaredBounds(t *testing.T) {
 	}
 	prompt, err := NewMultiSelect(
 		MultiSelectConfig[int]{
-			ID: "numbers",
-			Label: "Numbers",
-			Options: options,
-			Min: 2,
-			Max: 2,
+			ID:         "numbers",
+			Label:      "Numbers",
+			Options:    options,
+			Min:        2,
+			Max:        2,
 			MaxOptions: 2,
 		},
 	)
@@ -49,21 +48,20 @@ func TestMultiSelectRejectsEachInvalidBoundIndependently(t *testing.T) {
 		{id: "one", label: "One", value: 1},
 		{id: "two", label: "Two", value: 2},
 	}
-	for name, bounds := range
-		map[string]struct {
-			minimum, maximum int
-		}{
-			"negative minimum": {-1, 2},
-			"maximum below minimum": {2, 1},
-			"maximum above options": {0, 3},
-		} {
+	for name, bounds := range map[string]struct {
+		minimum, maximum int
+	}{
+		"negative minimum":      {-1, 2},
+		"maximum below minimum": {2, 1},
+		"maximum above options": {0, 3},
+	} {
 		_, err := NewMultiSelect(
 			MultiSelectConfig[int]{
-				ID: "numbers",
-				Label: "Numbers",
-				Options: options,
-				Min: bounds.minimum,
-				Max: bounds.maximum,
+				ID:         "numbers",
+				Label:      "Numbers",
+				Options:    options,
+				Min:        bounds.minimum,
+				Max:        bounds.maximum,
 				MaxOptions: 2,
 			},
 		)

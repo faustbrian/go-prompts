@@ -26,8 +26,8 @@ func TestRunRefusesForbiddenHeadlessPromptWithoutReading(t *testing.T) {
 
 	prompt, err := prompts.NewText(
 		prompts.TextConfig{
-			ID: "account-name",
-			Label: "Account name",
+			ID:       "account-name",
+			Label:    "Account name",
 			Headless: prompts.HeadlessForbidden,
 		},
 	)
@@ -42,9 +42,9 @@ func TestRunRefusesForbiddenHeadlessPromptWithoutReading(t *testing.T) {
 		context.Background(),
 		prompt,
 		prompts.Execution{
-			Input: rejectingReader{t: t},
+			Input:  rejectingReader{t: t},
 			Output: &output,
-			Error: &errorOutput,
+			Error:  &errorOutput,
 			Policy: prompts.InteractionPolicy{Mode: prompts.NonInteractiveOnly},
 		},
 	)

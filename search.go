@@ -13,8 +13,8 @@ import (
 
 // SearchPolicy bounds deterministic static option search.
 type SearchPolicy struct {
-	MaxOptions int
-	MaxResults int
+	MaxOptions    int
+	MaxResults    int
 	MaxQueryRunes int
 }
 
@@ -50,23 +50,23 @@ func Search[T any](options []Option[T], query string, policy SearchPolicy) ([]Op
 	normalizedPolicy, err := normalizeSearchPolicy(policy)
 	if err != nil {
 		return nil, &Error{
-			Kind: ErrorUnsupported,
+			Kind:      ErrorUnsupported,
 			Operation: "search options",
-			Cause: ErrUnsupported,
+			Cause:     ErrUnsupported,
 		}
 	}
 	if len(options) > normalizedPolicy.MaxOptions {
 		return nil, &Error{
-			Kind: ErrorUnsupported,
+			Kind:      ErrorUnsupported,
 			Operation: "search options",
-			Cause: ErrUnsupported,
+			Cause:     ErrUnsupported,
 		}
 	}
 	if utf8.RuneCountInString(query) > normalizedPolicy.MaxQueryRunes {
 		return nil, &Error{
-			Kind: ErrorUnsupported,
+			Kind:      ErrorUnsupported,
 			Operation: "search options",
-			Cause: ErrUnsupported,
+			Cause:     ErrUnsupported,
 		}
 	}
 	if len(options) == 0 {
@@ -75,9 +75,9 @@ func Search[T any](options []Option[T], query string, policy SearchPolicy) ([]Op
 	owned, _, err := ownOptions(options, normalizedPolicy.MaxOptions)
 	if err != nil {
 		return nil, &Error{
-			Kind: ErrorUnsupported,
+			Kind:      ErrorUnsupported,
 			Operation: "search options",
-			Cause: ErrUnsupported,
+			Cause:     ErrUnsupported,
 		}
 	}
 	options = owned
@@ -85,8 +85,8 @@ func Search[T any](options []Option[T], query string, policy SearchPolicy) ([]Op
 	queryTokens := strings.Fields(normalizedQuery)
 	type match struct {
 		option Option[T]
-		rank int
-		index int
+		rank   int
+		index  int
 	}
 	matches := make([]match, 0, min(len(options), normalizedPolicy.MaxResults))
 	for index, option := range options {

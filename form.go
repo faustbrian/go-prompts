@@ -38,7 +38,7 @@ func When(field FormField, predicate func(FormResult) bool) FormField {
 }
 
 type conditionalFormField struct {
-	field FormField
+	field     FormField
 	predicate func(FormResult) bool
 }
 
@@ -86,17 +86,17 @@ func (field conditionalFormField) condition(result FormResult) bool {
 
 // FormConfig defines an ordered grouped interaction.
 type FormConfig struct {
-	ID string
-	Fields []FormField
-	Validate []FormValidator
+	ID           string
+	Fields       []FormField
+	Validate     []FormValidator
 	Dependencies any
 }
 
 // Form is an immutable grouped prompt definition.
 type Form struct {
-	id string
-	fields []FormField
-	validators []FormValidator
+	id           string
+	fields       []FormField
+	validators   []FormValidator
 	dependencies any
 }
 
@@ -136,9 +136,9 @@ func NewForm(config FormConfig) (Form, error) {
 	}
 
 	return Form{
-		id: config.ID,
-		fields: fields,
-		validators: append([]FormValidator(nil), config.Validate...),
+		id:           config.ID,
+		fields:       fields,
+		validators:   append([]FormValidator(nil), config.Validate...),
 		dependencies: config.Dependencies,
 	}, nil
 }
@@ -151,7 +151,7 @@ type storedFormValue struct {
 // FormResult is an immutable typed answer collection.
 type FormResult struct {
 	values map[string]storedFormValue
-	order []string
+	order  []string
 }
 
 // IDs returns answered field identities in execution order.
@@ -213,10 +213,10 @@ func RunForm(
 		}
 		if recover() != nil {
 			resultErr = &Error{
-				Kind: ErrorAdapter,
+				Kind:      ErrorAdapter,
 				Operation: "run form callback",
-				PromptID: form.id,
-				Cause: ErrAdapter,
+				PromptID:  form.id,
+				Cause:     ErrAdapter,
 			}
 		}
 		if resultErr != nil {
@@ -243,7 +243,7 @@ func RunForm(
 			interaction.captured = nil
 		}
 		if errors.Is(err, errFormBack) {
-			target := max(0, index - 1)
+			target := max(0, index-1)
 			for target != 0 && !form.fields[target].condition(result) {
 				target--
 			}
@@ -304,10 +304,10 @@ func formValidationFailure(formID string, result FormResult, cause error) error 
 		cause = NewValidationIssue("form_validation", "Form validation failed", fields...)
 	}
 	return &Error{
-		Kind: ErrorValidationExhausted,
+		Kind:      ErrorValidationExhausted,
 		Operation: "validate form",
-		PromptID: formID,
-		Cause: normalizeIssue(cause, formID),
+		PromptID:  formID,
+		Cause:     normalizeIssue(cause, formID),
 	}
 }
 

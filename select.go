@@ -8,22 +8,22 @@ import (
 
 // OptionConfig defines one stable selection identity and display value.
 type OptionConfig[T any] struct {
-	ID string
-	Label string
+	ID          string
+	Label       string
 	Description string
-	Group string
-	Value T
-	Disabled bool
+	Group       string
+	Value       T
+	Disabled    bool
 }
 
 // Option keeps stable identity separate from its display label and value.
 type Option[T any] struct {
-	id string
-	label string
+	id          string
+	label       string
 	description string
-	group string
-	value T
-	disabled bool
+	group       string
+	value       T
+	disabled    bool
 }
 
 // NewOption creates an immutable option value.
@@ -40,12 +40,12 @@ func NewOption[T any](config OptionConfig[T]) (Option[T], error) {
 	}
 
 	return Option[T]{
-		id: config.ID,
-		label: config.Label,
+		id:          config.ID,
+		label:       config.Label,
 		description: config.Description,
-		group: config.Group,
-		value: config.Value,
-		disabled: config.Disabled,
+		group:       config.Group,
+		value:       config.Value,
+		disabled:    config.Disabled,
 	}, nil
 }
 
@@ -76,30 +76,30 @@ func (option Option[T]) Disabled() bool {
 // SelectConfig defines a single selection prompt.
 type SelectConfig[T any] struct {
 	ID, Label, Description, Placeholder, Hint, Help string
-	DefaultID, FallbackID Optional[string]
-	Headless HeadlessBehavior
-	Accessibility Accessibility
-	PreValidate, PostValidate []Validator[T]
-	Transform []Transformer[T]
-	Retry RetryPolicy
-	Cancel CancelBehavior
-	EndOfInput EOFBehavior
-	Options []Option[T]
-	InitialID string
-	MaxOptions int
+	DefaultID, FallbackID                           Optional[string]
+	Headless                                        HeadlessBehavior
+	Accessibility                                   Accessibility
+	PreValidate, PostValidate                       []Validator[T]
+	Transform                                       []Transformer[T]
+	Retry                                           RetryPolicy
+	Cancel                                          CancelBehavior
+	EndOfInput                                      EOFBehavior
+	Options                                         []Option[T]
+	InitialID                                       string
+	MaxOptions                                      int
 }
 
 type selectionOption struct {
 	id, label, description, group string
-	disabled bool
+	disabled                      bool
 }
 
 type selectionDetails struct {
-	options []selectionOption
-	initialIDs []string
-	multiple bool
-	minimum int
-	maximum int
+	options      []selectionOption
+	initialIDs   []string
+	multiple     bool
+	minimum      int
+	maximum      int
 	searchPolicy SearchPolicy
 }
 
@@ -178,10 +178,10 @@ func newSelect[T any](kind PromptKind, config SelectConfig[T]) (Prompt[T], error
 		return Prompt[T]{}, err
 	}
 	details := selectionDetails{
-		options: selectionOptions(options),
+		options:    selectionOptions(options),
 		initialIDs: []string{config.InitialID},
-		minimum: 1,
-		maximum: 1,
+		minimum:    1,
+		maximum:    1,
 	}
 	prompt.definition.selection = &details
 
@@ -239,18 +239,18 @@ func resolveOption[T any](
 // always returned in option declaration order.
 type MultiSelectConfig[T any] struct {
 	ID, Label, Description, Placeholder, Hint, Help string
-	DefaultIDs, FallbackIDs Optional[[]string]
-	Headless HeadlessBehavior
-	Accessibility Accessibility
-	PreValidate, PostValidate []Validator[[]T]
-	Transform []Transformer[[]T]
-	Retry RetryPolicy
-	Cancel CancelBehavior
-	EndOfInput EOFBehavior
-	Options []Option[T]
-	InitialIDs []string
-	Min, Max int
-	MaxOptions int
+	DefaultIDs, FallbackIDs                         Optional[[]string]
+	Headless                                        HeadlessBehavior
+	Accessibility                                   Accessibility
+	PreValidate, PostValidate                       []Validator[[]T]
+	Transform                                       []Transformer[[]T]
+	Retry                                           RetryPolicy
+	Cancel                                          CancelBehavior
+	EndOfInput                                      EOFBehavior
+	Options                                         []Option[T]
+	InitialIDs                                      []string
+	Min, Max                                        int
+	MaxOptions                                      int
 }
 
 // NewMultiSelect creates a bounded multiple-selection prompt.
@@ -356,11 +356,11 @@ func NewMultiSelect[T any](config MultiSelectConfig[T]) (Prompt[[]T], error) {
 		return append([]T(nil), values...)
 	}
 	details := selectionDetails{
-		options: selectionOptions(options),
+		options:    selectionOptions(options),
 		initialIDs: append([]string(nil), config.InitialIDs...),
-		multiple: true,
-		minimum: config.Min,
-		maximum: maximum,
+		multiple:   true,
+		minimum:    config.Min,
+		maximum:    maximum,
 	}
 	prompt.definition.selection = &details
 
@@ -371,11 +371,11 @@ func selectionOptions[T any](options []Option[T]) []selectionOption {
 	result := make([]selectionOption, len(options))
 	for index, option := range options {
 		result[index] = selectionOption{
-			id: option.id,
-			label: option.label,
+			id:          option.id,
+			label:       option.label,
 			description: option.description,
-			group: option.group,
-			disabled: option.disabled,
+			group:       option.group,
+			disabled:    option.disabled,
 		}
 	}
 

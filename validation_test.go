@@ -15,8 +15,8 @@ func TestRunAppliesDocumentedValidationAndTransformationOrder(t *testing.T) {
 	prompt := newTextPrompt(
 		t,
 		prompts.TextConfig{
-			ID: "name",
-			Label: "Name",
+			ID:       "name",
+			Label:    "Name",
 			Headless: prompts.HeadlessUseFallback,
 			Fallback: prompts.Some("  brian  "),
 			PreValidate: []prompts.Validator[string]{
@@ -25,7 +25,7 @@ func TestRunAppliesDocumentedValidationAndTransformationOrder(t *testing.T) {
 					value string,
 					validation prompts.ValidationContext,
 				) error {
-					calls = append(calls, "pre:" + value)
+					calls = append(calls, "pre:"+value)
 					if validation.Dependencies != "dependency" {
 						return prompts.NewValidationIssue(
 							"dependency",
@@ -43,7 +43,7 @@ func TestRunAppliesDocumentedValidationAndTransformationOrder(t *testing.T) {
 					value string,
 					_ prompts.ValidationContext,
 				) (string, error) {
-					calls = append(calls, "trim:" + value)
+					calls = append(calls, "trim:"+value)
 
 					return strings.TrimSpace(value), nil
 				},
@@ -52,7 +52,7 @@ func TestRunAppliesDocumentedValidationAndTransformationOrder(t *testing.T) {
 					value string,
 					_ prompts.ValidationContext,
 				) (string, error) {
-					calls = append(calls, "upper:" + value)
+					calls = append(calls, "upper:"+value)
 
 					return strings.ToUpper(value), nil
 				},
@@ -63,7 +63,7 @@ func TestRunAppliesDocumentedValidationAndTransformationOrder(t *testing.T) {
 					value string,
 					_ prompts.ValidationContext,
 				) error {
-					calls = append(calls, "post:" + value)
+					calls = append(calls, "post:"+value)
 
 					return nil
 				},
@@ -75,7 +75,7 @@ func TestRunAppliesDocumentedValidationAndTransformationOrder(t *testing.T) {
 		context.Background(),
 		prompt,
 		prompts.Execution{
-			Policy: prompts.InteractionPolicy{Mode: prompts.NonInteractiveOnly},
+			Policy:       prompts.InteractionPolicy{Mode: prompts.NonInteractiveOnly},
 			Dependencies: "dependency",
 		},
 	)
@@ -103,10 +103,10 @@ func TestPromptDefensivelyCopiesValidationPipeline(t *testing.T) {
 	prompt := newTextPrompt(
 		t,
 		prompts.TextConfig{
-			ID: "name",
-			Label: "Name",
-			Headless: prompts.HeadlessUseFallback,
-			Fallback: prompts.Some("safe"),
+			ID:           "name",
+			Label:        "Name",
+			Headless:     prompts.HeadlessUseFallback,
+			Fallback:     prompts.Some("safe"),
 			PostValidate: validators,
 		},
 	)
@@ -132,8 +132,8 @@ func TestValidationFailureIsStableSafeAndFieldAddressable(t *testing.T) {
 	prompt := newTextPrompt(
 		t,
 		prompts.TextConfig{
-			ID: "name",
-			Label: "Name",
+			ID:       "name",
+			Label:    "Name",
 			Headless: prompts.HeadlessUseFallback,
 			Fallback: prompts.Some("bad"),
 			PostValidate: []prompts.Validator[string]{
@@ -179,8 +179,8 @@ func TestValidationPipelineRejectsNilCallbacks(t *testing.T) {
 	tests := []prompts.TextConfig{
 		{ID: "pre", Label: "Pre", PreValidate: []prompts.Validator[string]{nil}},
 		{
-			ID: "transform",
-			Label: "Transform",
+			ID:        "transform",
+			Label:     "Transform",
 			Transform: []prompts.Transformer[string]{nil},
 		},
 		{ID: "post", Label: "Post", PostValidate: []prompts.Validator[string]{nil}},
@@ -204,8 +204,8 @@ func TestValidationPanicBecomesSafeAdapterFailure(t *testing.T) {
 	prompt := newTextPrompt(
 		t,
 		prompts.TextConfig{
-			ID: "name",
-			Label: "Name",
+			ID:       "name",
+			Label:    "Name",
 			Headless: prompts.HeadlessUseFallback,
 			Fallback: prompts.Some("value"),
 			PostValidate: []prompts.Validator[string]{
@@ -268,7 +268,7 @@ func TestEachPipelineStageCanRejectAValue(t *testing.T) {
 
 	genericFailure := errors.New(" unsafe\x1b failure ")
 	tests := []struct {
-		name string
+		name   string
 		config prompts.TextConfig
 	}{
 		{
@@ -358,7 +358,7 @@ func TestEachPipelineStageCanRejectAValue(t *testing.T) {
 
 type stagedContext struct {
 	calls int
-	err error
+	err   error
 }
 
 func (ctx *stagedContext) Deadline() (time.Time, bool) {
@@ -384,15 +384,15 @@ func (ctx *stagedContext) Err() error {
 
 func TestPipelineObservesContextAfterEveryCallbackKind(t *testing.T) {
 	tests := []struct {
-		name string
+		name       string
 		contextErr error
-		config prompts.TextConfig
-		want error
+		config     prompts.TextConfig
+		want       error
 	}{
 		{
-			name: "pre canceled",
+			name:       "pre canceled",
 			contextErr: context.Canceled,
-			want: prompts.ErrCanceled,
+			want:       prompts.ErrCanceled,
 			config: prompts.TextConfig{
 				PreValidate: []prompts.Validator[string]{
 					func(
@@ -406,9 +406,9 @@ func TestPipelineObservesContextAfterEveryCallbackKind(t *testing.T) {
 			},
 		},
 		{
-			name: "transform deadline",
+			name:       "transform deadline",
 			contextErr: context.DeadlineExceeded,
-			want: prompts.ErrDeadlineExceeded,
+			want:       prompts.ErrDeadlineExceeded,
 			config: prompts.TextConfig{
 				Transform: []prompts.Transformer[string]{
 					func(
@@ -422,9 +422,9 @@ func TestPipelineObservesContextAfterEveryCallbackKind(t *testing.T) {
 			},
 		},
 		{
-			name: "post canceled",
+			name:       "post canceled",
 			contextErr: context.Canceled,
-			want: prompts.ErrCanceled,
+			want:       prompts.ErrCanceled,
 			config: prompts.TextConfig{
 				PostValidate: []prompts.Validator[string]{
 					func(
@@ -484,8 +484,8 @@ func TestEmptyValidationMessageUsesStableFallback(t *testing.T) {
 	prompt := newTextPrompt(
 		t,
 		prompts.TextConfig{
-			ID: "name",
-			Label: "Name",
+			ID:       "name",
+			Label:    "Name",
 			Headless: prompts.HeadlessUseFallback,
 			Fallback: prompts.Some("value"),
 			PostValidate: []prompts.Validator[string]{

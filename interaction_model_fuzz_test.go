@@ -18,7 +18,7 @@ func FuzzInteractiveSelectionPaginationMatchesModel(fuzz *testing.F) {
 	for index := range 8 {
 		option, err := prompts.NewOption(
 			prompts.OptionConfig[int]{
-				ID: fmt.Sprintf("option-%d", index),
+				ID:    fmt.Sprintf("option-%d", index),
 				Label: fmt.Sprintf("Option %d", index),
 				Value: index,
 			},
@@ -30,9 +30,9 @@ func FuzzInteractiveSelectionPaginationMatchesModel(fuzz *testing.F) {
 	}
 	prompt, err := prompts.NewSelect(
 		prompts.SelectConfig[int]{
-			ID: "option",
-			Label: "Option",
-			Options: options,
+			ID:        "option",
+			Label:     "Option",
+			Options:   options,
 			InitialID: "option-0",
 		},
 	)
@@ -46,7 +46,7 @@ func FuzzInteractiveSelectionPaginationMatchesModel(fuzz *testing.F) {
 				t.Skip()
 			}
 			focus, height := 0, 4
-			events := make([]prompts.InputEvent, 0, len(raw) + 1)
+			events := make([]prompts.InputEvent, 0, len(raw)+1)
 			move := func(distance int) {
 				direction := 1
 				if distance < 0 {
@@ -69,10 +69,10 @@ func FuzzInteractiveSelectionPaginationMatchesModel(fuzz *testing.F) {
 						events,
 						prompts.KeyEvent(prompts.KeyPageDown),
 					)
-					move(max(1, height - 1))
+					move(max(1, height-1))
 				case 3:
 					events = append(events, prompts.KeyEvent(prompts.KeyPageUp))
-					move(-max(1, height - 1))
+					move(-max(1, height-1))
 				case 4:
 					events = append(events, prompts.KeyEvent(prompts.KeyHome))
 					focus = 0
@@ -83,7 +83,7 @@ func FuzzInteractiveSelectionPaginationMatchesModel(fuzz *testing.F) {
 					height = int(value % 7)
 					events = append(
 						events,
-						prompts.ResizeEvent(20 + int(value % 40), height),
+						prompts.ResizeEvent(20+int(value%40), height),
 					)
 				}
 			}
@@ -228,9 +228,9 @@ func FuzzDynamicOptionGenerationsMatchModel(fuzz *testing.F) {
 			clock := prompts.NewVirtualClock(time.Unix(100, 0))
 			dynamic, err := prompts.NewDynamicOptions(
 				prompts.DynamicOptionsConfig[string]{
-					Clock: clock,
-					Debounce: 2 * time.Millisecond,
-					MaxOptions: 1,
+					Clock:         clock,
+					Debounce:      2 * time.Millisecond,
+					MaxOptions:    1,
 					MaxQueryRunes: 8,
 					Provider: func(
 						_ context.Context,
@@ -238,7 +238,7 @@ func FuzzDynamicOptionGenerationsMatchModel(fuzz *testing.F) {
 					) ([]prompts.Option[string], error) {
 						option, optionErr := prompts.NewOption(
 							prompts.OptionConfig[string]{
-								ID: query,
+								ID:    query,
 								Label: query,
 								Value: query,
 							},
@@ -263,22 +263,21 @@ func FuzzDynamicOptionGenerationsMatchModel(fuzz *testing.F) {
 					if scheduleErr != nil {
 						t.Fatalf("Schedule() error = %v", scheduleErr)
 					}
-					current, due = generation, now + 2
+					current, due = generation, now+2
 					queries[generation] = query
 					generations = append(generations, generation)
 				case 1:
-					delta := int64(value % 4) + 1
+					delta := int64(value%4) + 1
 					now += delta
 					if err := clock.Advance(
 						time.Duration(delta) * time.Millisecond,
-					);
-						err != nil {
+					); err != nil {
 						t.Fatalf("Advance() error = %v", err)
 					}
 				case 2:
 					generation := current
 					if len(generations) > 0 {
-						generation = generations[int(value) %
+						generation = generations[int(value)%
 							len(generations)]
 					}
 					options, applied, resolveErr := dynamic.Resolve(
@@ -362,9 +361,9 @@ func FuzzProgressLifecycleMatchesModel(fuzz *testing.F) {
 				case 1:
 					delta := candidate % 9
 					updateErr := progress.Increment(delta, "increment")
-					accepted := !terminal && current + delta <= 32
+					accepted := !terminal && current+delta <= 32
 					if accepted {
-						current, state = current +
+						current, state = current+
 							delta, prompts.ProgressRunning
 					}
 					assertMutationResult(t, updateErr, accepted, index)

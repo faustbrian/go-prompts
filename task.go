@@ -10,14 +10,14 @@ import (
 // TaskGroupConfig defines explicit ordered task presentation ownership.
 type TaskGroupConfig struct {
 	ID, Label string
-	MaxTasks int
+	MaxTasks  int
 }
 
 // TaskConfig defines one caller-owned task state.
 type TaskConfig struct {
-	ID, Label string
-	ParentID string
-	Total int64
+	ID, Label       string
+	ParentID        string
+	Total           int64
 	AllowRegression bool
 }
 
@@ -40,11 +40,11 @@ func (task *Task) Snapshot() TaskSnapshot {
 
 // TaskGroup preserves Add order and explicit nesting.
 type TaskGroup struct {
-	mu sync.RWMutex
-	id string
-	label string
-	maximum int
-	tasks []*Task
+	mu       sync.RWMutex
+	id       string
+	label    string
+	maximum  int
+	tasks    []*Task
 	identity map[string]*Task
 }
 
@@ -62,10 +62,10 @@ func NewTaskGroup(config TaskGroupConfig) (*TaskGroup, error) {
 		)
 	}
 	return &TaskGroup{
-		id: config.ID,
-		label: config.Label,
-		maximum: maximum,
-		tasks: make([]*Task, 0, maximum),
+		id:       config.ID,
+		label:    config.Label,
+		maximum:  maximum,
+		tasks:    make([]*Task, 0, maximum),
 		identity: make(map[string]*Task, maximum),
 	}, nil
 }
@@ -102,9 +102,9 @@ func (group *TaskGroup) Add(config TaskConfig) (*Task, error) {
 	}
 	progress, err := NewProgress(
 		ProgressConfig{
-			ID: config.ID,
-			Label: config.Label,
-			Total: config.Total,
+			ID:              config.ID,
+			Label:           config.Label,
+			Total:           config.Total,
 			AllowRegression: config.AllowRegression,
 		},
 	)

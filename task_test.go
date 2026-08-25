@@ -50,8 +50,7 @@ func TestTaskGroupPreservesExplicitOwnershipAndOrder(t *testing.T) {
 		t.Fatal("Snapshot() exposed group state")
 	}
 	terminal := prompts.NewVirtualTerminal(40, 8)
-	if err := group.Render(context.Background(), prompts.Execution{Output: terminal});
-		err != nil {
+	if err := group.Render(context.Background(), prompts.Execution{Output: terminal}); err != nil {
 		t.Fatalf("Render() error = %v", err)
 	}
 	output := terminal.Output()
@@ -84,22 +83,19 @@ func TestTaskGroupConcurrentUpdatesDoNotCreateWorkers(t *testing.T) {
 		)
 	}
 	wait.Wait()
-	if snapshot := task.Snapshot();
-		snapshot.Current != 100 || snapshot.State != prompts.ProgressRunning {
+	if snapshot := task.Snapshot(); snapshot.Current != 100 || snapshot.State != prompts.ProgressRunning {
 		t.Fatalf("Snapshot() = %#v", snapshot)
 	}
 	if group.Len() != 1 {
 		t.Fatalf("Len() = %d", group.Len())
 	}
 	terminal := prompts.NewVirtualTerminal(40, 8)
-	if err := group.Render(context.Background(), prompts.Execution{Output: terminal});
-		err != nil || !strings.Contains(terminal.Output(), "progress: Items") {
+	if err := group.Render(context.Background(), prompts.Execution{Output: terminal}); err != nil || !strings.Contains(terminal.Output(), "progress: Items") {
 		t.Fatalf("running Render() = %v, output %q", err, terminal.Output())
 	}
 	task.Cancel("stopped")
 	terminal = prompts.NewVirtualTerminal(40, 8)
-	if err := group.Render(context.Background(), prompts.Execution{Output: terminal});
-		err != nil || !strings.Contains(terminal.Output(), "warning: Items") {
+	if err := group.Render(context.Background(), prompts.Execution{Output: terminal}); err != nil || !strings.Contains(terminal.Output(), "warning: Items") {
 		t.Fatalf("canceled Render() = %v, output %q", err, terminal.Output())
 	}
 }
@@ -107,14 +103,12 @@ func TestTaskGroupConcurrentUpdatesDoNotCreateWorkers(t *testing.T) {
 func TestTaskGroupRejectsInvalidDefinitionsAndOwnership(t *testing.T) {
 	t.Parallel()
 
-	for _, config := range
-		[]prompts.TaskGroupConfig{
-			{},
-			{ID: "group"},
-			{ID: "group", Label: "Group", MaxTasks: -1},
-		} {
-		if _, err := prompts.NewTaskGroup(config);
-			!errors.Is(err, prompts.ErrInvalidDefinition) {
+	for _, config := range []prompts.TaskGroupConfig{
+		{},
+		{ID: "group"},
+		{ID: "group", Label: "Group", MaxTasks: -1},
+	} {
+		if _, err := prompts.NewTaskGroup(config); !errors.Is(err, prompts.ErrInvalidDefinition) {
 			t.Fatalf("NewTaskGroup(%#v) error = %v", config, err)
 		}
 	}
@@ -126,23 +120,19 @@ func TestTaskGroupRejectsInvalidDefinitionsAndOwnership(t *testing.T) {
 	}
 	if _, err := group.Add(
 		prompts.TaskConfig{ID: "child", Label: "Child", ParentID: "missing"},
-	);
-		!errors.Is(err, prompts.ErrInvalidDefinition) {
+	); !errors.Is(err, prompts.ErrInvalidDefinition) {
 		t.Fatalf("missing parent error = %v", err)
 	}
-	if _, err := group.Add(prompts.TaskConfig{ID: "one", Label: "One", Total: -1});
-		!errors.Is(err, prompts.ErrInvalidDefinition) {
+	if _, err := group.Add(prompts.TaskConfig{ID: "one", Label: "One", Total: -1}); !errors.Is(err, prompts.ErrInvalidDefinition) {
 		t.Fatalf("invalid task error = %v", err)
 	}
 	if _, err := group.Add(prompts.TaskConfig{ID: "one", Label: "One"}); err != nil {
 		t.Fatalf("Add() error = %v", err)
 	}
-	if _, err := group.Add(prompts.TaskConfig{ID: "one", Label: "Duplicate"});
-		!errors.Is(err, prompts.ErrInvalidDefinition) {
+	if _, err := group.Add(prompts.TaskConfig{ID: "one", Label: "Duplicate"}); !errors.Is(err, prompts.ErrInvalidDefinition) {
 		t.Fatalf("duplicate task error = %v", err)
 	}
-	if _, err := group.Add(prompts.TaskConfig{ID: "two", Label: "Two"});
-		!errors.Is(err, prompts.ErrInvalidDefinition) {
+	if _, err := group.Add(prompts.TaskConfig{ID: "two", Label: "Two"}); !errors.Is(err, prompts.ErrInvalidDefinition) {
 		t.Fatalf("capacity error = %v", err)
 	}
 }

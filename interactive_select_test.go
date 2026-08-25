@@ -16,12 +16,12 @@ func TestInteractiveSelectSkipsDisabledOptions(t *testing.T) {
 	options := selectionOptions(t)
 	prompt, err := prompts.NewSelect(
 		prompts.SelectConfig[string]{
-			ID: "environment",
-			Label: "Environment",
-			Options: options,
+			ID:        "environment",
+			Label:     "Environment",
+			Options:   options,
 			InitialID: "dev",
 			Accessibility: prompts.Accessibility{
-				Label: "Deployment environment",
+				Label:       "Deployment environment",
 				Description: "Choose one target",
 				TextualHint: "Use arrow keys",
 			},
@@ -57,8 +57,8 @@ func TestInteractiveSelectPaginationWrapAndResize(t *testing.T) {
 	for index := range 8 {
 		option, err := prompts.NewOption(
 			prompts.OptionConfig[int]{
-				ID: string(rune('a' + index)),
-				Label: "Option " + string(rune('A' + index)),
+				ID:    string(rune('a' + index)),
+				Label: "Option " + string(rune('A'+index)),
 				Value: index,
 			},
 		)
@@ -69,9 +69,9 @@ func TestInteractiveSelectPaginationWrapAndResize(t *testing.T) {
 	}
 	prompt, err := prompts.NewSelect(
 		prompts.SelectConfig[int]{
-			ID: "option",
-			Label: "Option",
-			Options: options,
+			ID:        "option",
+			Label:     "Option",
+			Options:   options,
 			InitialID: "a",
 		},
 	)
@@ -97,12 +97,12 @@ func TestInteractiveMultiSelectPreservesDeclarationOrder(t *testing.T) {
 
 	prompt, err := prompts.NewMultiSelect(
 		prompts.MultiSelectConfig[string]{
-			ID: "environment",
-			Label: "Environments",
-			Options: selectionOptions(t),
+			ID:         "environment",
+			Label:      "Environments",
+			Options:    selectionOptions(t),
 			InitialIDs: []string{"dev"},
-			Min: 1,
-			Max: 2,
+			Min:        1,
+			Max:        2,
 		},
 	)
 	if err != nil {
@@ -132,12 +132,12 @@ func TestInteractiveMultiSelectEnforcesBoundsWithoutLosingFocus(t *testing.T) {
 
 	prompt, err := prompts.NewMultiSelect(
 		prompts.MultiSelectConfig[string]{
-			ID: "environment",
-			Label: "Environments",
+			ID:      "environment",
+			Label:   "Environments",
 			Options: selectionOptions(t),
-			Min: 1,
-			Max: 1,
-			Retry: prompts.RetryPolicy{MaxAttempts: 1},
+			Min:     1,
+			Max:     1,
+			Retry:   prompts.RetryPolicy{MaxAttempts: 1},
 		},
 	)
 	if err != nil {
@@ -172,12 +172,12 @@ func TestInteractiveMultiSelectRunsCallerValidationForBounds(t *testing.T) {
 	validationCalls := 0
 	prompt, err := prompts.NewMultiSelect(
 		prompts.MultiSelectConfig[string]{
-			ID: "environment",
-			Label: "Environments",
+			ID:      "environment",
+			Label:   "Environments",
 			Options: selectionOptions(t),
-			Min: 2,
-			Max: 2,
-			Retry: prompts.RetryPolicy{MaxAttempts: 2},
+			Min:     2,
+			Max:     2,
+			Retry:   prompts.RetryPolicy{MaxAttempts: 2},
 			PostValidate: []prompts.Validator[[]string]{
 				func(
 					_ context.Context,
@@ -227,14 +227,14 @@ func TestInteractiveSearchSelectFiltersAndRanks(t *testing.T) {
 	prompt, err := prompts.NewSearchSelect(
 		prompts.SearchSelectConfig[string]{
 			Select: prompts.SelectConfig[string]{
-				ID: "environment",
-				Label: "Environment",
-				Options: selectionOptions(t),
+				ID:        "environment",
+				Label:     "Environment",
+				Options:   selectionOptions(t),
 				InitialID: "dev",
 			},
 			Search: prompts.SearchPolicy{
-				MaxOptions: 10,
-				MaxResults: 3,
+				MaxOptions:    10,
+				MaxResults:    3,
 				MaxQueryRunes: 8,
 			},
 		},
@@ -263,9 +263,9 @@ func TestInteractiveSelectionTerminalEventsAndFailures(t *testing.T) {
 
 	prompt, err := prompts.NewSelect(
 		prompts.SelectConfig[string]{
-			ID: "environment",
-			Label: "Environment",
-			Options: selectionOptions(t),
+			ID:        "environment",
+			Label:     "Environment",
+			Options:   selectionOptions(t),
 			InitialID: "dev",
 		},
 	)
@@ -273,9 +273,9 @@ func TestInteractiveSelectionTerminalEventsAndFailures(t *testing.T) {
 		t.Fatalf("NewSelect() error = %v", err)
 	}
 	tests := []struct {
-		name string
+		name  string
 		event prompts.InputEvent
-		want error
+		want  error
 	}{
 		{"cancel", prompts.KeyEvent(prompts.KeyEscape), prompts.ErrCanceled},
 		{"control c", prompts.KeyEvent(prompts.KeyCtrlC), prompts.ErrCanceled},
@@ -355,9 +355,9 @@ func TestInteractiveSelectionRenderingAndCallbackFailures(t *testing.T) {
 
 	prompt, err := prompts.NewSelect(
 		prompts.SelectConfig[string]{
-			ID: "environment",
-			Label: "Environment",
-			Options: selectionOptions(t),
+			ID:        "environment",
+			Label:     "Environment",
+			Options:   selectionOptions(t),
 			InitialID: "dev",
 			PostValidate: []prompts.Validator[string]{
 				func(context.Context, string, prompts.ValidationContext) error {
@@ -378,9 +378,9 @@ func TestInteractiveSelectionRenderingAndCallbackFailures(t *testing.T) {
 
 	plain, err := prompts.NewSelect(
 		prompts.SelectConfig[string]{
-			ID: "environment",
-			Label: "Environment",
-			Options: selectionOptions(t),
+			ID:        "environment",
+			Label:     "Environment",
+			Options:   selectionOptions(t),
 			InitialID: "dev",
 		},
 	)
@@ -429,8 +429,8 @@ func TestInteractiveSelectionAppliesCapabilityChanges(t *testing.T) {
 	}
 	prompt, err := prompts.NewSelect(
 		prompts.SelectConfig[string]{
-			ID: "city",
-			Label: "City",
+			ID:      "city",
+			Label:   "City",
 			Options: []prompts.Option[string]{option},
 		},
 	)
@@ -441,10 +441,10 @@ func TestInteractiveSelectionAppliesCapabilityChanges(t *testing.T) {
 	terminal.Push(
 		prompts.CapabilityEvent(
 			prompts.Capabilities{
-				InputTerminal: true,
+				InputTerminal:  true,
 				OutputTerminal: true,
-				Width: 20,
-				Height: 3,
+				Width:          20,
+				Height:         3,
 			},
 		),
 		prompts.KeyEvent(prompts.KeyEnter),
@@ -456,11 +456,10 @@ func TestInteractiveSelectionAppliesCapabilityChanges(t *testing.T) {
 		t.Fatalf("Run() = %q, %v; output %q", value, err, terminal.Output())
 	}
 
-	for name, capabilities := range
-		map[string]prompts.Capabilities{
-			"detached": {},
-			"invalid": {InputTerminal: true, OutputTerminal: true, Height: -1},
-		} {
+	for name, capabilities := range map[string]prompts.Capabilities{
+		"detached": {},
+		"invalid":  {InputTerminal: true, OutputTerminal: true, Height: -1},
+	} {
 		terminal := prompts.NewVirtualTerminal(80, 24)
 		terminal.Push(prompts.CapabilityEvent(capabilities))
 		_, runErr := prompts.Run(
@@ -483,9 +482,9 @@ func TestInteractiveSelectionNavigationAndSearchEditing(t *testing.T) {
 
 	prompt, err := prompts.NewSelect(
 		prompts.SelectConfig[string]{
-			ID: "environment",
-			Label: "Environment",
-			Options: selectionOptions(t),
+			ID:        "environment",
+			Label:     "Environment",
+			Options:   selectionOptions(t),
 			InitialID: "dev",
 		},
 	)
@@ -511,14 +510,14 @@ func TestInteractiveSelectionNavigationAndSearchEditing(t *testing.T) {
 	search, err := prompts.NewSearchSelect(
 		prompts.SearchSelectConfig[string]{
 			Select: prompts.SelectConfig[string]{
-				ID: "environment",
-				Label: "Environment",
-				Options: selectionOptions(t),
+				ID:        "environment",
+				Label:     "Environment",
+				Options:   selectionOptions(t),
 				InitialID: "dev",
 			},
 			Search: prompts.SearchPolicy{
-				MaxOptions: 10,
-				MaxResults: 2,
+				MaxOptions:    10,
+				MaxResults:    2,
 				MaxQueryRunes: 3,
 			},
 		},
@@ -542,13 +541,12 @@ func TestInteractiveSelectionNavigationAndSearchEditing(t *testing.T) {
 		t.Fatalf("search editing Run() = %q, %v", value, err)
 	}
 
-	for _, event := range
-		[]prompts.InputEvent{
-			prompts.PasteEvent("four"),
-			prompts.PasteEvent(string([]byte{0xff})),
-			prompts.PasteEvent("a\n"),
-			prompts.RuneEvent('\n'),
-		} {
+	for _, event := range []prompts.InputEvent{
+		prompts.PasteEvent("four"),
+		prompts.PasteEvent(string([]byte{0xff})),
+		prompts.PasteEvent("a\n"),
+		prompts.RuneEvent('\n'),
+	} {
 		terminal = prompts.NewVirtualTerminal(40, 8)
 		terminal.Push(event)
 		_, runErr := prompts.Run(
@@ -585,12 +583,12 @@ func TestInteractiveMultiSelectCanDeselect(t *testing.T) {
 
 	prompt, err := prompts.NewMultiSelect(
 		prompts.MultiSelectConfig[string]{
-			ID: "environment",
-			Label: "Environments",
-			Options: selectionOptions(t),
+			ID:         "environment",
+			Label:      "Environments",
+			Options:    selectionOptions(t),
 			InitialIDs: []string{"dev", "prod"},
-			Min: 1,
-			Max: 2,
+			Min:        1,
+			Max:        2,
 		},
 	)
 	if err != nil {

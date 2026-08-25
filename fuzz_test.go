@@ -112,9 +112,9 @@ func FuzzDecoderBoundsArbitraryBytes(fuzz *testing.F) {
 		func(t *testing.T, input []byte, rawSplit uint8, byteInput bool) {
 			decoder, err := prompts.NewDecoder(
 				prompts.DecoderConfig{
-					MaxPasteBytes: 256,
+					MaxPasteBytes:  256,
 					MaxBufferBytes: 512,
-					ByteInput: byteInput,
+					ByteInput:      byteInput,
 				},
 			)
 			if err != nil {
@@ -140,8 +140,7 @@ func FuzzDecoderBoundsArbitraryBytes(fuzz *testing.F) {
 					event.Destroy()
 				}
 			}
-			if _, flushErr := decoder.Flush();
-				flushErr != nil && !errors.Is(flushErr, prompts.ErrReader) {
+			if _, flushErr := decoder.Flush(); flushErr != nil && !errors.Is(flushErr, prompts.ErrReader) {
 				t.Fatalf("Flush() error = %v", flushErr)
 			}
 		},
@@ -159,7 +158,7 @@ func FuzzInteractiveSecretBytesNeverRendersInput(fuzz *testing.F) {
 			canary := []byte("secret-" + hex.EncodeToString(raw))
 			prompt, err := prompts.NewSecretBytesPrompt(
 				prompts.SecretBytesConfig{
-					ID: "token",
+					ID:    "token",
 					Label: "Token",
 					Class: prompts.SecretToken,
 				},
@@ -205,13 +204,13 @@ func FuzzInteractiveNormalizedEventSequence(fuzz *testing.F) {
 				t.Fatal(err)
 			}
 			terminal := prompts.NewVirtualTerminal(40, 8)
-			events := make([]prompts.InputEvent, 0, len(raw) + 1)
+			events := make([]prompts.InputEvent, 0, len(raw)+1)
 			for _, value := range raw {
 				switch value % 15 {
 				case 0:
 					events = append(
 						events,
-						prompts.RuneEvent(rune('a' + value % 26)),
+						prompts.RuneEvent(rune('a'+value%26)),
 					)
 				case 1:
 					events = append(events, prompts.PasteEvent("e\u0301"))
@@ -251,8 +250,8 @@ func FuzzInteractiveNormalizedEventSequence(fuzz *testing.F) {
 					events = append(
 						events,
 						prompts.ResizeEvent(
-							int(value % 80),
-							int(value % 24),
+							int(value%80),
+							int(value%24),
 						),
 					)
 				case 13:
@@ -291,8 +290,8 @@ func FuzzSearchOrderingIsDeterministic(fuzz *testing.F) {
 				t.Skip()
 			}
 			policy := prompts.SearchPolicy{
-				MaxOptions: 8,
-				MaxResults: 8,
+				MaxOptions:    8,
+				MaxResults:    8,
 				MaxQueryRunes: 64,
 			}
 			first, err := prompts.Search(options, query, policy)
@@ -323,7 +322,7 @@ func FuzzInteractiveSecretNeverRendersInput(fuzz *testing.F) {
 			canary := "secret-" + hex.EncodeToString(raw)
 			prompt, err := prompts.NewSecret(
 				prompts.SecretConfig{
-					ID: "token",
+					ID:    "token",
 					Label: "Token",
 					Class: prompts.SecretToken,
 				},
@@ -362,7 +361,7 @@ func FuzzSecretEntryFailureNeverDiscloses(fuzz *testing.F) {
 			canary := "secret-failure-" + hex.EncodeToString(raw)
 			prompt, err := prompts.NewSecret(
 				prompts.SecretConfig{
-					ID: "token",
+					ID:    "token",
 					Label: "Token",
 					Class: prompts.SecretToken,
 				},

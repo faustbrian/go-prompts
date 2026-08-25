@@ -31,7 +31,7 @@ func run() error {
 	}
 	defer input.Close()
 
-	output, err := os.OpenFile(os.Args[2], os.O_WRONLY | os.O_CREATE | os.O_EXCL, 0o644)
+	output, err := os.OpenFile(os.Args[2], os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0o644)
 	if err != nil {
 		return fmt.Errorf("create release archive: %w", err)
 	}
@@ -86,7 +86,7 @@ func rewriteName(name, source, target string) string {
 	if name == source {
 		return target
 	}
-	if suffix, ok := strings.CutPrefix(name, source + "/"); ok {
+	if suffix, ok := strings.CutPrefix(name, source+"/"); ok {
 		return target + "/" + suffix
 	}
 	return name

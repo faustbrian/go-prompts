@@ -101,12 +101,10 @@ func TestDecoderBoundsAndDecodesBracketedPaste(t *testing.T) {
 	if _, err := limited.Feed([]byte("\x1b[200~four")); !errors.Is(err, prompts.ErrReader) {
 		t.Fatalf("oversized paste error = %v", err)
 	}
-	if _, err := limited.Feed([]byte("\x1b[200~four\x1b[201~"));
-		!errors.Is(err, prompts.ErrReader) {
+	if _, err := limited.Feed([]byte("\x1b[200~four\x1b[201~")); !errors.Is(err, prompts.ErrReader) {
 		t.Fatalf("completed oversized paste error = %v", err)
 	}
-	if _, err := limited.Feed([]byte("\x1b[200~\xff\x1b[201~"));
-		!errors.Is(err, prompts.ErrReader) {
+	if _, err := limited.Feed([]byte("\x1b[200~\xff\x1b[201~")); !errors.Is(err, prompts.ErrReader) {
 		t.Fatalf("invalid paste error = %v", err)
 	}
 	events, err = limited.Feed([]byte("ok"))
@@ -148,11 +146,11 @@ func TestDecoderRejectsUnsafeAndIncompleteInput(t *testing.T) {
 	t.Parallel()
 
 	tests := map[string][]byte{
-		"invalid UTF-8": {0xff},
+		"invalid UTF-8":      {0xff},
 		"unsupported escape": []byte("\x1b[9~"),
-		"control": {0x01},
-		"bidi control": []byte("\u202e"),
-		"stray paste end": []byte("\x1b[201~"),
+		"control":            {0x01},
+		"bidi control":       []byte("\u202e"),
+		"stray paste end":    []byte("\x1b[201~"),
 	}
 	for name, input := range tests {
 		t.Run(
@@ -163,8 +161,7 @@ func TestDecoderRejectsUnsafeAndIncompleteInput(t *testing.T) {
 				if err != nil {
 					t.Fatalf("NewDecoder() error = %v", err)
 				}
-				if _, err := decoder.Feed(input);
-					!errors.Is(err, prompts.ErrReader) {
+				if _, err := decoder.Feed(input); !errors.Is(err, prompts.ErrReader) {
 					t.Fatalf("Feed() error = %v", err)
 				}
 			},
@@ -200,14 +197,12 @@ func TestDecoderRejectsUnsafeAndIncompleteInput(t *testing.T) {
 func TestDecoderValidatesLimitsAndBufferBound(t *testing.T) {
 	t.Parallel()
 
-	for _, config := range
-		[]prompts.DecoderConfig{
-			{MaxPasteBytes: -1},
-			{MaxBufferBytes: -1},
-			{MaxPasteBytes: 2, MaxBufferBytes: 1},
-		} {
-		if _, err := prompts.NewDecoder(config);
-			!errors.Is(err, prompts.ErrInvalidDefinition) {
+	for _, config := range []prompts.DecoderConfig{
+		{MaxPasteBytes: -1},
+		{MaxBufferBytes: -1},
+		{MaxPasteBytes: 2, MaxBufferBytes: 1},
+	} {
+		if _, err := prompts.NewDecoder(config); !errors.Is(err, prompts.ErrInvalidDefinition) {
 			t.Fatalf("NewDecoder(%#v) error = %v", config, err)
 		}
 	}
@@ -242,11 +237,10 @@ func TestDecoderValidatesLimitsAndBufferBound(t *testing.T) {
 func TestDecoderAcceptsPasteAtTheExactByteLimit(t *testing.T) {
 	t.Parallel()
 
-	for name, chunks := range
-		map[string][][]byte{
-			"complete marker": {[]byte("\x1b[200~1234\x1b[201~")},
-			"split marker": {[]byte("\x1b[200~1234\x1b[20"), []byte("1~")},
-		} {
+	for name, chunks := range map[string][][]byte{
+		"complete marker": {[]byte("\x1b[200~1234\x1b[201~")},
+		"split marker":    {[]byte("\x1b[200~1234\x1b[20"), []byte("1~")},
+	} {
 		t.Run(
 			name,
 			func(t *testing.T) {

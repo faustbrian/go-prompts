@@ -10,12 +10,12 @@ import (
 // VirtualTerminal is a parallel-safe deterministic event source, terminal
 // controller, and output capture for tests. It never touches a real terminal.
 type VirtualTerminal struct {
-	mu sync.RWMutex
-	events chan InputEvent
-	output bytes.Buffer
-	width, height int
+	mu                              sync.RWMutex
+	events                          chan InputEvent
+	output                          bytes.Buffer
+	width, height                   int
 	acquired, released, echoEnabled bool
-	closed bool
+	closed                          bool
 	acquireErr, echoErr, releaseErr error
 }
 
@@ -23,9 +23,9 @@ type VirtualTerminal struct {
 // queue.
 func NewVirtualTerminal(width, height int) *VirtualTerminal {
 	return &VirtualTerminal{
-		events: make(chan InputEvent, 4096),
-		width: width,
-		height: height,
+		events:      make(chan InputEvent, 4096),
+		width:       width,
+		height:      height,
 		echoEnabled: true,
 	}
 }

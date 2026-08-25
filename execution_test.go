@@ -13,22 +13,22 @@ func TestRunHeadlessResolution(t *testing.T) {
 	t.Parallel()
 
 	tests := []struct {
-		name string
-		config prompts.TextConfig
-		policy prompts.InteractionPolicy
-		want string
+		name    string
+		config  prompts.TextConfig
+		policy  prompts.InteractionPolicy
+		want    string
 		wantErr error
 	}{
 		{
 			name: "explicit default permitted",
 			config: prompts.TextConfig{
-				ID: "name",
-				Label: "Name",
+				ID:       "name",
+				Label:    "Name",
 				Headless: prompts.HeadlessUseDefault,
-				Default: prompts.Some("default-name"),
+				Default:  prompts.Some("default-name"),
 			},
 			policy: prompts.InteractionPolicy{
-				Mode: prompts.NonInteractiveOnly,
+				Mode:           prompts.NonInteractiveOnly,
 				PermitDefaults: true,
 			},
 			want: "default-name",
@@ -36,23 +36,23 @@ func TestRunHeadlessResolution(t *testing.T) {
 		{
 			name: "default permission absent",
 			config: prompts.TextConfig{
-				ID: "name",
-				Label: "Name",
+				ID:       "name",
+				Label:    "Name",
 				Headless: prompts.HeadlessUseDefault,
-				Default: prompts.Some("default-name"),
+				Default:  prompts.Some("default-name"),
 			},
-			policy: prompts.InteractionPolicy{Mode: prompts.NonInteractiveOnly},
+			policy:  prompts.InteractionPolicy{Mode: prompts.NonInteractiveOnly},
 			wantErr: prompts.ErrInteractionNotPermitted,
 		},
 		{
 			name: "default absent",
 			config: prompts.TextConfig{
-				ID: "name",
-				Label: "Name",
+				ID:       "name",
+				Label:    "Name",
 				Headless: prompts.HeadlessUseDefault,
 			},
 			policy: prompts.InteractionPolicy{
-				Mode: prompts.NonInteractiveOnly,
+				Mode:           prompts.NonInteractiveOnly,
 				PermitDefaults: true,
 			},
 			wantErr: prompts.ErrInteractionNotPermitted,
@@ -60,32 +60,32 @@ func TestRunHeadlessResolution(t *testing.T) {
 		{
 			name: "explicit fallback",
 			config: prompts.TextConfig{
-				ID: "name",
-				Label: "Name",
+				ID:       "name",
+				Label:    "Name",
 				Headless: prompts.HeadlessUseFallback,
 				Fallback: prompts.Some("batch-name"),
 			},
 			policy: prompts.InteractionPolicy{Mode: prompts.InteractivePreferred},
-			want: "batch-name",
+			want:   "batch-name",
 		},
 		{
 			name: "fallback absent",
 			config: prompts.TextConfig{
-				ID: "name",
-				Label: "Name",
+				ID:       "name",
+				Label:    "Name",
 				Headless: prompts.HeadlessUseFallback,
 			},
-			policy: prompts.InteractionPolicy{Mode: prompts.NonInteractiveOnly},
+			policy:  prompts.InteractionPolicy{Mode: prompts.NonInteractiveOnly},
 			wantErr: prompts.ErrInteractionNotPermitted,
 		},
 		{
 			name: "invalid headless behavior",
 			config: prompts.TextConfig{
-				ID: "name",
-				Label: "Name",
+				ID:       "name",
+				Label:    "Name",
 				Headless: prompts.HeadlessBehavior(200),
 			},
-			policy: prompts.InteractionPolicy{Mode: prompts.NonInteractiveOnly},
+			policy:  prompts.InteractionPolicy{Mode: prompts.NonInteractiveOnly},
 			wantErr: prompts.ErrUnsupported,
 		},
 	}
@@ -119,8 +119,8 @@ func TestRunInteractionPolicyMatrix(t *testing.T) {
 	prompt := newTextPrompt(
 		t,
 		prompts.TextConfig{
-			ID: "name",
-			Label: "Name",
+			ID:       "name",
+			Label:    "Name",
 			Headless: prompts.HeadlessUseFallback,
 			Fallback: prompts.Some("batch-name"),
 		},
@@ -128,11 +128,11 @@ func TestRunInteractionPolicyMatrix(t *testing.T) {
 	terminal := prompts.Capabilities{InputTerminal: true, OutputTerminal: true}
 
 	tests := []struct {
-		name string
-		policy prompts.InteractionPolicy
+		name         string
+		policy       prompts.InteractionPolicy
 		capabilities prompts.Capabilities
-		want string
-		wantErr error
+		want         string
+		wantErr      error
 	}{
 		{
 			"required without permission",
@@ -144,7 +144,7 @@ func TestRunInteractionPolicyMatrix(t *testing.T) {
 		{
 			"required without input terminal",
 			prompts.InteractionPolicy{
-				Mode: prompts.InteractiveRequired,
+				Mode:              prompts.InteractiveRequired,
 				PermitInteraction: true,
 			},
 			prompts.Capabilities{OutputTerminal: true},
@@ -154,7 +154,7 @@ func TestRunInteractionPolicyMatrix(t *testing.T) {
 		{
 			"required without output terminal",
 			prompts.InteractionPolicy{
-				Mode: prompts.InteractiveRequired,
+				Mode:              prompts.InteractiveRequired,
 				PermitInteraction: true,
 			},
 			prompts.Capabilities{InputTerminal: true},
@@ -164,7 +164,7 @@ func TestRunInteractionPolicyMatrix(t *testing.T) {
 		{
 			"required interactive",
 			prompts.InteractionPolicy{
-				Mode: prompts.InteractiveRequired,
+				Mode:              prompts.InteractiveRequired,
 				PermitInteraction: true,
 			},
 			terminal,
@@ -174,7 +174,7 @@ func TestRunInteractionPolicyMatrix(t *testing.T) {
 		{
 			"preferred interactive",
 			prompts.InteractionPolicy{
-				Mode: prompts.InteractivePreferred,
+				Mode:              prompts.InteractivePreferred,
 				PermitInteraction: true,
 			},
 			terminal,
@@ -184,7 +184,7 @@ func TestRunInteractionPolicyMatrix(t *testing.T) {
 		{
 			"preferred fallback",
 			prompts.InteractionPolicy{
-				Mode: prompts.InteractivePreferred,
+				Mode:              prompts.InteractivePreferred,
 				PermitInteraction: true,
 			},
 			prompts.Capabilities{},
@@ -194,7 +194,7 @@ func TestRunInteractionPolicyMatrix(t *testing.T) {
 		{
 			"preferred input only",
 			prompts.InteractionPolicy{
-				Mode: prompts.InteractivePreferred,
+				Mode:              prompts.InteractivePreferred,
 				PermitInteraction: true,
 			},
 			prompts.Capabilities{InputTerminal: true},
@@ -204,7 +204,7 @@ func TestRunInteractionPolicyMatrix(t *testing.T) {
 		{
 			"preferred output only",
 			prompts.InteractionPolicy{
-				Mode: prompts.InteractivePreferred,
+				Mode:              prompts.InteractivePreferred,
 				PermitInteraction: true,
 			},
 			prompts.Capabilities{OutputTerminal: true},
@@ -221,9 +221,9 @@ func TestRunInteractionPolicyMatrix(t *testing.T) {
 		{
 			"auto requires input",
 			prompts.InteractionPolicy{
-				Mode: prompts.AutoDetect,
+				Mode:              prompts.AutoDetect,
 				PermitInteraction: true,
-				Auto: prompts.AutoRules{RequireInputTerminal: true},
+				Auto:              prompts.AutoRules{RequireInputTerminal: true},
 			},
 			prompts.Capabilities{OutputTerminal: true},
 			"batch-name",
@@ -232,9 +232,9 @@ func TestRunInteractionPolicyMatrix(t *testing.T) {
 		{
 			"auto requires output",
 			prompts.InteractionPolicy{
-				Mode: prompts.AutoDetect,
+				Mode:              prompts.AutoDetect,
 				PermitInteraction: true,
-				Auto: prompts.AutoRules{RequireOutputTerminal: true},
+				Auto:              prompts.AutoRules{RequireOutputTerminal: true},
 			},
 			prompts.Capabilities{InputTerminal: true},
 			"batch-name",
@@ -243,10 +243,10 @@ func TestRunInteractionPolicyMatrix(t *testing.T) {
 		{
 			"auto caller permits detected terminal",
 			prompts.InteractionPolicy{
-				Mode: prompts.AutoDetect,
+				Mode:              prompts.AutoDetect,
 				PermitInteraction: true,
 				Auto: prompts.AutoRules{
-					RequireInputTerminal: true,
+					RequireInputTerminal:  true,
 					RequireOutputTerminal: true,
 				},
 			},
@@ -273,7 +273,7 @@ func TestRunInteractionPolicyMatrix(t *testing.T) {
 					context.Background(),
 					prompt,
 					prompts.Execution{
-						Policy: test.policy,
+						Policy:       test.policy,
 						Capabilities: test.capabilities,
 					},
 				)

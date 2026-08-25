@@ -196,8 +196,7 @@ func TestAdapterCancellationAndReadFailures(t *testing.T) {
 	closedAdapter, _ := terminal.New(closedReader, closedWriter, terminal.Config{})
 	_ = closedReader.Close()
 	defer closedWriter.Close()
-	if _, err := closedAdapter.Next(testContext(t));
-		!errors.Is(err, prompts.ErrTerminalDetached) {
+	if _, err := closedAdapter.Next(testContext(t)); !errors.Is(err, prompts.ErrTerminalDetached) {
 		t.Fatalf("closed Next() error = %v", err)
 	}
 
@@ -221,30 +220,28 @@ func TestAdapterValidatesConfigAndNonTerminalControl(t *testing.T) {
 	}
 	defer reader.Close()
 	defer writer.Close()
-	for _, test := range
-		[]struct {
-			input, output *os.File
-			config terminal.Config
-		}{
-			{nil, writer, terminal.Config{}},
-			{reader, nil, terminal.Config{}},
-			{reader, writer, terminal.Config{ReadBuffer: -1}},
-			{reader, writer, terminal.Config{ReadBuffer: 1 << 21}},
-			{reader, writer, terminal.Config{PollInterval: -1}},
-			{reader, writer, terminal.Config{PollInterval: 2 * time.Second}},
-			{
-				reader,
-				writer,
-				terminal.Config{
-					Decoder: prompts.DecoderConfig{
-						MaxPasteBytes: 2,
-						MaxBufferBytes: 1,
-					},
+	for _, test := range []struct {
+		input, output *os.File
+		config        terminal.Config
+	}{
+		{nil, writer, terminal.Config{}},
+		{reader, nil, terminal.Config{}},
+		{reader, writer, terminal.Config{ReadBuffer: -1}},
+		{reader, writer, terminal.Config{ReadBuffer: 1 << 21}},
+		{reader, writer, terminal.Config{PollInterval: -1}},
+		{reader, writer, terminal.Config{PollInterval: 2 * time.Second}},
+		{
+			reader,
+			writer,
+			terminal.Config{
+				Decoder: prompts.DecoderConfig{
+					MaxPasteBytes:  2,
+					MaxBufferBytes: 1,
 				},
 			},
-		} {
-		if _, err := terminal.New(test.input, test.output, test.config);
-			!errors.Is(err, prompts.ErrInvalidDefinition) {
+		},
+	} {
+		if _, err := terminal.New(test.input, test.output, test.config); !errors.Is(err, prompts.ErrInvalidDefinition) {
 			t.Fatalf("New(%#v) error = %v", test.config, err)
 		}
 	}
@@ -286,7 +283,7 @@ func TestAdapterValidatesConfigAndNonTerminalControl(t *testing.T) {
 
 func testContext(t *testing.T) context.Context {
 	t.Helper()
-	ctx, cancel := context.WithTimeout(context.Background(), 2 * time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 	t.Cleanup(cancel)
 
 	return ctx

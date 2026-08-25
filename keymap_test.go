@@ -55,8 +55,7 @@ func TestKeyMapRebindsCancellationAndSelection(t *testing.T) {
 	)
 	execution := interactiveExecution(terminal)
 	execution.Keys = cancelKeys
-	if _, err := prompts.Run(context.Background(), prompt, execution);
-		!errors.Is(err, prompts.ErrCanceled) {
+	if _, err := prompts.Run(context.Background(), prompt, execution); !errors.Is(err, prompts.ErrCanceled) {
 		t.Fatalf("Run() error = %v", err)
 	}
 
@@ -68,9 +67,9 @@ func TestKeyMapRebindsCancellationAndSelection(t *testing.T) {
 	}
 	selection, err := prompts.NewSelect(
 		prompts.SelectConfig[string]{
-			ID: "environment",
-			Label: "Environment",
-			Options: selectionOptions(t),
+			ID:        "environment",
+			Label:     "Environment",
+			Options:   selectionOptions(t),
 			InitialID: "dev",
 		},
 	)
@@ -94,11 +93,11 @@ func TestKeyMapValidatesBindings(t *testing.T) {
 		t.Fatalf("default NewKeyMap() error = %v", err)
 	}
 	tests := map[string][]prompts.KeyBinding{
-		"rune input": {{Input: prompts.KeyRune, Meaning: prompts.KeyEnter}},
-		"rune meaning": {{Input: prompts.KeyTab, Meaning: prompts.KeyRune}},
-		"unknown input": {{Input: prompts.Key(255), Meaning: prompts.KeyEnter}},
+		"rune input":      {{Input: prompts.KeyRune, Meaning: prompts.KeyEnter}},
+		"rune meaning":    {{Input: prompts.KeyTab, Meaning: prompts.KeyRune}},
+		"unknown input":   {{Input: prompts.Key(255), Meaning: prompts.KeyEnter}},
 		"unknown meaning": {{Input: prompts.KeyTab, Meaning: prompts.Key(255)}},
-		"ignored input": {{Input: prompts.KeyIgnored, Meaning: prompts.KeyEnter}},
+		"ignored input":   {{Input: prompts.KeyIgnored, Meaning: prompts.KeyEnter}},
 		"ignored meaning": {{Input: prompts.KeyTab, Meaning: prompts.KeyIgnored}},
 		"duplicate input": {
 			{Input: prompts.KeyTab, Meaning: prompts.KeyEnter},
@@ -110,8 +109,7 @@ func TestKeyMapValidatesBindings(t *testing.T) {
 			name,
 			func(t *testing.T) {
 				t.Parallel()
-				if _, err := prompts.NewKeyMap(bindings...);
-					!errors.Is(err, prompts.ErrInvalidDefinition) {
+				if _, err := prompts.NewKeyMap(bindings...); !errors.Is(err, prompts.ErrInvalidDefinition) {
 					t.Fatalf("NewKeyMap() error = %v", err)
 				}
 			},

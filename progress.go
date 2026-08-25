@@ -25,31 +25,31 @@ const (
 // ProgressConfig defines determinate or indeterminate caller-owned progress.
 // A zero total is indeterminate.
 type ProgressConfig struct {
-	ID, Label string
-	Total int64
+	ID, Label       string
+	Total           int64
 	AllowRegression bool
-	Clock Clock
+	Clock           Clock
 }
 
 // ProgressSnapshot is an immutable state copy.
 type ProgressSnapshot struct {
 	ID, Label, Message string
-	Current, Total int64
-	State ProgressState
-	Elapsed time.Duration
-	RatePerSecond Optional[float64]
+	Current, Total     int64
+	State              ProgressState
+	Elapsed            time.Duration
+	RatePerSecond      Optional[float64]
 	EstimatedRemaining Optional[time.Duration]
 }
 
 // Progress stores only the latest update and never creates a goroutine or
 // queue. Update is non-blocking with respect to output; Render is explicit.
 type Progress struct {
-	mu sync.RWMutex
-	snapshot ProgressSnapshot
+	mu              sync.RWMutex
+	snapshot        ProgressSnapshot
 	allowRegression bool
-	clock Clock
-	measured bool
-	measuredAt time.Time
+	clock           Clock
+	measured        bool
+	measuredAt      time.Time
 	measuredCurrent int64
 }
 
@@ -67,13 +67,13 @@ func NewProgress(config ProgressConfig) (*Progress, error) {
 	}
 	return &Progress{
 		snapshot: ProgressSnapshot{
-			ID: config.ID,
+			ID:    config.ID,
 			Label: config.Label,
 			Total: config.Total,
 			State: ProgressPending,
 		},
 		allowRegression: config.AllowRegression,
-		clock: config.Clock,
+		clock:           config.Clock,
 	}, nil
 }
 
@@ -113,7 +113,7 @@ func (progress *Progress) Increment(delta int64, message string) error {
 	defer progress.mu.Unlock()
 	if terminalProgressState(progress.snapshot.State) ||
 		delta < 0 ||
-		progress.snapshot.Current > math.MaxInt64 - delta {
+		progress.snapshot.Current > math.MaxInt64-delta {
 		return invalidBehaviorDefinition(
 			"increment progress",
 			progress.snapshot.ID,
@@ -167,7 +167,7 @@ func (progress *Progress) updateTiming(current int64) {
 	if progress.snapshot.Total == 0 {
 		return
 	}
-	etaNanos := float64(progress.snapshot.Total - current) / rate * float64(time.Second)
+	etaNanos := float64(progress.snapshot.Total-current) / rate * float64(time.Second)
 	estimate, ok := progressDuration(etaNanos)
 	if !ok {
 		return
@@ -259,7 +259,7 @@ func (progress *Progress) Render(ctx context.Context, execution Execution) error
 // SpinnerConfig defines caller-advanced indeterminate status frames.
 type SpinnerConfig struct {
 	ID, Label string
-	Frames []string
+	Frames    []string
 }
 
 // SpinnerSnapshot is an immutable spinner state copy.
@@ -270,10 +270,10 @@ type SpinnerSnapshot struct {
 
 // Spinner advances only when the caller requests it and creates no timer.
 type Spinner struct {
-	mu sync.RWMutex
+	mu       sync.RWMutex
 	snapshot ProgressSnapshot
-	frames []string
-	index int
+	frames   []string
+	index    int
 }
 
 // NewSpinner creates a caller-driven spinner.
@@ -291,7 +291,7 @@ func NewSpinner(config SpinnerConfig) (*Spinner, error) {
 	}
 	return &Spinner{
 		snapshot: ProgressSnapshot{
-			ID: config.ID,
+			ID:    config.ID,
 			Label: config.Label,
 			State: ProgressPending,
 		},
@@ -348,7 +348,7 @@ func (spinner *Spinner) Snapshot() SpinnerSnapshot {
 	defer spinner.mu.RUnlock()
 	return SpinnerSnapshot{
 		ProgressSnapshot: spinner.snapshot,
-		Frame: spinner.frames[spinner.index],
+		Frame:            spinner.frames[spinner.index],
 	}
 }
 
@@ -396,10 +396,10 @@ type StatusEntry struct {
 
 // StatusStream retains only its configured number of latest entries.
 type StatusStream struct {
-	mu sync.RWMutex
+	mu       sync.RWMutex
 	capacity int
-	entries []StatusEntry
-	dropped uint64
+	entries  []StatusEntry
+	dropped  uint64
 }
 
 // NewStatusStream creates a bounded concurrent stream.
@@ -423,7 +423,7 @@ func (stream *StatusStream) Append(kind StatusKind, text string) error {
 	}
 	if len(stream.entries) == stream.capacity {
 		copy(stream.entries, stream.entries[1:])
-		stream.entries = stream.entries[:len(stream.entries) - 1]
+		stream.entries = stream.entries[:len(stream.entries)-1]
 		stream.dropped++
 	}
 	stream.entries = append(stream.entries, StatusEntry{Kind: kind, Text: text})
@@ -504,9 +504,9 @@ func renderOutput(ctx context.Context, identity string, frame Frame, execution E
 	output, err := renderer.Render(
 		frame,
 		RenderOptions{
-			Width: execution.Capabilities.Width,
-			Color: execution.Capabilities.Color,
-			ASCIIOnly: !execution.Capabilities.Unicode,
+			Width:      execution.Capabilities.Width,
+			Color:      execution.Capabilities.Color,
+			ASCIIOnly:  !execution.Capabilities.Unicode,
 			Hyperlinks: execution.Capabilities.Hyperlinks,
 		},
 	)

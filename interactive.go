@@ -57,10 +57,10 @@ func runInteractive[T any](
 				resultErr = cleanupErr
 			} else {
 				resultErr = &Error{
-					Kind: ErrorTerminalControl,
+					Kind:      ErrorTerminalControl,
 					Operation: "restore terminal",
-					PromptID: prompt.ID(),
-					Cause: errors.Join(resultErr, cleanupErr),
+					PromptID:  prompt.ID(),
+					Cause:     errors.Join(resultErr, cleanupErr),
 				}
 			}
 		}
@@ -84,8 +84,7 @@ func runInteractive[T any](
 		_ = editor.insert(navigation.initial.text, prompt.definition.kind == KindMultiline)
 	}
 	width := execution.Capabilities.Width
-	if err := writeInteractive(execution, prompt.definition, editor.text(), "", width);
-		err != nil {
+	if err := writeInteractive(execution, prompt.definition, editor.text(), "", width); err != nil {
 		return result, err
 	}
 	attempts := uint(0)
@@ -128,8 +127,7 @@ func runInteractive[T any](
 				event.Capabilities,
 				&width,
 				nil,
-			);
-				err != nil {
+			); err != nil {
 				if errors.Is(err, ErrTerminalDetached) {
 					return result, streamFailure(
 						prompt.ID(),
@@ -157,8 +155,7 @@ func runInteractive[T any](
 			if err := editor.insert(
 				event.Text,
 				prompt.definition.kind == KindMultiline,
-			);
-				err != nil {
+			); err != nil {
 				return result, streamFailure(
 					prompt.ID(),
 					ErrorReader,
@@ -247,14 +244,12 @@ func runInteractive[T any](
 				editor.text(),
 				validationMessage(parseErr),
 				width,
-			);
-				err != nil {
+			); err != nil {
 				return result, err
 			}
 			continue
 		}
-		if err := writeInteractive(execution, prompt.definition, editor.text(), "", width);
-			err != nil {
+		if err := writeInteractive(execution, prompt.definition, editor.text(), "", width); err != nil {
 			return result, err
 		}
 	}
@@ -305,9 +300,9 @@ func writeInteractive[T any](
 	output, err := renderer.Render(
 		NewFrame(lines...),
 		RenderOptions{
-			Width: width,
-			Color: execution.Capabilities.Color,
-			ASCIIOnly: !execution.Capabilities.Unicode,
+			Width:      width,
+			Color:      execution.Capabilities.Color,
+			ASCIIOnly:  !execution.Capabilities.Unicode,
 			Hyperlinks: execution.Capabilities.Hyperlinks,
 		},
 	)
@@ -444,8 +439,8 @@ func applyCapabilityChange(
 }
 
 type lineEditor struct {
-	cells []string
-	cursor int
+	cells    []string
+	cursor   int
 	maxBytes int
 }
 
@@ -469,12 +464,12 @@ func (editor *lineEditor) insert(value string, multiline bool) error {
 		},
 		value,
 	)
-	if len(editor.text()) + len(clean) > editor.maxBytes {
+	if len(editor.text())+len(clean) > editor.maxBytes {
 		return ErrReader
 	}
 	inserted := splitGraphemes(clean)
 	editor.cells = append(editor.cells, make([]string, len(inserted))...)
-	copy(editor.cells[editor.cursor + len(inserted):], editor.cells[editor.cursor:])
+	copy(editor.cells[editor.cursor+len(inserted):], editor.cells[editor.cursor:])
 	copy(editor.cells[editor.cursor:], inserted)
 	editor.cursor += len(inserted)
 	return nil
@@ -490,7 +485,7 @@ func (editor *lineEditor) applyKey(event InputEvent) error {
 	case KeyBackspace:
 		if editor.cursor > 0 {
 			editor.cells = append(
-				editor.cells[:editor.cursor - 1],
+				editor.cells[:editor.cursor-1],
 				editor.cells[editor.cursor:]...,
 			)
 			editor.cursor--
@@ -499,7 +494,7 @@ func (editor *lineEditor) applyKey(event InputEvent) error {
 		if editor.cursor < len(editor.cells) {
 			editor.cells = append(
 				editor.cells[:editor.cursor],
-				editor.cells[editor.cursor + 1:]...,
+				editor.cells[editor.cursor+1:]...,
 			)
 		}
 	case KeyLeft:
@@ -527,10 +522,10 @@ func (editor *lineEditor) applyKey(event InputEvent) error {
 }
 
 func (editor *lineEditor) wordLeft() {
-	for editor.cursor > 0 && strings.TrimSpace(editor.cells[editor.cursor - 1]) == "" {
+	for editor.cursor > 0 && strings.TrimSpace(editor.cells[editor.cursor-1]) == "" {
 		editor.cursor--
 	}
-	for editor.cursor > 0 && strings.TrimSpace(editor.cells[editor.cursor - 1]) != "" {
+	for editor.cursor > 0 && strings.TrimSpace(editor.cells[editor.cursor-1]) != "" {
 		editor.cursor--
 	}
 }

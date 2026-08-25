@@ -26,8 +26,7 @@ func review(ctx context.Context) error {
 		prompts.MessageInfo,
 		"VoiceOver review",
 		"Use only the keyboard. Confirm that every label, hint, error, focused option, selected option, and final status is announced in a useful order.",
-	);
-		err != nil {
+	); err != nil {
 		return err
 	}
 
@@ -41,10 +40,10 @@ func review(ctx context.Context) error {
 
 	secret, err := prompts.NewSecret(
 		prompts.SecretConfig{
-			ID: "review-secret",
-			Label: "Demonstration secret",
+			ID:          "review-secret",
+			Label:       "Demonstration secret",
 			Description: "Enter disposable text, not a real password or token.",
-			Hint: "Input must not be displayed or repeated after submission.",
+			Hint:        "Input must not be displayed or repeated after submission.",
 			Accessibility: prompts.Accessibility{
 				TextualHint: "Type disposable text and press Enter. Confirm that VoiceOver does not announce the entered value.",
 			},
@@ -62,8 +61,7 @@ func review(ctx context.Context) error {
 		prompts.MessageSuccess,
 		"Secret accepted",
 		"The secret value was not rendered.",
-	);
-		err != nil {
+	); err != nil {
 		return err
 	}
 
@@ -73,10 +71,10 @@ func review(ctx context.Context) error {
 	}
 	selection, err := prompts.NewSelect(
 		prompts.SelectConfig[string]{
-			ID: "review-select",
-			Label: "Deployment region",
+			ID:          "review-select",
+			Label:       "Deployment region",
 			Description: "Use arrow keys to inspect focus, including the disabled option.",
-			Hint: "Choose Helsinki or London and press Enter.",
+			Hint:        "Choose Helsinki or London and press Enter.",
 			Accessibility: prompts.Accessibility{
 				TextualHint: "Use Up and Down. Confirm that focused, disabled, and option descriptions are announced.",
 			},
@@ -103,15 +101,14 @@ func review(ctx context.Context) error {
 		prompts.MessageInfo,
 		"Resize check",
 		"Make this terminal narrow before continuing. The next prompt detects the new width without relying on color or cursor animation.",
-	);
-		err != nil {
+	); err != nil {
 		return err
 	}
 	resizeReady, err := prompts.NewConfirm(
 		prompts.ConfirmConfig{
-			ID: "review-resize",
+			ID:    "review-resize",
 			Label: "Narrow terminal ready",
-			Hint: "Resize the terminal, then type yes and press Enter.",
+			Hint:  "Resize the terminal, then type yes and press Enter.",
 			Accessibility: prompts.Accessibility{
 				TextualHint: "After making the terminal narrow, type yes and press Enter.",
 			},
@@ -126,17 +123,17 @@ func review(ctx context.Context) error {
 	search, err := prompts.NewSearchSelect(
 		prompts.SearchSelectConfig[string]{
 			Select: prompts.SelectConfig[string]{
-				ID: "review-search",
+				ID:    "review-search",
 				Label: "Search for a city",
-				Hint: "Type hel, confirm the filtered result remains understandable, then press Enter.",
+				Hint:  "Type hel, confirm the filtered result remains understandable, then press Enter.",
 				Accessibility: prompts.Accessibility{
 					TextualHint: "Type hel and verify that Helsinki is announced as the focused result.",
 				},
 				Options: options,
 			},
 			Search: prompts.SearchPolicy{
-				MaxOptions: 10,
-				MaxResults: 5,
+				MaxOptions:    10,
+				MaxResults:    5,
 				MaxQueryRunes: 20,
 			},
 		},
@@ -150,9 +147,9 @@ func review(ctx context.Context) error {
 
 	cancel, err := prompts.NewText(
 		prompts.TextConfig{
-			ID: "review-cancel",
+			ID:    "review-cancel",
 			Label: "Cancellation check",
-			Hint: "Press Escape. The review should continue with a cancellation confirmation.",
+			Hint:  "Press Escape. The review should continue with a cancellation confirmation.",
 			Accessibility: prompts.Accessibility{
 				TextualHint: "Press Escape without entering a value.",
 			},
@@ -169,14 +166,13 @@ func review(ctx context.Context) error {
 		prompts.MessageWarning,
 		"Cancellation confirmed",
 		"The canceled prompt returned control and restored the terminal.",
-	);
-		err != nil {
+	); err != nil {
 		return err
 	}
 
 	progress, err := prompts.NewProgress(
 		prompts.ProgressConfig{
-			ID: "review-progress",
+			ID:    "review-progress",
 			Label: "Accessible progress",
 			Total: 3,
 		},
@@ -209,17 +205,17 @@ func review(ctx context.Context) error {
 func reviewMultiSelect(options []prompts.Option[string]) (prompts.Prompt[[]string], error) {
 	return prompts.NewMultiSelect(
 		prompts.MultiSelectConfig[string]{
-			ID: "review-multi",
-			Label: "Preferred regions",
+			ID:          "review-multi",
+			Label:       "Preferred regions",
 			Description: "Toggle two choices and verify selected state is spoken.",
-			Hint: "Space toggles, arrows move, and Enter submits.",
+			Hint:        "Space toggles, arrows move, and Enter submits.",
 			Accessibility: prompts.Accessibility{
 				TextualHint: "Select exactly two choices with Space, then press Enter.",
 			},
 			Options: options,
-			Min: 2,
-			Max: 2,
-			Retry: prompts.RetryPolicy{Unlimited: true},
+			Min:     2,
+			Max:     2,
+			Retry:   prompts.RetryPolicy{Unlimited: true},
 			PostValidate: []prompts.Validator[[]string]{
 				func(
 					_ context.Context,
@@ -244,12 +240,12 @@ func reviewMultiSelect(options []prompts.Option[string]) (prompts.Prompt[[]strin
 func reviewNamePrompt() (prompts.Prompt[string], error) {
 	return prompts.NewText(
 		prompts.TextConfig{
-			ID: "review-name",
-			Label: "Review name",
+			ID:          "review-name",
+			Label:       "Review name",
 			Description: "Submit an empty value once, then enter any two letters.",
-			Hint: "The first submission should announce a validation error.",
+			Hint:        "The first submission should announce a validation error.",
 			Accessibility: prompts.Accessibility{
-				Label: "Reviewer name",
+				Label:       "Reviewer name",
 				Description: "A validation retry demonstration.",
 				TextualHint: "Press Enter once while empty, then type two or more letters and press Enter.",
 			},
@@ -288,15 +284,15 @@ func run[T any](ctx context.Context, prompt prompts.Prompt[T]) (T, error) {
 		ctx,
 		prompt,
 		prompts.Execution{
-			Input: os.Stdin,
-			Output: os.Stdout,
-			Error: os.Stderr,
-			Events: adapter,
-			Terminal: adapter,
+			Input:        os.Stdin,
+			Output:       os.Stdout,
+			Error:        os.Stderr,
+			Events:       adapter,
+			Terminal:     adapter,
 			Capabilities: capabilities,
 			Policy: prompts.InteractionPolicy{
-				Mode: prompts.InteractiveRequired,
-				PermitInteraction: true,
+				Mode:                   prompts.InteractiveRequired,
+				PermitInteraction:      true,
 				PermitUnlimitedRetries: true,
 			},
 		},
@@ -306,23 +302,23 @@ func run[T any](ctx context.Context, prompt prompts.Prompt[T]) (T, error) {
 func reviewOptions() ([]prompts.Option[string], error) {
 	configs := []prompts.OptionConfig[string]{
 		{
-			ID: "helsinki",
-			Label: "Helsinki",
+			ID:          "helsinki",
+			Label:       "Helsinki",
 			Description: "Supported primary location",
-			Value: "helsinki",
+			Value:       "helsinki",
 		},
 		{
-			ID: "london",
-			Label: "London",
+			ID:          "london",
+			Label:       "London",
 			Description: "Supported secondary location",
-			Value: "london",
+			Value:       "london",
 		},
 		{
-			ID: "retired",
-			Label: "Retired region",
+			ID:          "retired",
+			Label:       "Retired region",
 			Description: "Unavailable choice",
-			Value: "retired",
-			Disabled: true,
+			Value:       "retired",
+			Disabled:    true,
 		},
 	}
 	options := make([]prompts.Option[string], 0, len(configs))
@@ -346,7 +342,7 @@ func message(ctx context.Context, kind prompts.MessageKind, title, body string) 
 
 func outputExecution() prompts.Execution {
 	return prompts.Execution{
-		Output: os.Stdout,
+		Output:       os.Stdout,
 		Capabilities: prompts.Capabilities{Unicode: true, Color: prompts.ColorNone},
 	}
 }

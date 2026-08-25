@@ -12,7 +12,7 @@ func TestFormSecretLeakIgnoresEmptySecretValues(t *testing.T) {
 	defer byteSecret.Destroy()
 	result := FormResult{
 		values: map[string]storedFormValue{
-			"text": {value: SecretValue{}},
+			"text":  {value: SecretValue{}},
 			"bytes": {value: byteSecret},
 		},
 	}

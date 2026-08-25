@@ -89,14 +89,14 @@ func BenchmarkInteractiveSearchNavigationPagination(benchmark *testing.B) {
 	prompt, err := prompts.NewSearchSelect(
 		prompts.SearchSelectConfig[int]{
 			Select: prompts.SelectConfig[int]{
-				ID: "option",
-				Label: "Option",
-				Options: options,
+				ID:         "option",
+				Label:      "Option",
+				Options:    options,
 				MaxOptions: len(options),
 			},
 			Search: prompts.SearchPolicy{
-				MaxOptions: len(options),
-				MaxResults: 100,
+				MaxOptions:    len(options),
+				MaxResults:    100,
 				MaxQueryRunes: 64,
 			},
 		},
@@ -125,7 +125,7 @@ func BenchmarkInteractiveSearchNavigationPagination(benchmark *testing.B) {
 func BenchmarkFormValidationAndTransitions(benchmark *testing.B) {
 	name, err := prompts.NewText(
 		prompts.TextConfig{
-			ID: "name",
+			ID:    "name",
 			Label: "Name",
 			PostValidate: []prompts.Validator[string]{
 				func(
@@ -155,7 +155,7 @@ func BenchmarkFormValidationAndTransitions(benchmark *testing.B) {
 	}
 	form, err := prompts.NewForm(
 		prompts.FormConfig{
-			ID: "setup",
+			ID:     "setup",
 			Fields: []prompts.FormField{prompts.AsField(name), prompts.AsField(count)},
 		},
 	)
@@ -185,37 +185,35 @@ func BenchmarkSemanticRenderProfiles(benchmark *testing.B) {
 		prompts.Line(prompts.Text(prompts.RoleFocus, "Production 界")),
 		prompts.Line(prompts.Text(prompts.RoleHint, "Remote deployment target")),
 	)
-	for _, test := range
-		[]struct {
-			name string
-			renderer prompts.Renderer
-			options prompts.RenderOptions
-		}{
-			{"plain", prompts.PlainRenderer{}, prompts.RenderOptions{Width: 80}},
-			{"no-color", prompts.ANSIRenderer{}, prompts.RenderOptions{Width: 80}},
-			{
-				"ansi-256",
-				prompts.ANSIRenderer{},
-				prompts.RenderOptions{Width: 80, Color: prompts.ColorANSI256},
-			},
-			{
-				"true-color",
-				prompts.ANSIRenderer{},
-				prompts.RenderOptions{Width: 80, Color: prompts.ColorTrueColor},
-			},
-			{
-				"redirected-ascii",
-				prompts.PlainRenderer{},
-				prompts.RenderOptions{ASCIIOnly: true},
-			},
-		} {
+	for _, test := range []struct {
+		name     string
+		renderer prompts.Renderer
+		options  prompts.RenderOptions
+	}{
+		{"plain", prompts.PlainRenderer{}, prompts.RenderOptions{Width: 80}},
+		{"no-color", prompts.ANSIRenderer{}, prompts.RenderOptions{Width: 80}},
+		{
+			"ansi-256",
+			prompts.ANSIRenderer{},
+			prompts.RenderOptions{Width: 80, Color: prompts.ColorANSI256},
+		},
+		{
+			"true-color",
+			prompts.ANSIRenderer{},
+			prompts.RenderOptions{Width: 80, Color: prompts.ColorTrueColor},
+		},
+		{
+			"redirected-ascii",
+			prompts.PlainRenderer{},
+			prompts.RenderOptions{ASCIIOnly: true},
+		},
+	} {
 		benchmark.Run(
 			test.name,
 			func(benchmark *testing.B) {
 				benchmark.ReportAllocs()
 				for benchmark.Loop() {
-					if _, err := test.renderer.Render(frame, test.options);
-						err != nil {
+					if _, err := test.renderer.Render(frame, test.options); err != nil {
 						benchmark.Fatal(err)
 					}
 				}
@@ -296,10 +294,10 @@ func benchmarkOptions(testingContext testing.TB, count int) []prompts.Option[int
 	for index := range options {
 		option, err := prompts.NewOption(
 			prompts.OptionConfig[int]{
-				ID: fmt.Sprintf("option-%05d", index),
-				Label: fmt.Sprintf("Option %05d", index),
+				ID:          fmt.Sprintf("option-%05d", index),
+				Label:       fmt.Sprintf("Option %05d", index),
 				Description: "deterministic benchmark option",
-				Value: index,
+				Value:       index,
 			},
 		)
 		if err != nil {

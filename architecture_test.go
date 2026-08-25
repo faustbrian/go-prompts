@@ -26,13 +26,12 @@ func TestCoreDependencyAndRuntimeBoundaries(t *testing.T) {
 		"module github.com/faustbrian/go-prompts" {
 		t.Fatalf("unexpected module declaration: %q", content)
 	}
-	for _, dependency := range
-		[]string{
-			"charm.land/",
-			"charmbracelet/",
-			"AlecAivazis/survey",
-			"manifoldco/promptui",
-		} {
+	for _, dependency := range []string{
+		"charm.land/",
+		"charmbracelet/",
+		"AlecAivazis/survey",
+		"manifoldco/promptui",
+	} {
 		if strings.Contains(content, dependency) {
 			t.Fatalf("core module leaked interactive engine dependency %q", dependency)
 		}
@@ -85,8 +84,7 @@ func TestCoreDependencyAndRuntimeBoundaries(t *testing.T) {
 						)
 					}
 				case *ast.CallExpr:
-					if identifier, ok := value.Fun.(*ast.Ident);
-						ok && identifier.Name == "panic" {
+					if identifier, ok := value.Fun.(*ast.Ident); ok && identifier.Name == "panic" {
 						t.Errorf(
 							"%s contains a production panic at %d",
 							name,

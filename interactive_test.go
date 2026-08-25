@@ -54,11 +54,11 @@ func TestInteractiveRenderingUsesAccessibilityMetadata(t *testing.T) {
 	prompt := newTextPrompt(
 		t,
 		prompts.TextConfig{
-			ID: "name",
-			Label: "Visual name",
+			ID:          "name",
+			Label:       "Visual name",
 			Description: "Visual description",
 			Accessibility: prompts.Accessibility{
-				Label: "Account holder name",
+				Label:       "Account holder name",
 				Description: "Public account value",
 				TextualHint: "Type the complete name",
 			},
@@ -66,13 +66,11 @@ func TestInteractiveRenderingUsesAccessibilityMetadata(t *testing.T) {
 	)
 	terminal := prompts.NewVirtualTerminal(80, 24)
 	terminal.Push(prompts.PasteEvent("Ada"), prompts.KeyEvent(prompts.KeyEnter))
-	if _, err := prompts.Run(context.Background(), prompt, interactiveExecution(terminal));
-		err != nil {
+	if _, err := prompts.Run(context.Background(), prompt, interactiveExecution(terminal)); err != nil {
 		t.Fatalf("Run() error = %v", err)
 	}
 	output := terminal.Output()
-	for _, text := range
-		[]string{"Account holder name", "Public account value", "Type the complete name"} {
+	for _, text := range []string{"Account holder name", "Public account value", "Type the complete name"} {
 		if !strings.Contains(output, text) {
 			t.Fatalf("accessible output missing %q: %q", text, output)
 		}
@@ -124,7 +122,7 @@ func TestInteractiveRetryCancelEOFAndDetach(t *testing.T) {
 	prompt := newTextPrompt(
 		t,
 		prompts.TextConfig{
-			ID: "name",
+			ID:    "name",
 			Label: "Name",
 			Retry: prompts.RetryPolicy{MaxAttempts: 2},
 			PostValidate: []prompts.Validator[string]{
@@ -165,9 +163,9 @@ func TestInteractiveRetryCancelEOFAndDetach(t *testing.T) {
 	}
 
 	tests := []struct {
-		name string
+		name  string
 		event prompts.InputEvent
-		want error
+		want  error
 	}{
 		{"escape", prompts.KeyEvent(prompts.KeyEscape), prompts.ErrCanceled},
 		{"control c", prompts.KeyEvent(prompts.KeyCtrlC), prompts.ErrCanceled},
@@ -211,11 +209,11 @@ func TestInteractiveCancelAndEOFModesUseOwnedValues(t *testing.T) {
 	t.Parallel()
 
 	tests := []struct {
-		name string
+		name   string
 		cancel prompts.CancelBehavior
-		eof prompts.EOFBehavior
-		event prompts.InputEvent
-		want string
+		eof    prompts.EOFBehavior
+		event  prompts.InputEvent
+		want   string
 	}{
 		{
 			"cancel default",
@@ -254,11 +252,11 @@ func TestInteractiveCancelAndEOFModesUseOwnedValues(t *testing.T) {
 				prompt := newTextPrompt(
 					t,
 					prompts.TextConfig{
-						ID: "name",
-						Label: "Name",
-						Default: prompts.Some("default"),
-						Fallback: prompts.Some("fallback"),
-						Cancel: test.cancel,
+						ID:         "name",
+						Label:      "Name",
+						Default:    prompts.Some("default"),
+						Fallback:   prompts.Some("fallback"),
+						Cancel:     test.cancel,
 						EndOfInput: test.eof,
 					},
 				)
@@ -307,9 +305,9 @@ func TestInteractiveTerminalFailuresAreTypedAndRestored(t *testing.T) {
 
 	prompt := newTextPrompt(t, prompts.TextConfig{ID: "name", Label: "Name"})
 	tests := []struct {
-		name string
+		name      string
 		configure func(*prompts.VirtualTerminal)
-		want error
+		want      error
 	}{
 		{
 			"acquire",
@@ -399,18 +397,18 @@ func interactiveExecution(terminal *prompts.VirtualTerminal) prompts.Execution {
 
 func unboundedInteractiveExecution(terminal *prompts.VirtualTerminal) prompts.Execution {
 	return prompts.Execution{
-		Output: terminal,
-		Events: terminal,
+		Output:   terminal,
+		Events:   terminal,
 		Terminal: terminal,
 		Capabilities: prompts.Capabilities{
-			InputTerminal: true,
+			InputTerminal:  true,
 			OutputTerminal: true,
-			Width: terminal.Width(),
-			Height: terminal.Height(),
-			Unicode: true,
+			Width:          terminal.Width(),
+			Height:         terminal.Height(),
+			Unicode:        true,
 		},
 		Policy: prompts.InteractionPolicy{
-			Mode: prompts.InteractiveRequired,
+			Mode:              prompts.InteractiveRequired,
 			PermitInteraction: true,
 		},
 	}
@@ -452,12 +450,10 @@ func TestInputEventConstructorsAndFormattingStaySafe(t *testing.T) {
 	t.Parallel()
 
 	capabilities := prompts.Capabilities{Width: 12, Height: 3, Unicode: true}
-	if event := prompts.CapabilityEvent(capabilities);
-		event.Kind != prompts.EventCapabilities || event.Capabilities != capabilities {
+	if event := prompts.CapabilityEvent(capabilities); event.Kind != prompts.EventCapabilities || event.Capabilities != capabilities {
 		t.Fatalf("CapabilityEvent() = %#v", event)
 	}
-	if event := prompts.ResizeEvent(12, 3);
-		event.Kind != prompts.EventResize || event.Width != 12 || event.Height != 3 {
+	if event := prompts.ResizeEvent(12, 3); event.Kind != prompts.EventResize || event.Width != 12 || event.Height != 3 {
 		t.Fatalf("ResizeEvent() = %#v", event)
 	}
 	event := prompts.PasteEvent(secretCanary)
@@ -469,16 +465,15 @@ func TestInputEventConstructorsAndFormattingStaySafe(t *testing.T) {
 	if err != nil {
 		t.Fatalf("MarshalJSON() error = %v", err)
 	}
-	for _, got := range
-		[]string{
-			event.String(),
-			event.GoString(),
-			fmt.Sprint(event),
-			fmt.Sprintf("%#v", event),
-			string(text),
-			string(encoded),
-			event.LogValue().String(),
-		} {
+	for _, got := range []string{
+		event.String(),
+		event.GoString(),
+		fmt.Sprint(event),
+		fmt.Sprintf("%#v", event),
+		string(text),
+		string(encoded),
+		event.LogValue().String(),
+	} {
 		if strings.Contains(got, secretCanary) || !strings.Contains(got, "INPUT EVENT") {
 			t.Fatalf("event formatting exposed input = %q", got)
 		}
@@ -491,19 +486,19 @@ func TestInteractiveEventAndRendererFailures(t *testing.T) {
 	prompt := newTextPrompt(
 		t,
 		prompts.TextConfig{
-			ID: "name",
-			Label: "Name",
+			ID:          "name",
+			Label:       "Name",
 			Description: "Description",
-			Help: "Help",
+			Help:        "Help",
 			Placeholder: "Placeholder",
 		},
 	)
 	tests := []struct {
-		name string
+		name   string
 		source prompts.EventSource
-		ctx context.Context
-		want error
-		kind prompts.ErrorKind
+		ctx    context.Context
+		want   error
+		kind   prompts.ErrorKind
 	}{
 		{
 			"source error",
@@ -605,7 +600,7 @@ func TestInteractiveResizeInvalidEventsAndParsing(t *testing.T) {
 
 	integer, err := prompts.NewInteger(
 		prompts.IntegerConfig{
-			ID: "count",
+			ID:    "count",
 			Label: "Count",
 			Retry: prompts.RetryPolicy{MaxAttempts: 1},
 		},
@@ -684,8 +679,7 @@ func TestInteractiveResizeInvalidEventsAndParsing(t *testing.T) {
 
 	unsafeRune := prompts.NewVirtualTerminal(80, 24)
 	unsafeRune.Push(prompts.RuneEvent('\n'), prompts.KeyEvent(prompts.KeyEnter))
-	if _, err := prompts.Run(context.Background(), prompt, interactiveExecution(unsafeRune));
-		!errors.Is(err, prompts.ErrReader) {
+	if _, err := prompts.Run(context.Background(), prompt, interactiveExecution(unsafeRune)); !errors.Is(err, prompts.ErrReader) {
 		t.Fatalf("unsafe rune error = %v", err)
 	}
 }
@@ -698,10 +692,10 @@ func TestInteractiveCapabilityChangesUpdateFallbackAndDetectLoss(t *testing.T) {
 	terminal.Push(
 		prompts.CapabilityEvent(
 			prompts.Capabilities{
-				InputTerminal: true,
+				InputTerminal:  true,
 				OutputTerminal: true,
-				Width: 20,
-				Height: 4,
+				Width:          20,
+				Height:         4,
 			},
 		),
 		prompts.PasteEvent("界"),
@@ -718,11 +712,10 @@ func TestInteractiveCapabilityChangesUpdateFallbackAndDetectLoss(t *testing.T) {
 	if !errors.Is(err, prompts.ErrTerminalDetached) || !terminal.Released() {
 		t.Fatalf("terminal loss = %v, released %v", err, terminal.Released())
 	}
-	for name, capabilities := range
-		map[string]prompts.Capabilities{
-			"input": {OutputTerminal: true},
-			"output": {InputTerminal: true},
-		} {
+	for name, capabilities := range map[string]prompts.Capabilities{
+		"input":  {OutputTerminal: true},
+		"output": {InputTerminal: true},
+	} {
 		terminal = prompts.NewVirtualTerminal(80, 24)
 		terminal.Push(prompts.CapabilityEvent(capabilities))
 		_, err = prompts.Run(context.Background(), prompt, interactiveExecution(terminal))
@@ -804,8 +797,7 @@ func TestInteractiveNavigationNoOpsAndMultiline(t *testing.T) {
 	terminal.Push(prompts.RuneEvent('x'), prompts.KeyEvent(prompts.KeyNewline))
 	execution := interactiveExecution(terminal)
 	execution.Limits = prompts.InputLimits{MaxPasteBytes: 1, MaxInputBytes: 1}
-	if _, err := prompts.Run(context.Background(), multiline, execution);
-		!errors.Is(err, prompts.ErrReader) {
+	if _, err := prompts.Run(context.Background(), multiline, execution); !errors.Is(err, prompts.ErrReader) {
 		t.Fatalf("multiline limit error = %v", err)
 	}
 }
@@ -816,7 +808,7 @@ func TestInteractiveUnlimitedRetryRequiresAuthority(t *testing.T) {
 	prompt := newTextPrompt(
 		t,
 		prompts.TextConfig{
-			ID: "name",
+			ID:    "name",
 			Label: "Name",
 			Retry: prompts.RetryPolicy{Unlimited: true},
 			PostValidate: []prompts.Validator[string]{
@@ -863,7 +855,7 @@ func TestInteractiveCallbackAndRetryRenderFailuresRestoreTerminal(t *testing.T) 
 
 	panicPrompt, err := prompts.NewSecret(
 		prompts.SecretConfig{
-			ID: "token",
+			ID:    "token",
 			Label: "Token",
 			Class: prompts.SecretToken,
 			PostValidate: []prompts.Validator[prompts.SecretValue]{
@@ -898,7 +890,7 @@ func TestInteractiveCallbackAndRetryRenderFailuresRestoreTerminal(t *testing.T) 
 	retryPrompt := newTextPrompt(
 		t,
 		prompts.TextConfig{
-			ID: "name",
+			ID:    "name",
 			Label: "Name",
 			PostValidate: []prompts.Validator[string]{
 				func(context.Context, string, prompts.ValidationContext) error {
@@ -977,8 +969,7 @@ func TestVirtualTerminalLifecycleAndCancellation(t *testing.T) {
 	}
 	terminal.CloseInput()
 	terminal.CloseInput()
-	if err := terminal.Push(prompts.KeyEvent(prompts.KeyEnter));
-		!errors.Is(err, prompts.ErrEndOfInput) {
+	if err := terminal.Push(prompts.KeyEvent(prompts.KeyEnter)); !errors.Is(err, prompts.ErrEndOfInput) {
 		t.Fatalf("closed Push() error = %v", err)
 	}
 	_, err = terminal.Next(context.Background())
@@ -1022,7 +1013,7 @@ func (renderer rendererFunc) Render(
 
 type restoreFailTerminal struct {
 	echoCalls int
-	released bool
+	released  bool
 }
 
 type cancelAcquireTerminal struct {

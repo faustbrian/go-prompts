@@ -55,7 +55,7 @@ func TestSecretPromptSuppressesValidationAndPanicDisclosure(t *testing.T) {
 
 	prompt, err := prompts.NewSecret(
 		prompts.SecretConfig{
-			ID: "token",
+			ID:    "token",
 			Label: "Token",
 			Class: prompts.SecretToken,
 			PostValidate: []prompts.Validator[prompts.SecretValue]{
@@ -90,7 +90,7 @@ func TestSecretPromptSuppressesValidationAndPanicDisclosure(t *testing.T) {
 
 	panicPrompt, err := prompts.NewSecret(
 		prompts.SecretConfig{
-			ID: "token",
+			ID:    "token",
 			Label: "Token",
 			Class: prompts.SecretToken,
 			Transform: []prompts.Transformer[prompts.SecretValue]{
@@ -119,12 +119,12 @@ func TestSecretDefaultsStayOutOfMetadataAndOutput(t *testing.T) {
 
 	prompt, err := prompts.NewSecret(
 		prompts.SecretConfig{
-			ID: "password",
-			Label: "Password",
+			ID:          "password",
+			Label:       "Password",
 			Description: "Account password",
-			Class: prompts.SecretPassword,
-			Headless: prompts.HeadlessUseFallback,
-			Fallback: prompts.Some(prompts.NewSecretValue(secretCanary)),
+			Class:       prompts.SecretPassword,
+			Headless:    prompts.HeadlessUseFallback,
+			Fallback:    prompts.Some(prompts.NewSecretValue(secretCanary)),
 		},
 	)
 	if err != nil {
@@ -158,7 +158,7 @@ func TestSecretDefinitionsRequireClassification(t *testing.T) {
 	}
 	_, err = prompts.NewSecret(
 		prompts.SecretConfig{
-			ID: "secret",
+			ID:    "secret",
 			Label: "Secret",
 			Class: prompts.SecretClass(200),
 		},
@@ -168,13 +168,12 @@ func TestSecretDefinitionsRequireClassification(t *testing.T) {
 	}
 	if _, err := prompts.NewSecret(
 		prompts.SecretConfig{ID: "other", Label: "Other", Class: prompts.SecretOther},
-	);
-		err != nil {
+	); err != nil {
 		t.Fatalf("maximum secret class error = %v", err)
 	}
 	bytesPrompt, err := prompts.NewSecretBytesPrompt(
 		prompts.SecretBytesConfig{
-			ID: "other-bytes",
+			ID:    "other-bytes",
 			Label: "Other bytes",
 			Class: prompts.SecretOther,
 		},
@@ -211,16 +210,15 @@ func TestSecretBytesCopiesRedactsAndDestroysMemory(t *testing.T) {
 	if err != nil {
 		t.Fatalf("MarshalText() error = %v", err)
 	}
-	for _, representation := range
-		[]string{
-			secret.String(),
-			secret.GoString(),
-			fmt.Sprint(secret),
-			fmt.Sprintf("%#v", secret),
-			secret.LogValue().String(),
-			string(text),
-			string(encoded),
-		} {
+	for _, representation := range []string{
+		secret.String(),
+		secret.GoString(),
+		fmt.Sprint(secret),
+		fmt.Sprintf("%#v", secret),
+		secret.LogValue().String(),
+		string(text),
+		string(encoded),
+	} {
 		if strings.Contains(representation, secretCanary) ||
 			!strings.Contains(representation, "REDACTED") {
 			t.Fatalf("secret bytes representation = %q", representation)
@@ -265,9 +263,9 @@ func TestSecretBytesPromptReturnsIndependentOwnedResults(t *testing.T) {
 	fallback := prompts.NewSecretBytes([]byte(secretCanary))
 	prompt, err := prompts.NewSecretBytesPrompt(
 		prompts.SecretBytesConfig{
-			ID: "token",
-			Label: "Token",
-			Class: prompts.SecretToken,
+			ID:       "token",
+			Label:    "Token",
+			Class:    prompts.SecretToken,
 			Headless: prompts.HeadlessUseFallback,
 			Fallback: prompts.Some(fallback),
 		},
@@ -381,7 +379,7 @@ func TestSecretBytesPromptRejectsInvalidDefinitions(t *testing.T) {
 	}
 	_, err = prompts.NewSecretBytesPrompt(
 		prompts.SecretBytesConfig{
-			ID: "token",
+			ID:    "token",
 			Label: "Token",
 			Class: prompts.SecretClass(200),
 		},
@@ -400,7 +398,7 @@ func TestParseBytesValidatesContextTypeAndSafeErrors(t *testing.T) {
 
 	prompt, err := prompts.NewSecretBytesPrompt(
 		prompts.SecretBytesConfig{
-			ID: "token",
+			ID:    "token",
 			Label: "Token",
 			Class: prompts.SecretToken,
 			PostValidate: []prompts.Validator[*prompts.SecretBytes]{

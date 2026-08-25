@@ -30,26 +30,25 @@ func TestByteLineEditorCoversEditingAndBounds(t *testing.T) {
 	if editor.renderValue() != "secret entered" {
 		t.Fatal("populated editor did not render safe state")
 	}
-	for _, key := range
-		[]Key{
-			KeyHome,
-			KeyRight,
-			KeyDelete,
-			KeyBackspace,
-			KeyEnd,
-			KeyLeft,
-			KeyWordLeft,
-			KeyWordRight,
-			KeyLeft,
-			KeyRight,
-			KeyTab,
-			KeyShiftTab,
-			KeyUp,
-			KeyDown,
-			KeyPageUp,
-			KeyPageDown,
-			KeyIgnored,
-		} {
+	for _, key := range []Key{
+		KeyHome,
+		KeyRight,
+		KeyDelete,
+		KeyBackspace,
+		KeyEnd,
+		KeyLeft,
+		KeyWordLeft,
+		KeyWordRight,
+		KeyLeft,
+		KeyRight,
+		KeyTab,
+		KeyShiftTab,
+		KeyUp,
+		KeyDown,
+		KeyPageUp,
+		KeyPageDown,
+		KeyIgnored,
+	} {
 		if err := editor.applyKey(KeyEvent(key)); err != nil {
 			t.Fatalf("applyKey(%v) error = %v", key, err)
 		}
@@ -95,11 +94,10 @@ func TestByteLineEditorExactStateTransitionsAndWordBoundaries(t *testing.T) {
 	if err := exact.insert([]byte("ab")); err != nil {
 		t.Fatal(err)
 	}
-	if err := exact.insert([]byte("cd"));
-		err != nil ||
-			exact.size != 4 ||
-			exact.cursor != len(exact.cells) ||
-			string(exact.bytes()) != "abcd" {
+	if err := exact.insert([]byte("cd")); err != nil ||
+		exact.size != 4 ||
+		exact.cursor != len(exact.cells) ||
+		string(exact.bytes()) != "abcd" {
 		t.Fatalf(
 			"exact insert = %q, size %d, cursor %d, error %v",
 			exact.bytes(),
@@ -114,8 +112,7 @@ func TestByteLineEditorExactStateTransitionsAndWordBoundaries(t *testing.T) {
 
 	empty := byteLineEditor{maxBytes: 4}
 	for _, key := range []Key{KeyBackspace, KeyDelete, KeyLeft, KeyRight} {
-		if err := empty.applyKey(KeyEvent(key));
-			err != nil || empty.cursor != 0 || empty.size != 0 {
+		if err := empty.applyKey(KeyEvent(key)); err != nil || empty.cursor != 0 || empty.size != 0 {
 			t.Fatalf(
 				"empty %v = cursor %d, size %d, error %v",
 				key,
@@ -130,11 +127,10 @@ func TestByteLineEditorExactStateTransitionsAndWordBoundaries(t *testing.T) {
 	if err := backspace.insert([]byte("ab")); err != nil {
 		t.Fatal(err)
 	}
-	if err := backspace.applyKey(KeyEvent(KeyBackspace));
-		err != nil ||
-			string(backspace.bytes()) != "a" ||
-			backspace.cursor != 1 ||
-			backspace.size != 1 {
+	if err := backspace.applyKey(KeyEvent(KeyBackspace)); err != nil ||
+		string(backspace.bytes()) != "a" ||
+		backspace.cursor != 1 ||
+		backspace.size != 1 {
 		t.Fatalf(
 			"backspace = %q, cursor %d, size %d, error %v",
 			backspace.bytes(),
@@ -146,8 +142,7 @@ func TestByteLineEditorExactStateTransitionsAndWordBoundaries(t *testing.T) {
 	if err := backspace.applyKey(KeyEvent(KeyEnd)); err != nil {
 		t.Fatal(err)
 	}
-	if err := backspace.applyKey(KeyEvent(KeyDelete));
-		err != nil || string(backspace.bytes()) != "a" {
+	if err := backspace.applyKey(KeyEvent(KeyDelete)); err != nil || string(backspace.bytes()) != "a" {
 		t.Fatalf("delete at end = %q, error %v", backspace.bytes(), err)
 	}
 
@@ -202,30 +197,29 @@ func TestHandleSecretByteEventCoversSemanticEvents(t *testing.T) {
 	var nilEvent *InputEvent
 	nilEvent.Destroy()
 	limits := InputLimits{MaxPasteBytes: 4, MaxInputBytes: 16}
-	for name, test := range
-		map[string]struct {
-			event InputEvent
-			action secretInputAction
-			err error
-		}{
-			"eof": {event: InputEvent{Kind: EventEOF}, action: secretEOF},
-			"detached": {
-				event: InputEvent{Kind: EventDetached},
-				err: ErrTerminalDetached,
-			},
-			"resize": {event: ResizeEvent(40, 10), action: secretContinue},
-			"invalid resize": {event: ResizeEvent(-1, 10), err: ErrReader},
-			"large bytes": {event: PasteBytesEvent([]byte("large")), err: ErrReader},
-			"large text": {event: PasteEvent("large"), err: ErrReader},
-			"text": {event: PasteEvent("ok"), action: secretContinue},
-			"escape": {event: KeyEvent(KeyEscape), action: secretCancel},
-			"control c": {event: KeyEvent(KeyCtrlC), action: secretCancel},
-			"control d": {event: KeyEvent(KeyCtrlD), action: secretEOF},
-			"enter": {event: KeyEvent(KeyEnter), action: secretSubmit},
-			"ignored": {event: KeyEvent(KeyIgnored), action: secretContinue},
-			"unknown event": {event: InputEvent{Kind: EventKind(200)}, err: ErrReader},
-			"invalid byte key": {event: KeyEvent(Key(200)), err: ErrReader},
-		} {
+	for name, test := range map[string]struct {
+		event  InputEvent
+		action secretInputAction
+		err    error
+	}{
+		"eof": {event: InputEvent{Kind: EventEOF}, action: secretEOF},
+		"detached": {
+			event: InputEvent{Kind: EventDetached},
+			err:   ErrTerminalDetached,
+		},
+		"resize":           {event: ResizeEvent(40, 10), action: secretContinue},
+		"invalid resize":   {event: ResizeEvent(-1, 10), err: ErrReader},
+		"large bytes":      {event: PasteBytesEvent([]byte("large")), err: ErrReader},
+		"large text":       {event: PasteEvent("large"), err: ErrReader},
+		"text":             {event: PasteEvent("ok"), action: secretContinue},
+		"escape":           {event: KeyEvent(KeyEscape), action: secretCancel},
+		"control c":        {event: KeyEvent(KeyCtrlC), action: secretCancel},
+		"control d":        {event: KeyEvent(KeyCtrlD), action: secretEOF},
+		"enter":            {event: KeyEvent(KeyEnter), action: secretSubmit},
+		"ignored":          {event: KeyEvent(KeyIgnored), action: secretContinue},
+		"unknown event":    {event: InputEvent{Kind: EventKind(200)}, err: ErrReader},
+		"invalid byte key": {event: KeyEvent(Key(200)), err: ErrReader},
+	} {
 		t.Run(
 			name,
 			func(t *testing.T) {
@@ -255,11 +249,10 @@ func TestHandleSecretByteEventAcceptsExactLimitsAndZeroSize(t *testing.T) {
 	t.Parallel()
 
 	limits := InputLimits{MaxPasteBytes: 4, MaxInputBytes: 4}
-	for name, event := range
-		map[string]InputEvent{
-			"bytes": PasteBytesEvent([]byte("four")),
-			"text": PasteEvent("four"),
-		} {
+	for name, event := range map[string]InputEvent{
+		"bytes": PasteBytesEvent([]byte("four")),
+		"text":  PasteEvent("four"),
+	} {
 		t.Run(
 			name,
 			func(t *testing.T) {
@@ -306,7 +299,7 @@ func TestSecretByteExecutionCoversReaderAndParserFailures(t *testing.T) {
 
 	prompt, err := NewSecretBytesPrompt(
 		SecretBytesConfig{
-			ID: "secret",
+			ID:    "secret",
 			Label: "Secret",
 			Class: SecretToken,
 			Retry: RetryPolicy{MaxAttempts: 1},
@@ -315,34 +308,33 @@ func TestSecretByteExecutionCoversReaderAndParserFailures(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for name, source := range
-		map[string]EventSource{
-			"reader": eventSourceFunc(
-				func(context.Context) (InputEvent, error) {
-					return InputEvent{}, errors.New("read failure")
-				},
-			),
-			"eof": eventSourceFunc(
-				func(context.Context) (InputEvent, error) {
-					return InputEvent{}, io.EOF
-				},
-			),
-			"semantic eof": eventSourceFunc(
-				func(context.Context) (InputEvent, error) {
-					return InputEvent{Kind: EventEOF}, nil
-				},
-			),
-			"detached": eventSourceFunc(
-				func(context.Context) (InputEvent, error) {
-					return InputEvent{Kind: EventDetached}, nil
-				},
-			),
-			"invalid event": eventSourceFunc(
-				func(context.Context) (InputEvent, error) {
-					return ResizeEvent(-1, 10), nil
-				},
-			),
-		} {
+	for name, source := range map[string]EventSource{
+		"reader": eventSourceFunc(
+			func(context.Context) (InputEvent, error) {
+				return InputEvent{}, errors.New("read failure")
+			},
+		),
+		"eof": eventSourceFunc(
+			func(context.Context) (InputEvent, error) {
+				return InputEvent{}, io.EOF
+			},
+		),
+		"semantic eof": eventSourceFunc(
+			func(context.Context) (InputEvent, error) {
+				return InputEvent{Kind: EventEOF}, nil
+			},
+		),
+		"detached": eventSourceFunc(
+			func(context.Context) (InputEvent, error) {
+				return InputEvent{Kind: EventDetached}, nil
+			},
+		),
+		"invalid event": eventSourceFunc(
+			func(context.Context) (InputEvent, error) {
+				return ResizeEvent(-1, 10), nil
+			},
+		),
+	} {
 		t.Run(
 			name,
 			func(t *testing.T) {
@@ -418,7 +410,7 @@ func TestSecretByteExecutionCoversRenderingRetryAndCallbackFailures(t *testing.T
 	attempts := 0
 	retryPrompt, err := NewSecretBytesPrompt(
 		SecretBytesConfig{
-			ID: "retry",
+			ID:    "retry",
 			Label: "Retry",
 			Class: SecretToken,
 			PostValidate: []Validator[*SecretBytes]{
@@ -454,7 +446,7 @@ func TestSecretByteExecutionCoversRenderingRetryAndCallbackFailures(t *testing.T
 
 	panicPrompt, err := NewSecretBytesPrompt(
 		SecretBytesConfig{
-			ID: "panic",
+			ID:    "panic",
 			Label: "Panic",
 			Class: SecretToken,
 			Transform: []Transformer[*SecretBytes]{
@@ -473,8 +465,7 @@ func TestSecretByteExecutionCoversRenderingRetryAndCallbackFailures(t *testing.T
 	}
 	terminal = NewVirtualTerminal(80, 24)
 	terminal.Push(KeyEvent(KeyEnter))
-	if _, err := Run(context.Background(), panicPrompt, secretInteractiveExecution(terminal));
-		!errors.Is(err, ErrAdapter) {
+	if _, err := Run(context.Background(), panicPrompt, secretInteractiveExecution(terminal)); !errors.Is(err, ErrAdapter) {
 		t.Fatalf("callback error = %v", err)
 	}
 
@@ -505,10 +496,10 @@ func TestSecretByteExecutionAppliesCapabilityChanges(t *testing.T) {
 	terminal.Push(
 		CapabilityEvent(
 			Capabilities{
-				InputTerminal: true,
+				InputTerminal:  true,
 				OutputTerminal: true,
-				Width: 20,
-				Height: 3,
+				Width:          20,
+				Height:         3,
 			},
 		),
 		RuneEvent('x'),
@@ -520,11 +511,10 @@ func TestSecretByteExecutionAppliesCapabilityChanges(t *testing.T) {
 	}
 	result.Destroy()
 
-	for name, capabilities := range
-		map[string]Capabilities{
-			"detached": {},
-			"invalid": {InputTerminal: true, OutputTerminal: true, Width: -1},
-		} {
+	for name, capabilities := range map[string]Capabilities{
+		"detached": {},
+		"invalid":  {InputTerminal: true, OutputTerminal: true, Width: -1},
+	} {
 		terminal := NewVirtualTerminal(80, 24)
 		terminal.Push(CapabilityEvent(capabilities))
 		_, runErr := Run(context.Background(), prompt, secretInteractiveExecution(terminal))
@@ -541,10 +531,10 @@ func TestSecretByteExecutionAppliesCapabilityChanges(t *testing.T) {
 	terminal.Push(
 		CapabilityEvent(
 			Capabilities{
-				InputTerminal: true,
+				InputTerminal:  true,
 				OutputTerminal: true,
-				Width: 20,
-				Height: 3,
+				Width:          20,
+				Height:         3,
 			},
 		),
 	)
@@ -556,7 +546,7 @@ func TestSecretByteExecutionAppliesCapabilityChanges(t *testing.T) {
 }
 
 type secretNthWriter struct {
-	calls int
+	calls  int
 	failAt int
 }
 
@@ -580,14 +570,14 @@ func secretInteractiveExecution(terminal *VirtualTerminal) Execution {
 		Output: terminal,
 		Events: boundedInternalEventSource{
 			EventSource: terminal,
-			Wait: 5 * time.Millisecond,
+			Wait:        5 * time.Millisecond,
 		},
 		Terminal: terminal,
 		Capabilities: Capabilities{
-			InputTerminal: true,
+			InputTerminal:  true,
 			OutputTerminal: true,
-			Width: 80,
-			Height: 24,
+			Width:          80,
+			Height:         24,
 		},
 		Policy: InteractionPolicy{Mode: InteractiveRequired, PermitInteraction: true},
 	}

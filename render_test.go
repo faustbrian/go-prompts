@@ -141,17 +141,15 @@ func TestHyperlinksAreCapabilityDrivenAndSafe(t *testing.T) {
 		t.Fatalf("mailto Hyperlink() = %#v, %v", mail, err)
 	}
 
-	for _, target := range
-		[]string{
-			"",
-			"relative/path",
-			"javascript:alert(1)",
-			"https://example.com/\nunsafe",
-			"https://example.com/\u202Eunsafe",
-			"https://user@example.com/private",
-		} {
-		if _, err := prompts.Hyperlink(prompts.RoleValue, "unsafe", target);
-			!errors.Is(err, prompts.ErrInvalidDefinition) {
+	for _, target := range []string{
+		"",
+		"relative/path",
+		"javascript:alert(1)",
+		"https://example.com/\nunsafe",
+		"https://example.com/\u202Eunsafe",
+		"https://user@example.com/private",
+	} {
+		if _, err := prompts.Hyperlink(prompts.RoleValue, "unsafe", target); !errors.Is(err, prompts.ErrInvalidDefinition) {
 			t.Fatalf("Hyperlink(%q) error = %v", target, err)
 		}
 	}
@@ -186,8 +184,7 @@ func TestSemanticFrameAccessorsReturnCopies(t *testing.T) {
 	copyLines := frame.Lines()
 	copySegments := copyLines[0].Segments()
 	copySegments[0] = prompts.Text(prompts.RoleError, "mutated again")
-	if got := frame.Lines()[0].Segments()[0];
-		got.Role != prompts.RoleValue || got.Content != "value" {
+	if got := frame.Lines()[0].Segments()[0]; got.Role != prompts.RoleValue || got.Content != "value" {
 		t.Fatalf("frame retained caller or accessor mutation: %#v", got)
 	}
 }
@@ -196,8 +193,7 @@ func TestRendererRejectsInvalidCapabilities(t *testing.T) {
 	t.Parallel()
 
 	frame := prompts.NewFrame(prompts.Line(prompts.Text(prompts.RoleValue, "value")))
-	for _, options := range
-		[]prompts.RenderOptions{{Width: -1}, {Color: prompts.ColorProfile(200)}} {
+	for _, options := range []prompts.RenderOptions{{Width: -1}, {Color: prompts.ColorProfile(200)}} {
 		_, err := (prompts.ANSIRenderer{}).Render(frame, options)
 		if !errors.Is(err, prompts.ErrRenderer) {
 			t.Fatalf("Render(%#v) error = %v", options, err)
@@ -209,8 +205,7 @@ func TestRendererHandlesEmptyExplicitAndTinyLines(t *testing.T) {
 	t.Parallel()
 
 	renderer := prompts.PlainRenderer{}
-	if got, err := renderer.Render(prompts.NewFrame(), prompts.RenderOptions{});
-		err != nil || got != "" {
+	if got, err := renderer.Render(prompts.NewFrame(), prompts.RenderOptions{}); err != nil || got != "" {
 		t.Fatalf("empty Render() = %q, %v", got, err)
 	}
 	frame := prompts.NewFrame(
@@ -247,10 +242,10 @@ func TestANSIProfilesAndAttributes(t *testing.T) {
 	t.Parallel()
 
 	tests := []struct {
-		name string
-		style prompts.Style
+		name    string
+		style   prompts.Style
 		profile prompts.ColorProfile
-		want string
+		want    string
 	}{
 		{
 			"ansi16 dark",

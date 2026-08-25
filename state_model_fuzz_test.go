@@ -17,7 +17,7 @@ func FuzzLineEditorMatchesReferenceModel(fuzz *testing.F) {
 			cells := []string{}
 			cursor, byteCount := 0, 0
 			insert := func(value string) {
-				wantError := byteCount + len(value) > editor.maxBytes
+				wantError := byteCount+len(value) > editor.maxBytes
 				err := editor.insert(value, false)
 				if wantError {
 					if err == nil {
@@ -32,7 +32,7 @@ func FuzzLineEditorMatchesReferenceModel(fuzz *testing.F) {
 					t.Fatalf("insert %q error = %v", value, err)
 				}
 				cells = append(cells, "")
-				copy(cells[cursor + 1:], cells[cursor:])
+				copy(cells[cursor+1:], cells[cursor:])
 				cells[cursor] = value
 				cursor++
 				byteCount += len(value)
@@ -40,7 +40,7 @@ func FuzzLineEditorMatchesReferenceModel(fuzz *testing.F) {
 			for index, value := range raw {
 				switch value % 12 {
 				case 0:
-					insert(string(rune('a' + value % 26)))
+					insert(string(rune('a' + value%26)))
 				case 1:
 					insert(" ")
 				case 2:
@@ -48,14 +48,13 @@ func FuzzLineEditorMatchesReferenceModel(fuzz *testing.F) {
 				case 3:
 					insert("👩‍💻")
 				case 4:
-					if err := editor.applyKey(KeyEvent(KeyBackspace));
-						err != nil {
+					if err := editor.applyKey(KeyEvent(KeyBackspace)); err != nil {
 						t.Fatal(err)
 					}
 					if cursor > 0 {
-						byteCount -= len(cells[cursor - 1])
+						byteCount -= len(cells[cursor-1])
 						cells = append(
-							cells[:cursor - 1],
+							cells[:cursor-1],
 							cells[cursor:]...,
 						)
 						cursor--
@@ -68,7 +67,7 @@ func FuzzLineEditorMatchesReferenceModel(fuzz *testing.F) {
 						byteCount -= len(cells[cursor])
 						cells = append(
 							cells[:cursor],
-							cells[cursor + 1:]...,
+							cells[cursor+1:]...,
 						)
 					}
 				case 6:
@@ -90,11 +89,11 @@ func FuzzLineEditorMatchesReferenceModel(fuzz *testing.F) {
 				case 10:
 					_ = editor.applyKey(KeyEvent(KeyWordLeft))
 					for cursor > 0 &&
-						strings.TrimSpace(cells[cursor - 1]) == "" {
+						strings.TrimSpace(cells[cursor-1]) == "" {
 						cursor--
 					}
 					for cursor > 0 &&
-						strings.TrimSpace(cells[cursor - 1]) != "" {
+						strings.TrimSpace(cells[cursor-1]) != "" {
 						cursor--
 					}
 				case 11:
@@ -133,14 +132,14 @@ func FuzzSelectionFilterAndStateMatchesReferenceModel(fuzz *testing.F) {
 		options[index] = selectionOption{id: label, label: label, disabled: index == 2}
 	}
 	details := selectionDetails{
-		options: options,
+		options:    options,
 		initialIDs: []string{"alpha"},
-		multiple: true,
-		minimum: 0,
-		maximum: len(options),
+		multiple:   true,
+		minimum:    0,
+		maximum:    len(options),
 		searchPolicy: SearchPolicy{
-			MaxOptions: len(options),
-			MaxResults: len(options),
+			MaxOptions:    len(options),
+			MaxResults:    len(options),
 			MaxQueryRunes: 16,
 		},
 	}
@@ -198,10 +197,10 @@ func FuzzSelectionFilterAndStateMatchesReferenceModel(fuzz *testing.F) {
 					move(-1, 1)
 				case 2:
 					state.move(1, state.pageSize())
-					move(1, max(1, height - 2))
+					move(1, max(1, height-2))
 				case 3:
 					state.move(-1, state.pageSize())
-					move(-1, max(1, height - 2))
+					move(-1, max(1, height-2))
 				case 4:
 					state.focusFirst()
 					focus = 0
@@ -222,7 +221,7 @@ func FuzzSelectionFilterAndStateMatchesReferenceModel(fuzz *testing.F) {
 				case 7:
 					setQuery("")
 				case 8:
-					setQuery(labels[int(value) % len(labels)])
+					setQuery(labels[int(value)%len(labels)])
 				case 9:
 					height = int(value % 8)
 					state.height = height

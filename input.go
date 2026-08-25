@@ -48,13 +48,13 @@ const (
 
 // InputEvent is a secret-redacting semantic input event.
 type InputEvent struct {
-	Kind EventKind
-	Key Key
-	Rune rune
-	Text string
-	Bytes *SecretBytes
+	Kind          EventKind
+	Key           Key
+	Rune          rune
+	Text          string
+	Bytes         *SecretBytes
 	Width, Height int
-	Capabilities Capabilities
+	Capabilities  Capabilities
 }
 
 // RuneEvent creates a text insertion event.

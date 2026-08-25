@@ -8,17 +8,17 @@ import (
 // VirtualClock is a deterministic parallel-safe clock with no goroutines or
 // real sleeps. Advance is the only way positive-duration events fire.
 type VirtualClock struct {
-	mu sync.Mutex
-	now time.Time
+	mu     sync.Mutex
+	now    time.Time
 	events map[*virtualClockEvent]struct{}
 }
 
 type virtualClockEvent struct {
-	clock *VirtualClock
-	channel chan time.Time
-	due time.Time
+	clock    *VirtualClock
+	channel  chan time.Time
+	due      time.Time
 	interval time.Duration
-	active bool
+	active   bool
 }
 
 type virtualTimer struct {
@@ -47,10 +47,10 @@ func (clock *VirtualClock) NewTimer(duration time.Duration) Timer {
 	clock.mu.Lock()
 	defer clock.mu.Unlock()
 	event := &virtualClockEvent{
-		clock: clock,
+		clock:   clock,
 		channel: make(chan time.Time, 1),
-		due: clock.now.Add(duration),
-		active: duration > 0,
+		due:     clock.now.Add(duration),
+		active:  duration > 0,
 	}
 	if duration <= 0 {
 		event.channel <- clock.now
@@ -67,11 +67,11 @@ func (clock *VirtualClock) NewTicker(interval time.Duration) Ticker {
 	clock.mu.Lock()
 	defer clock.mu.Unlock()
 	event := &virtualClockEvent{
-		clock: clock,
-		channel: make(chan time.Time, 1),
-		due: clock.now.Add(interval),
+		clock:    clock,
+		channel:  make(chan time.Time, 1),
+		due:      clock.now.Add(interval),
 		interval: interval,
-		active: interval > 0,
+		active:   interval > 0,
 	}
 	if event.active {
 		clock.events[event] = struct{}{}

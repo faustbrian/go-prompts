@@ -11,20 +11,19 @@ func TestInteractiveRequiresEachRuntimeDependency(t *testing.T) {
 	t.Parallel()
 
 	prompt := Prompt[string]{definition: definition[string]{id: "name", label: "Name"}}
-	for name, omit := range
-		map[string]func(
-			*Execution,
-		){
-			"events": func(execution *Execution) {
-				execution.Events = nil
-			},
-			"terminal": func(execution *Execution) {
-				execution.Terminal = nil
-			},
-			"output": func(execution *Execution) {
-				execution.Output = nil
-			},
-		} {
+	for name, omit := range map[string]func(
+		*Execution,
+	){
+		"events": func(execution *Execution) {
+			execution.Events = nil
+		},
+		"terminal": func(execution *Execution) {
+			execution.Terminal = nil
+		},
+		"output": func(execution *Execution) {
+			execution.Output = nil
+		},
+	} {
 		t.Run(
 			name,
 			func(t *testing.T) {
@@ -32,8 +31,8 @@ func TestInteractiveRequiresEachRuntimeDependency(t *testing.T) {
 
 				terminal := NewVirtualTerminal(80, 24)
 				execution := Execution{
-					Output: terminal,
-					Events: terminal,
+					Output:   terminal,
+					Events:   terminal,
 					Terminal: terminal,
 				}
 				omit(&execution)
@@ -53,8 +52,7 @@ func TestInteractiveRequiresEachRuntimeDependency(t *testing.T) {
 func TestValidationMessageFallsBackForNonValidationErrors(t *testing.T) {
 	t.Parallel()
 
-	if got := validationMessage(errors.New("opaque validator failure"));
-		got != "Value was rejected" {
+	if got := validationMessage(errors.New("opaque validator failure")); got != "Value was rejected" {
 		t.Fatalf("validationMessage() = %q", got)
 	}
 }
@@ -70,9 +68,9 @@ func TestInteractiveIgnoresReplayFromAnotherPromptKind(t *testing.T) {
 	ctx := context.WithValue(context.Background(), formNavigationContextKey{}, interaction)
 	prompt := Prompt[string]{
 		definition: definition[string]{
-			id: "name",
+			id:    "name",
 			label: "Name",
-			kind: KindText,
+			kind:  KindText,
 			retry: RetryPolicy{MaxAttempts: 1},
 			parse: func(value string) (string, error) {
 				return value, nil
@@ -83,9 +81,9 @@ func TestInteractiveIgnoresReplayFromAnotherPromptKind(t *testing.T) {
 		ctx,
 		prompt,
 		Execution{
-			Output: terminal,
-			Events: terminal,
-			Terminal: terminal,
+			Output:       terminal,
+			Events:       terminal,
+			Terminal:     terminal,
 			Capabilities: Capabilities{InputTerminal: true, OutputTerminal: true},
 		},
 	)
@@ -99,9 +97,9 @@ func TestInteractiveTextRejectsMultilineReplayAndPaste(t *testing.T) {
 
 	prompt := Prompt[string]{
 		definition: definition[string]{
-			id: "name",
+			id:    "name",
 			label: "Name",
-			kind: KindText,
+			kind:  KindText,
 			retry: RetryPolicy{MaxAttempts: 1},
 			parse: func(value string) (string, error) {
 				return value, nil
@@ -119,9 +117,9 @@ func TestInteractiveTextRejectsMultilineReplayAndPaste(t *testing.T) {
 		ctx,
 		prompt,
 		Execution{
-			Output: replayTerminal,
-			Events: replayTerminal,
-			Terminal: replayTerminal,
+			Output:       replayTerminal,
+			Events:       replayTerminal,
+			Terminal:     replayTerminal,
 			Capabilities: Capabilities{InputTerminal: true, OutputTerminal: true},
 		},
 	)
@@ -137,9 +135,9 @@ func TestInteractiveTextRejectsMultilineReplayAndPaste(t *testing.T) {
 		context.Background(),
 		prompt,
 		Execution{
-			Output: pasteTerminal,
-			Events: pasteTerminal,
-			Terminal: pasteTerminal,
+			Output:       pasteTerminal,
+			Events:       pasteTerminal,
+			Terminal:     pasteTerminal,
 			Capabilities: Capabilities{InputTerminal: true, OutputTerminal: true},
 		},
 	)
@@ -158,8 +156,7 @@ func TestInteractiveSecretEmptyStateAndCapabilityBoundaries(t *testing.T) {
 		"",
 		"",
 		80,
-	);
-		err != nil {
+	); err != nil {
 		t.Fatal(err)
 	}
 	if strings.Contains(terminal.Output(), "secret entered") {
@@ -169,9 +166,9 @@ func TestInteractiveSecretEmptyStateAndCapabilityBoundaries(t *testing.T) {
 	execution := Execution{}
 	width, height := -1, -1
 	capabilities := Capabilities{
-		InputTerminal: true,
+		InputTerminal:  true,
 		OutputTerminal: true,
-		Color: ColorTrueColor,
+		Color:          ColorTrueColor,
 	}
 	if err := applyCapabilityChange(&execution, capabilities, &width, &height); err != nil {
 		t.Fatalf("exact-bound capability error = %v", err)
@@ -179,13 +176,11 @@ func TestInteractiveSecretEmptyStateAndCapabilityBoundaries(t *testing.T) {
 	if width != 0 || height != 0 || execution.Capabilities != capabilities {
 		t.Fatalf("capability state = %#v, %d x %d", execution.Capabilities, width, height)
 	}
-	for name, detached := range
-		map[string]Capabilities{
-			"input": {OutputTerminal: true},
-			"output": {InputTerminal: true},
-		} {
-		if err := applyCapabilityChange(&execution, detached, &width, &height);
-			!errors.Is(err, ErrTerminalDetached) {
+	for name, detached := range map[string]Capabilities{
+		"input":  {OutputTerminal: true},
+		"output": {InputTerminal: true},
+	} {
+		if err := applyCapabilityChange(&execution, detached, &width, &height); !errors.Is(err, ErrTerminalDetached) {
 			t.Fatalf("missing %s terminal error = %v", name, err)
 		}
 	}

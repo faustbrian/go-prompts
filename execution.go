@@ -28,19 +28,19 @@ type Clock interface {
 
 // Execution contains every ambient resource a prompt is allowed to use.
 type Execution struct {
-	Input io.Reader
-	Output io.Writer
-	Error io.Writer
+	Input        io.Reader
+	Output       io.Writer
+	Error        io.Writer
 	Capabilities Capabilities
-	Policy InteractionPolicy
-	Clock Clock
+	Policy       InteractionPolicy
+	Clock        Clock
 	Dependencies any
-	Events EventSource
-	Terminal TerminalController
-	Renderer Renderer
-	Theme Theme
-	Limits InputLimits
-	Keys KeyMap
+	Events       EventSource
+	Terminal     TerminalController
+	Renderer     Renderer
+	Theme        Theme
+	Limits       InputLimits
+	Keys         KeyMap
 }
 
 // Run executes a typed prompt without consulting process-wide streams or
@@ -49,10 +49,10 @@ func Run[T any](ctx context.Context, prompt Prompt[T], execution Execution) (T, 
 	var zero T
 	if ctx == nil {
 		return zero, &Error{
-			Kind: ErrorInvalidDefinition,
+			Kind:      ErrorInvalidDefinition,
 			Operation: "execute prompt",
-			PromptID: prompt.definition.id,
-			Cause: ErrInvalidDefinition,
+			PromptID:  prompt.definition.id,
+			Cause:     ErrInvalidDefinition,
 		}
 	}
 	if err := ctx.Err(); err != nil {
@@ -62,10 +62,10 @@ func Run[T any](ctx context.Context, prompt Prompt[T], execution Execution) (T, 
 		}
 
 		return zero, &Error{
-			Kind: kind,
+			Kind:      kind,
 			Operation: "execute prompt",
-			PromptID: prompt.definition.id,
-			Cause: err,
+			PromptID:  prompt.definition.id,
+			Cause:     err,
 		}
 	}
 
@@ -123,10 +123,10 @@ func applyPipeline[T any](
 			var zero T
 			result = zero
 			resultErr = &Error{
-				Kind: ErrorAdapter,
+				Kind:      ErrorAdapter,
 				Operation: "run prompt callback",
-				PromptID: definition.id,
-				Cause: ErrAdapter,
+				PromptID:  definition.id,
+				Cause:     ErrAdapter,
 			}
 		}
 	}()
@@ -177,10 +177,10 @@ func validationFailure(promptID string, cause error, secret SecretClass) error {
 	}
 
 	return &Error{
-		Kind: ErrorValidationExhausted,
+		Kind:      ErrorValidationExhausted,
 		Operation: "validate prompt",
-		PromptID: promptID,
-		Cause: normalizeIssue(cause, promptID),
+		PromptID:  promptID,
+		Cause:     normalizeIssue(cause, promptID),
 	}
 }
 

@@ -81,8 +81,7 @@ func runInteractiveSecretBytes[T any](
 				editor.renderValue(),
 				"",
 				width,
-			);
-				err != nil {
+			); err != nil {
 				return result, err
 			}
 			continue
@@ -166,8 +165,7 @@ func runInteractiveSecretBytes[T any](
 				"secret entered",
 				validationMessage(parseErr),
 				width,
-			);
-				err != nil {
+			); err != nil {
 				return result, err
 			}
 		case secretContinue:
@@ -177,8 +175,7 @@ func runInteractiveSecretBytes[T any](
 				editor.renderValue(),
 				"",
 				width,
-			);
-				err != nil {
+			); err != nil {
 				return result, err
 			}
 		}
@@ -237,9 +234,9 @@ func handleSecretByteEvent(
 }
 
 type byteLineEditor struct {
-	cells [][]byte
-	cursor int
-	size int
+	cells    [][]byte
+	cursor   int
+	size     int
 	maxBytes int
 }
 
@@ -258,16 +255,16 @@ func (editor *byteLineEditor) insert(input []byte) error {
 			return ErrReader
 		}
 		if !unicode.IsControl(char) && !isBidiControl(char) {
-			clean = append(clean, input[index:index + size]...)
+			clean = append(clean, input[index:index+size]...)
 		}
 	}
 	defer clear(clean)
-	if editor.size + len(clean) > editor.maxBytes {
+	if editor.size+len(clean) > editor.maxBytes {
 		return ErrReader
 	}
 	inserted := splitByteGraphemes(clean)
 	editor.cells = append(editor.cells, make([][]byte, len(inserted))...)
-	copy(editor.cells[editor.cursor + len(inserted):], editor.cells[editor.cursor:])
+	copy(editor.cells[editor.cursor+len(inserted):], editor.cells[editor.cursor:])
 	copy(editor.cells[editor.cursor:], inserted)
 	editor.cursor += len(inserted)
 	editor.size += len(clean)
@@ -321,16 +318,16 @@ func (editor *byteLineEditor) applyKey(event InputEvent) error {
 func (editor *byteLineEditor) remove(index int) {
 	editor.size -= len(editor.cells[index])
 	clear(editor.cells[index])
-	copy(editor.cells[index:], editor.cells[index + 1:])
-	editor.cells[len(editor.cells) - 1] = nil
-	editor.cells = editor.cells[:len(editor.cells) - 1]
+	copy(editor.cells[index:], editor.cells[index+1:])
+	editor.cells[len(editor.cells)-1] = nil
+	editor.cells = editor.cells[:len(editor.cells)-1]
 }
 
 func (editor *byteLineEditor) wordLeft() {
-	for editor.cursor > 0 && byteClusterSpace(editor.cells[editor.cursor - 1]) {
+	for editor.cursor > 0 && byteClusterSpace(editor.cells[editor.cursor-1]) {
 		editor.cursor--
 	}
-	for editor.cursor > 0 && !byteClusterSpace(editor.cells[editor.cursor - 1]) {
+	for editor.cursor > 0 && !byteClusterSpace(editor.cells[editor.cursor-1]) {
 		editor.cursor--
 	}
 }
