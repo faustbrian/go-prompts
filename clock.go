@@ -93,20 +93,19 @@ func (clock *VirtualClock) Advance(duration time.Duration) error {
 	defer clock.mu.Unlock()
 	target := clock.now.Add(duration)
 	for event := range clock.events {
-		if !event.active || event.due.After(target) {
-			continue
+		if event.active && !event.due.After(target) {
+			select {
+			case event.channel <- event.due:
+			default:
+			}
+			if event.interval <= 0 {
+				event.active = false
+				delete(clock.events, event)
+			} else {
+				remainder := target.Sub(event.due) % event.interval
+				event.due = target.Add(event.interval - remainder)
+			}
 		}
-		select {
-		case event.channel <- event.due:
-		default:
-		}
-		if event.interval <= 0 {
-			event.active = false
-			delete(clock.events, event)
-			continue
-		}
-		remainder := target.Sub(event.due) % event.interval
-		event.due = target.Add(event.interval - remainder)
 	}
 	clock.now = target
 	return nil
