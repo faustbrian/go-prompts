@@ -17,7 +17,6 @@ docs/compatibility.md
 docs/dependency-evaluation.md
 docs/faq.md
 docs/forms.md
-docs/hardening-evidence.md
 docs/integrations.md
 docs/interactive-input.md
 docs/migrations.md

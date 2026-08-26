@@ -14,11 +14,10 @@
 prompts and deterministic non-interactive fallbacks. Callers own the context,
 streams, terminal capabilities, interaction authority, and lifecycle.
 
-The package has a stable v1 API. Its automated prompt, rendering,
-terminal, headless, security, test, and release contracts are implemented and
-remain subject to compatibility review. A stable release is still blocked on
-the recorded manual terminal and assistive-technology matrix; see
-[Accessibility review evidence](docs/accessibility-review.md).
+The package has a stable v1 API. Its prompt, rendering, terminal, headless,
+security, and compatibility contracts are automated. The
+[accessibility review](docs/accessibility-review.md) records the manual terminal
+and assistive-technology support matrix.
 
 Explicit non-interactive input uses the same typed parser and validation
 pipeline without authorizing a terminal read:
@@ -56,29 +55,16 @@ are caller-driven presentation values. See
 
 ## Documentation
 
-- [API overview](docs/api.md)
-- [Prompt types](docs/prompt-types.md)
-- [Selection and search](docs/selection.md)
-- [Validation](docs/validation.md)
-- [Rendering and themes](docs/rendering.md)
-- [Accessibility](docs/accessibility.md)
-- [Accessibility review evidence](docs/accessibility-review.md)
-- [Hardening evidence](docs/hardening-evidence.md)
-- [Security model](docs/security.md)
-- [Compatibility](docs/compatibility.md)
-- [Terminal adapter](docs/terminal-adapter.md)
-- [Integrations](docs/integrations.md)
-- [Migration guidance](docs/migrations.md)
-- [Troubleshooting](docs/troubleshooting.md)
-- [FAQ](docs/faq.md)
-- [Release process](docs/release.md)
+Start with the [documentation index](docs/README.md). It organizes prompt
+types, terminal behavior, accessibility, integration, operations, and
+maintainer references.
 
 Executable examples in `example_test.go` cover explicit input, headless
 fallback, virtual-terminal interaction, forms, progress, and tables.
 
 ## Development
 
-Go 1.26.6 is the initial minimum toolchain. All commands must run with
+Go 1.26.6 is the minimum supported toolchain. All commands must run with
 `GOWORK=off` so the module is verified independently of sibling checkouts.
 
 ```sh
@@ -94,8 +80,3 @@ Makefile. Do not run gofmt, goimports, gofumpt, or golines over this module;
 their output is not compatible with the canonical Glippy layout.
 
 Licensed under Apache-2.0.
-
-## Ecosystem
-
-Use the [Golib documentation portal](https://github.com/faustbrian/golib/blob/main/docs/index.md)
-to choose companion packages, supported stacks, recipes, and operations guidance.
