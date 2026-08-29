@@ -10,6 +10,11 @@ All notable changes follow Keep a Changelog and Semantic Versioning.
   `go-library-tools` v1.0.7 contract while retaining package-owned mutation,
   API, fuzz, benchmark, terminal concurrency, and reproducibility policy.
 
+### Documentation
+
+- Remove the archived monorepo documentation link; package guidance remains in
+  the repository-owned documentation.
+
 ## [1.0.0] - 2026-08-25
 
 ### Changed
