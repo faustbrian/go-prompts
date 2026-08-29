@@ -94,8 +94,3 @@ Makefile. Do not run gofmt, goimports, gofumpt, or golines over this module;
 their output is not compatible with the canonical Glippy layout.
 
 Licensed under Apache-2.0.
-
-## Ecosystem
-
-Use the [Golib documentation portal](https://github.com/faustbrian/golib/blob/main/docs/index.md)
-to choose companion packages, supported stacks, recipes, and operations guidance.
