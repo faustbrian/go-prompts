@@ -78,13 +78,12 @@ func (err *Error) Is(target error) bool {
 		return false
 	}
 
-	var sentinel sentinelError
-	if errors.As(target, &sentinel) {
+	if sentinel, ok := errors.AsType[sentinelError](target); ok {
 		return err.Kind == ErrorKind(sentinel)
 	}
 
-	var other *Error
-	return errors.As(target, &other) && err.Kind == other.Kind
+	other, ok := errors.AsType[*Error](target)
+	return ok && err.Kind == other.Kind
 }
 
 func (err *Error) Unwrap() error {

@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "repository": "github.com/faustbrian/go-prompts",
+  "module": ".",
+  "package": "terminal",
+  "gate": "mutation",
+  "input_digest": "sha256:014528b52565b61edf8c2808040fd599d28868f25ff899653bba9b4803a7f9b0",
+  "verifier_digest": "sha256:9a9499ff68a8dfd49a0be7995590297a8ee563a1aa226bfd8b9361dc53058108",
+  "result": "passed",
+  "report_digest": "sha256:c4cca575a40e6d7a0d5cae45cfa8bb33412755022b7dbe9af96158d439b2b367",
+  "environment": {
+    "CGO_ENABLED": "1",
+    "GOARCH": "arm64",
+    "GOOS": "darwin",
+    "GOVERSION": "go1.27.0",
+    "gremlins_binary_sha256": "sha256:6a2beddc477eb410f8a670b6c9049558563d3c4327498fe31604d31c773a959e"
+  },
+  "completed_at": "2026-08-29T11:04:58.445431Z"
+}

@@ -346,8 +346,7 @@ func presentationMetadata[T any](definition definition[T]) []SemanticLine {
 }
 
 func validationMessage(err error) string {
-	var issue *ValidationIssue
-	if errors.As(err, &issue) {
+	if issue, ok := errors.AsType[*ValidationIssue](err); ok {
 		return issue.Message()
 	}
 	return "Value was rejected"
