@@ -82,8 +82,7 @@ func (issue *ValidationIssue) Fields() []string {
 }
 
 func normalizeIssue(err error, promptID string) error {
-	var issue *ValidationIssue
-	if errors.As(err, &issue) {
+	if issue, ok := errors.AsType[*ValidationIssue](err); ok {
 		return issue
 	}
 

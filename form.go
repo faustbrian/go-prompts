@@ -336,8 +336,7 @@ func formSecretLeak(result FormResult, cause error) ([]string, bool) {
 		return nil, false
 	}
 	sort.Strings(fields)
-	var issue *ValidationIssue
-	if errors.As(cause, &issue) {
+	if issue, ok := errors.AsType[*ValidationIssue](cause); ok {
 		fields = append([]string(nil), issue.fields...)
 	}
 	return fields, true

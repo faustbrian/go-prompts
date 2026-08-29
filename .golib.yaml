@@ -1,0 +1,124 @@
+schema_version: 1
+tool_version: v1.0.7
+tool_checksums_sha256: beb57df2dff76b4a0044af843398baecab55a3d420986d9be7c9b14ca88befef
+
+manifest:
+  modules: modules.json
+  packages: packages.json
+
+evidence:
+  root: ".verification"
+
+mutation:
+  root: ".verification/mutation"
+  imports:
+    - module: "."
+      archive: ".verification/mutation/bootstrap/root.zip"
+      ledger: ".verification/mutation/migration-ledger.json"
+
+api:
+  baselines:
+    - module: "."
+      mode: apidiff
+      path: specification/api-v0.txt
+
+operations:
+  - module: "."
+    gate: test
+    steps:
+      - type: make
+        makefile: verification/package.mk
+        target: package-specific
+        timeout: 20m
+  - module: "."
+    gate: docs
+    steps:
+      - type: make
+        makefile: verification/package.mk
+        target: docs
+        timeout: 20m
+  - module: "."
+    gate: fuzz
+    steps:
+      - type: go-test
+        packages: ["."]
+        fuzz: '^FuzzSanitizeNeutralizesTerminalControls$'
+        budget: 1000x
+        timeout: 20m
+      - type: go-test
+        packages: ["."]
+        fuzz: '^FuzzPlainRenderingIsDeterministic$'
+        budget: 1000x
+        timeout: 20m
+      - type: go-test
+        packages: ["."]
+        fuzz: '^FuzzHyperlinkNeverInjectsTerminalControls$'
+        budget: 1000x
+        timeout: 20m
+      - type: go-test
+        packages: ["."]
+        fuzz: '^FuzzSearchOrderingIsDeterministic$'
+        budget: 1000x
+        timeout: 20m
+      - type: go-test
+        packages: ["."]
+        fuzz: '^FuzzInteractiveSecretNeverRendersInput$'
+        budget: 1000x
+        timeout: 20m
+      - type: go-test
+        packages: ["."]
+        fuzz: '^FuzzInteractiveSecretBytesNeverRendersInput$'
+        budget: 1000x
+        timeout: 20m
+      - type: go-test
+        packages: ["."]
+        fuzz: '^FuzzInteractiveNormalizedEventSequence$'
+        budget: 1000x
+        timeout: 20m
+      - type: go-test
+        packages: ["."]
+        fuzz: '^FuzzDecoderBoundsArbitraryBytes$'
+        budget: 1000x
+        timeout: 20m
+      - type: go-test
+        packages: ["."]
+        fuzz: '^FuzzInteractiveSelectionPaginationMatchesModel$'
+        budget: 1000x
+        timeout: 20m
+      - type: go-test
+        packages: ["."]
+        fuzz: '^FuzzFormNavigationAndVisibilityMatchesModel$'
+        budget: 1000x
+        timeout: 20m
+      - type: go-test
+        packages: ["."]
+        fuzz: '^FuzzDynamicOptionGenerationsMatchModel$'
+        budget: 1000x
+        timeout: 20m
+      - type: go-test
+        packages: ["."]
+        fuzz: '^FuzzProgressLifecycleMatchesModel$'
+        budget: 1000x
+        timeout: 20m
+      - type: go-test
+        packages: ["."]
+        fuzz: '^FuzzLineEditorMatchesReferenceModel$'
+        budget: 1000x
+        timeout: 20m
+      - type: go-test
+        packages: ["."]
+        fuzz: '^FuzzSelectionFilterAndStateMatchesReferenceModel$'
+        budget: 1000x
+        timeout: 20m
+      - type: go-test
+        packages: ["."]
+        fuzz: '^FuzzSecretEntryFailureNeverDiscloses$'
+        budget: 1000x
+        timeout: 20m
+  - module: "."
+    gate: benchmark
+    steps:
+      - type: make
+        makefile: verification/package.mk
+        target: benchmark
+        timeout: 20m
