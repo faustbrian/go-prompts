@@ -7,7 +7,7 @@ All notable changes follow Keep a Changelog and Semantic Versioning.
 ### Changed
 
 - Delegate repository verification and CI orchestration to the immutable
-  `go-library-tools` v1.0.7 contract while retaining package-owned mutation,
+  `go-library-tools` v1.0.13 contract while retaining package-owned mutation,
   API, fuzz, benchmark, terminal concurrency, and reproducibility policy.
 
 ### Documentation
