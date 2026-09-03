@@ -6,10 +6,16 @@ All notable changes follow Keep a Changelog and Semantic Versioning.
 
 ### Changed
 
-- Adopt the checksum-verified `go-library-tools` v1.3.0 schema-v2 cohesion
-  contract, local `make cohesion` gate, and immutable shared CI workflow while
-  retaining package-owned mutation, API, fuzz, benchmark, terminal concurrency,
-  and reproducibility policy.
+- Adopt the checksum-verified `go-library-tools` v1.4.0 schema-v2 cohesion
+  contract, local `make cohesion` gate, and immutable W14-enforcement workflow
+  while retaining package-owned mutation, API, fuzz, benchmark, terminal
+  concurrency, and reproducibility policy.
+- Stagger allocation-budget iteration deadlines so race instrumentation cannot
+  expire later iterations before they begin while hangs remain bounded.
+- Keep deterministic interactive event-source waits bounded without making
+  test outcomes depend on millisecond-scale scheduler timing.
+- Reconcile the comparison harness with the checksum published by the Go
+  checksum database for the immutable v1.0.0 commit.
 - Keep API, fuzz-budget, and benchmark evidence under the repository's
   verification tree so the reserved specification path cannot imply external
   specification ownership.

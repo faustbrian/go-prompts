@@ -390,7 +390,7 @@ func TestInteractiveAcquireCancellationIsTypedAsCancellation(t *testing.T) {
 
 func interactiveExecution(terminal *prompts.VirtualTerminal) prompts.Execution {
 	execution := unboundedInteractiveExecution(terminal)
-	execution.Events = boundedEventSource{EventSource: terminal, Wait: 5 * time.Millisecond}
+	execution.Events = boundedEventSource{EventSource: terminal, Wait: 5 * time.Second}
 
 	return execution
 }
