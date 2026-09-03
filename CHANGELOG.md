@@ -6,14 +6,26 @@ All notable changes follow Keep a Changelog and Semantic Versioning.
 
 ### Changed
 
-- Delegate repository verification and CI orchestration to the immutable
-  `go-library-tools` v1.0.7 contract while retaining package-owned mutation,
-  API, fuzz, benchmark, terminal concurrency, and reproducibility policy.
+- Adopt the checksum-verified `go-library-tools` v1.4.0 schema-v2 cohesion
+  contract, local `make cohesion` gate, and immutable W14-enforcement workflow
+  while retaining package-owned mutation, API, fuzz, benchmark, terminal
+  concurrency, and reproducibility policy.
+- Stagger allocation-budget iteration deadlines so race instrumentation cannot
+  expire later iterations before they begin while hangs remain bounded.
+- Keep deterministic interactive event-source waits bounded without making
+  test outcomes depend on millisecond-scale scheduler timing.
+- Reconcile the comparison harness with the checksum published by the Go
+  checksum database for the immutable v1.0.0 commit.
+- Keep API, fuzz-budget, and benchmark evidence under the repository's
+  verification tree so the reserved specification path cannot imply external
+  specification ownership.
 
 ### Documentation
 
 - Remove the archived monorepo documentation link; package guidance remains in
   the repository-owned documentation.
+- Publish the module's family, capabilities, ownership, lifecycle, supported
+  environments, package selection, and versioned ecosystem navigation.
 
 ## [1.0.0] - 2026-08-25
 

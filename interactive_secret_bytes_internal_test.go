@@ -570,7 +570,7 @@ func secretInteractiveExecution(terminal *VirtualTerminal) Execution {
 		Output: terminal,
 		Events: boundedInternalEventSource{
 			EventSource: terminal,
-			Wait:        5 * time.Millisecond,
+			Wait:        5 * time.Second,
 		},
 		Terminal: terminal,
 		Capabilities: Capabilities{

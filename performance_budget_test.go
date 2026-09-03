@@ -11,7 +11,10 @@ import (
 	prompts "github.com/faustbrian/go-prompts"
 )
 
-const allocationBudgetRuns = 25
+const (
+	allocationBudgetRuns    = 25
+	allocationBudgetTimeout = 5 * time.Second
+)
 
 func TestAllocationBudgets(t *testing.T) {
 	t.Run(
@@ -300,8 +303,11 @@ func assertBoundedAllocationBudget(t *testing.T, maximum float64, operation func
 	)
 }
 
-func newAllocationContext(parent context.Context) (context.Context, context.CancelFunc) {
-	return context.WithTimeout(parent, 5*time.Second)
+func newAllocationContext(
+	parent context.Context,
+	timeout time.Duration,
+) (context.Context, context.CancelFunc) {
+	return context.WithTimeout(parent, timeout)
 }
 
 func newAllocationContexts(
@@ -313,7 +319,10 @@ func newAllocationContexts(
 	}
 
 	contexts, cancels := newAllocationContexts(parent, count-1)
-	ctx, cancel := newAllocationContext(parent)
+	ctx, cancel := newAllocationContext(
+		parent,
+		time.Duration(count)*allocationBudgetTimeout,
+	)
 
 	return append(contexts, ctx), append(cancels, cancel)
 }

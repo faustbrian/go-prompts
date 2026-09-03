@@ -11,7 +11,7 @@ evidence was refreshed on 2026-08-20 with Go 1.26.6 on macOS arm64.
 | --- | --- | --- |
 | Meaningful production statement coverage | Passed locally | `GOWORK=off make coverage`; `prompts` covers 2,152/2,152 statements and `terminal` covers 169/169 statements |
 | Formatting, vet, tests, docs, race, static and security checks | Passed locally | `GOWORK=off make check` |
-| Retained fuzz and reference-model budgets | Passed locally | `GOWORK=off make fuzz`; budgets are in `specification/fuzz-budgets.tsv` |
+| Retained fuzz and reference-model budgets | Passed locally | `GOWORK=off make fuzz`; budgets are in `verification/fuzz/fuzz-budgets.tsv` |
 | Mutation campaign | Passed locally | `GOWORK=off make mutation`; 1,131/1,131 viable mutants were killed with no timeouts or unclassified outcomes |
 | Benchmarks and isolated comparisons | Passed locally | `GOWORK=off make benchmark comparison-benchmark comparison-binaries` |
 | Clean-clone release gate | Passed locally | `GOWORK=off make release-check` in a separate clone |
@@ -104,7 +104,7 @@ covered by focused tests.
 
 ## Fuzz, model, and mutation evidence
 
-`specification/fuzz-budgets.tsv` is the executable inventory for raw decoder,
+`verification/fuzz/fuzz-budgets.tsv` is the executable inventory for raw decoder,
 normalized interaction, rendering, search, secret, form, provider, progress,
 editor, and selection fuzzers. Source seeds and retained regression corpus
 files live beside the fuzz targets and under `testdata/fuzz`. Independent
@@ -120,13 +120,14 @@ by 24 pseudo-terminal, the same answer assertion, and the same full setup and
 cleanup boundary for prompts, Huh, Survey, PromptUI, and direct Bubble
 Tea/Bubbles. Visual output differs, so the results are observations rather
 than speedup claims. Raw three-sample data is retained in
-`specification/benchmark-comparison-2026-07-22.tsv`; stripped minimum-import
-binary sizes are in `specification/binary-size-comparison-2026-07-22.tsv`.
+`verification/benchmarks/benchmark-comparison-2026-07-22.tsv`; stripped
+minimum-import binary sizes are in
+`verification/benchmarks/binary-size-comparison-2026-07-22.tsv`.
 `docs/benchmarks.md` records the method, summaries, and limitations.
 
 ## API, dependency, and supply-chain evidence
 
-`GOWORK=off make api` enforces `specification/api-v0.txt`. Architecture tests
+`GOWORK=off make api` enforces `verification/api/api-v0.txt`. Architecture tests
 reject ambient OS access, upstream prompt-engine types, initialization side
 effects, production panic, and unowned core goroutines. `go.mod` keeps the core
 independent of Huh and Bubble Tea; comparisons live in a nested module.
