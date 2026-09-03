@@ -76,7 +76,7 @@ The median 2026-07-22 Apple M4 Max observation with Go 1.26.5 was:
 | Bubble Tea/Bubbles | 2.0.8 / 2.1.1 | 19,374,509 (18,866,274-19,506,337) | 727,740 | 1,966 |
 
 The raw three-sample results are retained in
-`specification/benchmark-comparison-2026-07-22.tsv`. These are observations,
+`verification/benchmarks/benchmark-comparison-2026-07-22.tsv`. These are observations,
 not portable speedup claims. The engines render
 different visual detail and the Bubble Tea case pays for full-screen renderer
 startup and shutdown. The benchmark exists to expose those boundaries rather
@@ -90,7 +90,7 @@ machine the sizes were 2,132,674 bytes for prompts, 3,664,818 for Huh,
 2,384,946 for Survey, 1,949,282 for PromptUI, and 2,527,154 for Bubbles. This is
 a minimum-import measurement, not the size of a complete application. Raw
 values are retained in
-`specification/binary-size-comparison-2026-07-22.tsv`.
+`verification/benchmarks/binary-size-comparison-2026-07-22.tsv`.
 
 Latency remains observational because shared CI runners are not stable timing
 references. Allocation budgets and a 2.5 MB minimum-import binary ceiling are

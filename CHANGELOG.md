@@ -10,6 +10,9 @@ All notable changes follow Keep a Changelog and Semantic Versioning.
   contract, local `make cohesion` gate, and immutable shared CI workflow while
   retaining package-owned mutation, API, fuzz, benchmark, terminal concurrency,
   and reproducibility policy.
+- Keep API, fuzz-budget, and benchmark evidence under the repository's
+  verification tree so the reserved specification path cannot imply external
+  specification ownership.
 
 ### Documentation
 

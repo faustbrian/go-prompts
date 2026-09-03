@@ -23,6 +23,6 @@ No application must import Huh, Bubble Tea, Bubbles, Survey, or PromptUI types.
 The core does not accept a command tree, parse argv, exit a process, or own a
 business operation.
 
-`specification/api-v0.txt` is the reviewed exported-module baseline. `make api`
+`verification/api/api-v0.txt` is the reviewed exported-module baseline. `make api`
 requires the current public surface to match it exactly, so additions and
 breaking changes both require an explicit baseline update before release.
