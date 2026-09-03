@@ -1,4 +1,4 @@
-.PHONY: check ci inventory repository-check
+.PHONY: check ci cohesion inventory repository-check
 
 GOLIB ?= golib
 
@@ -7,7 +7,11 @@ check:
 
 ci:
 	$(GOLIB) repository check
+	$(GOLIB) cohesion check
 	$(GOLIB) check --all
+
+cohesion:
+	$(GOLIB) cohesion check
 
 inventory repository-check:
 	$(GOLIB) repository check

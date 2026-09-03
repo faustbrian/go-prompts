@@ -6,14 +6,17 @@ All notable changes follow Keep a Changelog and Semantic Versioning.
 
 ### Changed
 
-- Delegate repository verification and CI orchestration to the immutable
-  `go-library-tools` v1.0.14 contract while retaining package-owned mutation,
-  API, fuzz, benchmark, terminal concurrency, and reproducibility policy.
+- Adopt the checksum-verified `go-library-tools` v1.3.0 schema-v2 cohesion
+  contract, local `make cohesion` gate, and immutable shared CI workflow while
+  retaining package-owned mutation, API, fuzz, benchmark, terminal concurrency,
+  and reproducibility policy.
 
 ### Documentation
 
 - Remove the archived monorepo documentation link; package guidance remains in
   the repository-owned documentation.
+- Publish the module's family, capabilities, ownership, lifecycle, supported
+  environments, package selection, and versioned ecosystem navigation.
 
 ## [1.0.0] - 2026-08-25
 
