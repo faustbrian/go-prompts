@@ -8,17 +8,23 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/faustbrian/go-prompts.svg)](https://pkg.go.dev/github.com/faustbrian/go-prompts)
 [![Release](https://img.shields.io/github/v/release/faustbrian/go-prompts?sort=semver)](https://github.com/faustbrian/go-prompts/releases)
 [![Go](https://img.shields.io/badge/go-1.26.6-00ADD8?logo=go)](https://go.dev/)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 
 `prompts` is an explicit, typed foundation for interactive terminal
 prompts and deterministic non-interactive fallbacks. Callers own the context,
 streams, terminal capabilities, interaction authority, and lifecycle.
 
-The package has a stable v1 API. Its automated prompt, rendering,
-terminal, headless, security, test, and release contracts are implemented and
-remain subject to compatibility review. A stable release is still blocked on
-the recorded manual terminal and assistive-technology matrix; see
+The published v1.0.0 release provides a stable v1 API. Its automated prompt,
+rendering, terminal, headless, security, test, and release contracts are
+implemented and remain subject to compatibility review. The recorded manual
+terminal and assistive-technology matrix is available in
 [Accessibility review evidence](docs/accessibility-review.md).
+
+## Installation
+
+```sh
+go get github.com/faustbrian/go-prompts@v1.0.0
+```
 
 Explicit non-interactive input uses the same typed parser and validation
 pipeline without authorizing a terminal read:
@@ -64,6 +70,7 @@ are caller-driven presentation values. See
 - [Accessibility](docs/accessibility.md)
 - [Accessibility review evidence](docs/accessibility-review.md)
 - [Hardening evidence](docs/hardening-evidence.md)
+- [Benchmarks](docs/benchmarks.md)
 - [Security model](docs/security.md)
 - [Compatibility](docs/compatibility.md)
 - [Terminal adapter](docs/terminal-adapter.md)

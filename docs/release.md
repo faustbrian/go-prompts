@@ -1,10 +1,10 @@
 # Release process
 
-No stable release exists yet. A release candidate must start from a clean clone
-with `GOWORK=off`, pass `make check`, retained fuzz budgets, mutation review,
-benchmark budgets, documentation and example checks, platform CI, dependency
-review, vulnerability and license review, SBOM generation, reproducibility,
-provenance, and signing.
+The stable v1 line began with v1.0.0. A release candidate must start from a
+clean clone with `GOWORK=off`, pass `make check`, retained fuzz budgets,
+mutation review, benchmark budgets, documentation and example checks, platform
+CI, dependency review, vulnerability and license review, SBOM generation,
+reproducibility, provenance, and signing.
 
 Freeze the release commit before evidence generation. Update the changelog with
 every user-visible behavior and compatibility decision. Tag only the verified
@@ -19,13 +19,14 @@ boundary are recorded in `docs/accessibility-review.md`.
 The local `make release-check` command adds retained fuzz budgets, the reviewed
 mutation threshold, and benchmark execution to the standard quality gates.
 `make api`, `make license`, `make sbom`, and `make reproducible` provide focused
-entry points. The API export baseline is intentionally exact during pre-v1
-development; an intentional public change must update it with review.
+entry points. The API export baseline is intentionally exact; an intentional
+public change must update it with review and follow the stable-major
+compatibility policy.
 
-Signed `prompts/v*` tags trigger the release workflow. It verifies the tag,
-runs the complete release gate, builds a deterministic source archive and
-CycloneDX SBOM, records checksums, creates keyless Sigstore bundles, emits a
-GitHub artifact attestation, uploads the evidence, and publishes the verified
-tag as a GitHub release. CodeQL runs on changes, main, and a weekly schedule;
-dependency review enforces moderate-severity and license policy on module
-changes.
+The root module uses `v*` tags. Release operators run the complete release
+gate, build and verify the archive, SBOM, checksums, signatures, and provenance,
+then publish the verified tag and assets as a GitHub release. The repository CI
+workflow covers pull requests, main pushes, scheduled checks, and manually
+requested release rehearsals; it does not publish releases. CodeQL runs on
+changes, main, and a weekly schedule; dependency review enforces
+moderate-severity and license policy on module changes.

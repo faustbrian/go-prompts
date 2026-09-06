@@ -22,12 +22,14 @@ All notable changes follow Keep a Changelog and Semantic Versioning.
 
 ### Documentation
 
+- Correct the Apache-2.0 badge, published v1 status, canonical installation,
+  release guidance, and internal comparison-benchmark navigation.
 - Remove the archived monorepo documentation link; package guidance remains in
   the repository-owned documentation.
 - Publish the module's family, capabilities, ownership, lifecycle, supported
   environments, package selection, and versioned ecosystem navigation.
 
-## [1.0.0] - 2026-08-25
+## [1.0.0] - 2026-08-26
 
 ### Changed
 
@@ -131,9 +133,9 @@ All notable changes follow Keep a Changelog and Semantic Versioning.
 - Exact exported-API compatibility evidence, reviewed mutation thresholds,
   dependency license and deterministic SBOM checks, and reproducible source
   archive verification with a composite release gate.
-- SHA-pinned CodeQL and dependency-review workflows plus signed-tag release
-  automation for deterministic source archives, SBOMs, checksums, keyless
-  Sigstore bundles, GitHub attestations, and verified releases.
+- SHA-pinned CodeQL and dependency-review workflows, deterministic release
+  archives, SBOMs, and checksums, plus operator-published signature and
+  provenance assets for verified releases.
 - Immutable execution-local key maps that rebind non-text editing, navigation,
   submission, cancellation, and end-of-input meanings while disabling prior
   shortcuts for the rebound action.
