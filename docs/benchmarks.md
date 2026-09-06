@@ -47,13 +47,15 @@ results remain observational; allocation ceilings fail `make check`.
 
 ## Comparative pseudo-terminal benchmark
 
-The dependency-isolated module in `benchmarks/comparison` drives a single-line
-text prompt through an 80 by 24 pseudo-terminal. Every engine receives the
-same `Ada` plus Enter byte stream, renders to the same terminal, returns the
-same answer, and includes prompt construction, terminal setup, rendering,
-editing, submission, cleanup, and harness setup in the timed region. Survey's
-cursor-position requests are answered by a VT10x terminal model. The direct
-Bubble Tea/Bubbles case includes a complete program and renderer lifecycle.
+The dependency-isolated module in
+[`benchmarks/comparison`](../benchmarks/comparison/README.md) drives a
+single-line text prompt through an 80 by 24 pseudo-terminal. Every engine
+receives the same `Ada` plus Enter byte stream, renders to the same terminal,
+returns the same answer, and includes prompt construction, terminal setup,
+rendering, editing, submission, cleanup, and harness setup in the timed region.
+Survey's cursor-position requests are answered by a VT10x terminal model. The
+direct Bubble Tea/Bubbles case includes a complete program and renderer
+lifecycle.
 
 Run it on Unix with:
 

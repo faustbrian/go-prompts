@@ -3,7 +3,9 @@
 This report maps the mandatory hardening evidence to reproducible source,
 test, and command evidence. It records automated guarantees separately from
 manual or remote release evidence. Unless stated otherwise, the automated
-evidence was refreshed on 2026-08-20 with Go 1.26.6 on macOS arm64.
+evidence was refreshed on 2026-08-20 with Go 1.26.6 on macOS arm64. The
+v1.0.0 release was published on 2026-08-26 after its exact commit passed
+[protected CI](https://github.com/faustbrian/go-prompts/actions/runs/32916114156).
 
 ## Release status
 
@@ -15,12 +17,11 @@ evidence was refreshed on 2026-08-20 with Go 1.26.6 on macOS arm64.
 | Mutation campaign | Passed locally | `GOWORK=off make mutation`; 1,131/1,131 viable mutants were killed with no timeouts or unclassified outcomes |
 | Benchmarks and isolated comparisons | Passed locally | `GOWORK=off make benchmark comparison-benchmark comparison-binaries` |
 | Clean-clone release gate | Passed locally | `GOWORK=off make release-check` in a separate clone |
-| Remote CI for the release commit | Pending | Requires the release commit to be pushed and all protected workflows to pass |
+| Remote CI for the release commit | Passed | The exact v1.0.0 commit passed protected CI before publication |
 | Manual assistive-technology review | Passed | VoiceOver review completed in iTerm2 3.6.11 and Apple Terminal 2.15; evidence and limitations are in `docs/accessibility-review.md` |
 
-The local and manual passes are not substitutes for pending remote CI. A
-release commit must be frozen and the complete local and remote evidence
-regenerated before a stable tag.
+The local and manual passes did not substitute for remote CI. The exact v1.0.0
+commit passed the protected workflow before the stable release was published.
 
 ## Prompt and interaction-policy matrix
 
@@ -134,7 +135,8 @@ independent of Huh and Bubble Tea; comparisons live in a nested module.
 `make vulnerability license secret-scan sbom workflow-lint reproducible`
 checks advisories, licenses, repository secrets, deterministic CycloneDX
 generation, immutable workflow pins, and reproducible Git-object archives.
-Release signing and provenance remain workflow-owned remote evidence.
+Release signing and provenance are release-operator evidence bound to the exact
+published artifacts.
 
 ## Documentation execution and compatibility
 
@@ -145,9 +147,9 @@ evidence; migration and explicit non-interactive examples avoid mandatory
 prompting. The exact exported API baseline detects unreviewed compatibility
 changes.
 
-## Open release findings
+## v1.0.0 release closure
 
-| Finding | Owner | Severity | Rationale and follow-up |
-| --- | --- | --- | --- |
-| Assistive-technology matrix is incomplete | Release maintainer | Release blocker | Automated semantic checks cannot establish announcement order or usability. Complete every pending row in `docs/accessibility-review.md`. |
-| Current local commits have no protected remote CI result | Release operator | Release blocker | Local evidence cannot prove hosted OS, CodeQL, dependency review, signing, or provenance workflows. Push an approved branch or release commit and require every workflow to pass. |
+The named VoiceOver matrix was completed before release. The exact release
+commit then passed protected CI, and v1.0.0 was published with its checksums,
+SBOM, signature, and provenance assets. Those release-bound results close the
+pre-release accessibility and hosted-CI blockers recorded by this report.
