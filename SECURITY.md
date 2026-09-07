@@ -1,12 +1,12 @@
 # Security
 
-Report vulnerabilities through GitHub private vulnerability reporting for the
-repository. Do not include live credentials or secret prompt values in an
-issue, test fixture, terminal capture, or proof of concept.
+Report vulnerabilities through
+[GitHub private vulnerability reporting](https://github.com/faustbrian/go-prompts/security/advisories/new).
+Do not include live credentials or secret prompt values in an issue, test
+fixture, terminal capture, or proof of concept.
 
-There is no supported release while the module remains in initial development.
-After the first release, the latest minor line will receive security fixes and
-the support window will be recorded here. Security advisories will describe
+The published `v1.0.0` release begins the supported stable v1 line. The latest
+stable v1 minor line receives security fixes. Security advisories describe
 affected versions, safe upgrade versions, and whether secret disclosure or
 terminal-state restoration is involved.
 

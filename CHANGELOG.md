@@ -22,6 +22,8 @@ All notable changes follow Keep a Changelog and Semantic Versioning.
 
 ### Documentation
 
+- Add the consumer documentation index and package map, correct stable release
+  and tag guidance, and publish actionable support and security routes.
 - Correct the Apache-2.0 badge, published v1 status, canonical installation,
   release guidance, and internal comparison-benchmark navigation.
 - Remove the archived monorepo documentation link; package guidance remains in
