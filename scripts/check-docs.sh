@@ -15,6 +15,7 @@ docs/architecture.md
 docs/benchmarks.md
 docs/compatibility.md
 docs/dependency-evaluation.md
+docs/README.md
 docs/faq.md
 docs/forms.md
 docs/hardening-evidence.md

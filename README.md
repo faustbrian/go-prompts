@@ -62,6 +62,7 @@ are caller-driven presentation values. See
 
 ## Documentation
 
+- [Documentation index](docs/README.md)
 - [API overview](docs/api.md)
 - [Prompt types](docs/prompt-types.md)
 - [Selection and search](docs/selection.md)
@@ -82,6 +83,20 @@ are caller-driven presentation values. See
 
 Executable examples in `example_test.go` cover explicit input, headless
 fallback, virtual-terminal interaction, forms, progress, and tables.
+
+### Package map
+
+- [`github.com/faustbrian/go-prompts`](https://pkg.go.dev/github.com/faustbrian/go-prompts)
+  owns typed prompt definitions, explicit execution, forms, semantic rendering,
+  secrets, and caller-driven presentation.
+- [`github.com/faustbrian/go-prompts/terminal`](https://pkg.go.dev/github.com/faustbrian/go-prompts/terminal)
+  is the optional Linux and macOS adapter for caller-owned terminal files, raw
+  mode, echo restoration, and cancellable input decoding.
+
+Use `prompts` when an application needs typed, bounded interaction or the same
+validation pipeline for explicit non-interactive input. Do not use it as a
+command framework, configuration loader, application lifecycle, or source of
+ambient terminal authority.
 
 ## Development
 
