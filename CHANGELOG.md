@@ -4,6 +4,8 @@ All notable changes follow Keep a Changelog and Semantic Versioning.
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-09-09
+
 ### Added
 
 - Add the target-oriented `adapters/terminal` package as the implementation
@@ -242,5 +244,6 @@ All notable changes follow Keep a Changelog and Semantic Versioning.
   and the Narrator review requirement. Supported platforms are Linux and
   macOS.
 
-[Unreleased]: https://github.com/faustbrian/go-prompts/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/faustbrian/go-prompts/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/faustbrian/go-prompts/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/faustbrian/go-prompts/releases/tag/v1.0.0
