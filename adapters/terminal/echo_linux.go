@@ -1,6 +1,6 @@
 //go:build linux
 
-package terminal
+package promptsterminal
 
 import "golang.org/x/sys/unix"
 

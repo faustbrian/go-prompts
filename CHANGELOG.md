@@ -4,8 +4,16 @@ All notable changes follow Keep a Changelog and Semantic Versioning.
 
 ## [Unreleased]
 
+### Added
+
+- Add the target-oriented `adapters/terminal` package as the implementation
+  owner for explicit real-terminal integration.
+
 ### Changed
 
+- Deprecate the original `terminal` import path in favor of
+  `adapters/terminal` while retaining its v1 API and behavior as a compatibility
+  facade.
 - Adopt the checksum-verified `go-library-tools` v1.4.0 schema-v2 cohesion
   contract, local `make cohesion` gate, and immutable W14-enforcement workflow
   while retaining package-owned mutation, API, fuzz, benchmark, terminal

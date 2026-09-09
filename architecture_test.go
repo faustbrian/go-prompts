@@ -102,13 +102,19 @@ func TestSupportedPlatformBoundary(t *testing.T) {
 	t.Parallel()
 
 	root := packageRoot(t)
-	terminalEntries, err := os.ReadDir(filepath.Join(root, "terminal"))
-	if err != nil {
-		t.Fatalf("ReadDir(terminal) error = %v", err)
-	}
-	for _, entry := range terminalEntries {
-		if !entry.IsDir() && strings.HasSuffix(entry.Name(), "_windows.go") {
-			t.Errorf("unsupported Windows implementation remains: %s", entry.Name())
+	for _, directory := range []string{"adapters/terminal", "terminal"} {
+		terminalEntries, err := os.ReadDir(filepath.Join(root, directory))
+		if err != nil {
+			t.Fatalf("ReadDir(%s) error = %v", directory, err)
+		}
+		for _, entry := range terminalEntries {
+			if !entry.IsDir() && strings.HasSuffix(entry.Name(), "_windows.go") {
+				t.Errorf(
+					"unsupported Windows implementation remains: %s/%s",
+					directory,
+					entry.Name(),
+				)
+			}
 		}
 	}
 }

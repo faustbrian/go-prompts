@@ -79,8 +79,6 @@ func TestSelectionStateEmptyAndDisabledOperationsAreStable(t *testing.T) {
 }
 
 func TestSelectionStateFocusToggleAndRanking(t *testing.T) {
-	t.Parallel()
-
 	details := selectionDetails{
 		options: []selectionOption{
 			{id: "alpha", label: "Alpha", description: "first token"},
