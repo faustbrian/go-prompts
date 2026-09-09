@@ -14,7 +14,7 @@
 prompts and deterministic non-interactive fallbacks. Callers own the context,
 streams, terminal capabilities, interaction authority, and lifecycle.
 
-The published v1.0.0 release provides a stable v1 API. Its automated prompt,
+The published v1.1.0 release provides a stable v1 API. Its automated prompt,
 rendering, terminal, headless, security, test, and release contracts are
 implemented and remain subject to compatibility review. The recorded manual
 terminal and assistive-technology matrix is available in
@@ -23,11 +23,11 @@ terminal and assistive-technology matrix is available in
 ## Installation
 
 ```sh
-go get github.com/faustbrian/go-prompts@v1.0.0
+go get github.com/faustbrian/go-prompts@v1.1.0
 ```
 
-The target-oriented terminal adapter described below is scheduled for v1.1.0.
-Until that version is published, stable consumers should continue to import
+The target-oriented terminal adapter described below is available in v1.1.0.
+Existing consumers can continue to import the compatibility path at
 `github.com/faustbrian/go-prompts/terminal`.
 
 Explicit non-interactive input uses the same typed parser and validation
@@ -56,7 +56,7 @@ Interactive execution requires caller authority plus explicit `EventSource`,
 stream or acquires global terminal state on its own. See
 [Interactive input](docs/interactive-input.md).
 
-Starting with v1.1.0, the optional real-terminal implementation is
+The optional real-terminal implementation is
 `github.com/faustbrian/go-prompts/adapters/terminal`. The original
 `github.com/faustbrian/go-prompts/terminal` path remains as a deprecated,
 behavior-identical compatibility facade.
