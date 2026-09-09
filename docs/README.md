@@ -8,7 +8,7 @@ loading, application lifecycle, or ambient terminal access.
 
 - [Root package example](../example_test.go) shows explicit input, headless
   fallback, virtual-terminal interaction, forms, progress, and tables.
-- [Terminal adapter example](../terminal/example_test.go) shows construction
+- [Terminal adapter example](../adapters/terminal/example_test.go) shows construction
   and capability detection; the [terminal adapter guide](terminal-adapter.md)
   covers caller-owned acquisition and release.
 - [API overview](api.md) links the public API and package reference.
@@ -20,9 +20,11 @@ loading, application lifecycle, or ambient terminal access.
 - [`github.com/faustbrian/go-prompts`](https://pkg.go.dev/github.com/faustbrian/go-prompts)
   owns prompt definitions, explicit execution, forms, rendering, secrets, and
   caller-driven presentation.
-- [`github.com/faustbrian/go-prompts/terminal`](https://pkg.go.dev/github.com/faustbrian/go-prompts/terminal)
+- [`github.com/faustbrian/go-prompts/adapters/terminal`](https://pkg.go.dev/github.com/faustbrian/go-prompts/adapters/terminal)
   is the optional Linux and macOS terminal adapter. Callers own its files,
   context, acquisition authority, and release.
+- [`github.com/faustbrian/go-prompts/terminal`](https://pkg.go.dev/github.com/faustbrian/go-prompts/terminal)
+  is the deprecated v1 compatibility facade for the target-oriented adapter.
 
 The internal `benchmarks/comparison` module is an engineering harness, not a
 consumer package or independently released module.
@@ -48,7 +50,7 @@ consumer package or independently released module.
 ## Help, testing, and maintenance
 
 - [Executable examples](../example_test.go) and
-  [terminal examples](../terminal/example_test.go)
+  [terminal adapter examples](../adapters/terminal/example_test.go)
 - [Testing and hardening evidence](hardening-evidence.md)
 - [Mutation evidence](mutation.md)
 - [FAQ](faq.md)

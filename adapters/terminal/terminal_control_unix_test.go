@@ -1,6 +1,6 @@
 //go:build linux || darwin || dragonfly || freebsd || netbsd || openbsd
 
-package terminal
+package promptsterminal
 
 import (
 	"errors"

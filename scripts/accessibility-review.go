@@ -10,7 +10,7 @@ import (
 	"strings"
 
 	prompts "github.com/faustbrian/go-prompts"
-	"github.com/faustbrian/go-prompts/terminal"
+	terminal "github.com/faustbrian/go-prompts/adapters/terminal"
 )
 
 func main() {

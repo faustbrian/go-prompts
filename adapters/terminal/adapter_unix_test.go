@@ -1,6 +1,6 @@
 //go:build !windows
 
-package terminal_test
+package promptsterminal_test
 
 import (
 	"bytes"
@@ -14,14 +14,12 @@ import (
 
 	"github.com/creack/pty"
 	prompts "github.com/faustbrian/go-prompts"
-	"github.com/faustbrian/go-prompts/terminal"
+	terminal "github.com/faustbrian/go-prompts/adapters/terminal"
 	"golang.org/x/sys/unix"
 	"golang.org/x/term"
 )
 
 func TestInteractiveTextDoesNotEnableKernelEcho(t *testing.T) {
-	t.Parallel()
-
 	primary, replica, err := pty.Open()
 	if err != nil {
 		t.Fatalf("Open() error = %v", err)
@@ -154,8 +152,6 @@ func (observer *echoObserver) readAvailable() ([]byte, error) {
 }
 
 func TestAdapterPreservesTerminalOutputLineEndings(t *testing.T) {
-	t.Parallel()
-
 	primary, replica, err := pty.Open()
 	if err != nil {
 		t.Fatalf("Open() error = %v", err)
@@ -225,8 +221,6 @@ func readExactPTY(t *testing.T, file *os.File, size int, timeout time.Duration) 
 }
 
 func TestAdapterAcquiresEchoesAndRestoresPTY(t *testing.T) {
-	t.Parallel()
-
 	primary, replica, err := pty.Open()
 	if err != nil {
 		t.Fatalf("Open() error = %v", err)
@@ -268,8 +262,6 @@ func TestAdapterAcquiresEchoesAndRestoresPTY(t *testing.T) {
 }
 
 func TestAdapterRestoresSecretPTYAfterWriterFailure(t *testing.T) {
-	t.Parallel()
-
 	primary, replica, err := pty.Open()
 	if err != nil {
 		t.Fatalf("Open() error = %v", err)
@@ -324,8 +316,6 @@ func (terminalErrorWriter) Write([]byte) (int, error) {
 }
 
 func TestAdapterRestoresByteSecretPromptPTY(t *testing.T) {
-	t.Parallel()
-
 	for name, input := range map[string][]byte{
 		"submit": []byte("\x1b[200~secret-value\x1b[201~\r"),
 		"cancel": {0x03},
@@ -333,7 +323,6 @@ func TestAdapterRestoresByteSecretPromptPTY(t *testing.T) {
 		t.Run(
 			name,
 			func(t *testing.T) {
-				t.Parallel()
 				primary, replica, err := pty.Open()
 				if err != nil {
 					t.Fatalf("Open() error = %v", err)
@@ -432,8 +421,6 @@ func TestAdapterRestoresByteSecretPromptPTY(t *testing.T) {
 }
 
 func TestAdapterReportsPTYControlFailures(t *testing.T) {
-	t.Parallel()
-
 	primary, replica, err := pty.Open()
 	if err != nil {
 		t.Fatalf("Open() error = %v", err)

@@ -26,6 +26,10 @@ terminal and assistive-technology matrix is available in
 go get github.com/faustbrian/go-prompts@v1.0.0
 ```
 
+The target-oriented terminal adapter described below is scheduled for v1.1.0.
+Until that version is published, stable consumers should continue to import
+`github.com/faustbrian/go-prompts/terminal`.
+
 Explicit non-interactive input uses the same typed parser and validation
 pipeline without authorizing a terminal read:
 
@@ -51,6 +55,11 @@ Interactive execution requires caller authority plus explicit `EventSource`,
 `TerminalController`, and output resources. The core never decodes a process
 stream or acquires global terminal state on its own. See
 [Interactive input](docs/interactive-input.md).
+
+Starting with v1.1.0, the optional real-terminal implementation is
+`github.com/faustbrian/go-prompts/adapters/terminal`. The original
+`github.com/faustbrian/go-prompts/terminal` path remains as a deprecated,
+behavior-identical compatibility facade.
 
 Ordered heterogeneous prompts compose through `NewForm`, `AsField`, and
 `When`; typed answers are recovered with `FormValue`. See
@@ -89,9 +98,12 @@ fallback, virtual-terminal interaction, forms, progress, and tables.
 - [`github.com/faustbrian/go-prompts`](https://pkg.go.dev/github.com/faustbrian/go-prompts)
   owns typed prompt definitions, explicit execution, forms, semantic rendering,
   secrets, and caller-driven presentation.
-- [`github.com/faustbrian/go-prompts/terminal`](https://pkg.go.dev/github.com/faustbrian/go-prompts/terminal)
+- [`github.com/faustbrian/go-prompts/adapters/terminal`](https://pkg.go.dev/github.com/faustbrian/go-prompts/adapters/terminal)
   is the optional Linux and macOS adapter for caller-owned terminal files, raw
   mode, echo restoration, and cancellable input decoding.
+- [`github.com/faustbrian/go-prompts/terminal`](https://pkg.go.dev/github.com/faustbrian/go-prompts/terminal)
+  is the retained v1 compatibility facade. New integrations should use the
+  target-oriented adapter path.
 
 Use `prompts` when an application needs typed, bounded interaction or the same
 validation pipeline for explicit non-interactive input. Do not use it as a

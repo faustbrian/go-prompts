@@ -1,4 +1,4 @@
-package terminal
+package promptsterminal
 
 import (
 	"context"
@@ -14,8 +14,6 @@ import (
 )
 
 func TestAdapterRestoresWhenOutputConfigurationFails(t *testing.T) {
-	t.Parallel()
-
 	primary, replica, err := pty.Open()
 	if err != nil {
 		t.Fatalf("Open() error = %v", err)
@@ -47,8 +45,6 @@ func TestAdapterRestoresWhenOutputConfigurationFails(t *testing.T) {
 }
 
 func TestAdapterPropagatesDecoderAndReaderFailures(t *testing.T) {
-	t.Parallel()
-
 	reader, writer, err := os.Pipe()
 	if err != nil {
 		t.Fatalf("Pipe() error = %v", err)
@@ -80,8 +76,6 @@ func TestAdapterPropagatesDecoderAndReaderFailures(t *testing.T) {
 }
 
 func TestAdapterRejectsUnsupportedDeadlineFailure(t *testing.T) {
-	t.Parallel()
-
 	reader, writer, err := os.Pipe()
 	if err != nil {
 		t.Fatalf("Pipe() error = %v", err)
@@ -105,8 +99,6 @@ func TestAdapterRejectsUnsupportedDeadlineFailure(t *testing.T) {
 }
 
 func TestAdapterUsesEarlierContextDeadline(t *testing.T) {
-	t.Parallel()
-
 	reader, writer, err := os.Pipe()
 	if err != nil {
 		t.Fatalf("Pipe() error = %v", err)

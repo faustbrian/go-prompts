@@ -1,4 +1,4 @@
-package terminal_test
+package promptsterminal_test
 
 import (
 	"context"
@@ -9,12 +9,10 @@ import (
 	"time"
 
 	prompts "github.com/faustbrian/go-prompts"
-	"github.com/faustbrian/go-prompts/terminal"
+	terminal "github.com/faustbrian/go-prompts/adapters/terminal"
 )
 
 func TestAdapterReadsQueuedEventsAndEOF(t *testing.T) {
-	t.Parallel()
-
 	reader, writer, err := os.Pipe()
 	if err != nil {
 		t.Fatalf("Pipe() error = %v", err)
@@ -50,8 +48,6 @@ func TestAdapterReadsQueuedEventsAndEOF(t *testing.T) {
 }
 
 func TestAdapterDecodesBytePasteWithoutStringPayload(t *testing.T) {
-	t.Parallel()
-
 	reader, writer, err := os.Pipe()
 	if err != nil {
 		t.Fatalf("Pipe() error = %v", err)
@@ -79,13 +75,10 @@ func TestAdapterDecodesBytePasteWithoutStringPayload(t *testing.T) {
 }
 
 func TestAdapterFlushesEscapeAndRejectsTruncation(t *testing.T) {
-	t.Parallel()
-
 	for name, input := range map[string][]byte{"escape": {0x1b}, "truncated": []byte("\x1b[")} {
 		t.Run(
 			name,
 			func(t *testing.T) {
-				t.Parallel()
 				reader, writer, err := os.Pipe()
 				if err != nil {
 					t.Fatalf("Pipe() error = %v", err)
@@ -114,8 +107,6 @@ func TestAdapterFlushesEscapeAndRejectsTruncation(t *testing.T) {
 }
 
 func TestAdapterResolvesEscapeWhileInputRemainsOpen(t *testing.T) {
-	t.Parallel()
-
 	reader, writer, err := os.Pipe()
 	if err != nil {
 		t.Fatalf("Pipe() error = %v", err)
@@ -142,8 +133,6 @@ func TestAdapterResolvesEscapeWhileInputRemainsOpen(t *testing.T) {
 }
 
 func TestAdapterRejectsTimedOutPartialSequence(t *testing.T) {
-	t.Parallel()
-
 	reader, writer, err := os.Pipe()
 	if err != nil {
 		t.Fatalf("Pipe() error = %v", err)
@@ -169,8 +158,6 @@ func TestAdapterRejectsTimedOutPartialSequence(t *testing.T) {
 }
 
 func TestAdapterCancellationAndReadFailures(t *testing.T) {
-	t.Parallel()
-
 	reader, writer, err := os.Pipe()
 	if err != nil {
 		t.Fatalf("Pipe() error = %v", err)
@@ -212,8 +199,6 @@ func TestAdapterCancellationAndReadFailures(t *testing.T) {
 }
 
 func TestAdapterValidatesConfigAndNonTerminalControl(t *testing.T) {
-	t.Parallel()
-
 	reader, writer, err := os.Pipe()
 	if err != nil {
 		t.Fatalf("Pipe() error = %v", err)

@@ -1,6 +1,6 @@
 //go:build linux || darwin || dragonfly || freebsd || netbsd || openbsd
 
-package terminal
+package promptsterminal
 
 func setEcho(descriptor uintptr, enabled bool) error {
 	return setEchoUsing(descriptor, enabled, readTerminalState, writeTerminalState)
