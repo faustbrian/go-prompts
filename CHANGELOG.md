@@ -4,6 +4,10 @@ All notable changes follow Keep a Changelog and Semantic Versioning.
 
 ## [Unreleased]
 
+### Changed
+
+- Register the released public API baseline with the shared compatibility gate while retaining the repository-owned API snapshot oracle.
+
 ### Documentation
 
 - Align maintained documentation with the stable v1 release contract and
