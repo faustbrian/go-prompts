@@ -1,6 +1,6 @@
 module github.com/faustbrian/go-prompts
 
-go 1.26.6
+go 1.27.0
 
 require github.com/rivo/uniseg v0.4.7
 
