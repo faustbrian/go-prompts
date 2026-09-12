@@ -17,7 +17,7 @@ Measure stripped minimum-import binaries with:
 ./measure-binaries.sh
 ```
 
-The commands require the Go 1.26.6 toolchain. Results are observational across
+The commands require the Go 1.27.0 toolchain. Results are observational across
 machines; do not treat them as portable speed claims. See the root
 [benchmark documentation](../../docs/benchmarks.md) for the compared boundary,
 recorded results, and interpretation limits.
