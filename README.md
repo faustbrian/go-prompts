@@ -7,7 +7,7 @@
 [![Documentation](https://img.shields.io/badge/docs-checked_in_CI-blue)](docs/)
 [![Go Reference](https://pkg.go.dev/badge/github.com/faustbrian/go-prompts.svg)](https://pkg.go.dev/github.com/faustbrian/go-prompts)
 [![Release](https://img.shields.io/github/v/release/faustbrian/go-prompts?sort=semver)](https://github.com/faustbrian/go-prompts/releases)
-[![Go](https://img.shields.io/badge/go-1.26.6-00ADD8?logo=go)](https://go.dev/)
+[![Go](https://img.shields.io/badge/go-1.27.0-00ADD8?logo=go)](https://go.dev/)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 
 `prompts` is an explicit, typed foundation for interactive terminal
@@ -112,7 +112,7 @@ ambient terminal authority.
 
 ## Development
 
-Go 1.26.6 is the initial minimum toolchain. All commands must run with
+Go 1.27.0 is the tested toolchain. All commands must run with
 `GOWORK=off` so the module is verified independently of sibling checkouts.
 
 ```sh
