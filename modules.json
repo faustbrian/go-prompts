@@ -1,12 +1,12 @@
 {
   "schema_version": 2,
   "repository": "github.com/faustbrian/go-prompts",
-  "go_version": "1.26.6",
+  "go_version": "1.27.0",
   "modules": [
     {
       "directory": ".",
       "module_path": "github.com/faustbrian/go-prompts",
-      "go_version": "1.26.6",
+      "go_version": "1.27.0",
       "packages": [
         {
           "module_directory": ".",
@@ -30,6 +30,18 @@
           "executable": false,
           "coverage_required": false,
           "build_required": false,
+          "build_tags": []
+        },
+        {
+          "module_directory": ".",
+          "directory": "adapters/terminal",
+          "name": "promptsterminal",
+          "import_path": "github.com/faustbrian/go-prompts/adapters/terminal",
+          "kind": "adapter",
+          "production": true,
+          "executable": true,
+          "coverage_required": true,
+          "build_required": true,
           "build_tags": []
         },
         {
@@ -60,7 +72,7 @@
           "testing-and-conformance",
           "transport-and-networking"
         ],
-        "responsibility": "Provide typed interactive prompts, deterministic non-interactive parsing, semantic rendering, caller-driven presentation, and an explicit terminal adapter.",
+        "responsibility": "Provide typed interactive prompts, deterministic non-interactive parsing, semantic rendering, caller-driven presentation, and an explicit target-oriented terminal adapter.",
         "non_goals": [
           "Provide a command framework, service container, process control, configuration loading, application lifecycle, or business-operation runtime.",
           "Acquire ambient terminal authority, inspect global streams, start hidden goroutines, or require a third-party TUI framework."
@@ -71,7 +83,8 @@
         ],
         "package_selection": {
           "github.com/faustbrian/go-prompts": "Use for typed prompt definitions, explicit interactive or headless execution, forms, semantic rendering, secrets, and caller-driven presentation.",
-          "github.com/faustbrian/go-prompts/terminal": "Use as the optional Linux and macOS adapter for caller-owned terminal files, raw mode, echo restoration, and cancellable input decoding."
+          "github.com/faustbrian/go-prompts/adapters/terminal": "Use as the optional Linux and macOS adapter for caller-owned terminal files, raw mode, echo restoration, and cancellable input decoding.",
+          "github.com/faustbrian/go-prompts/terminal": "Retained v1 compatibility path; prefer github.com/faustbrian/go-prompts/adapters/terminal for new integrations."
         },
         "lifecycle_status": "active",
         "maturity": "stable",
@@ -95,13 +108,14 @@
         },
         "optional_owned_dependencies": [],
         "adapters": [
+          "github.com/faustbrian/go-prompts/adapters/terminal",
           "github.com/faustbrian/go-prompts/terminal"
         ],
         "companions": [],
         "supported_go": {
-          "minimum": "1.26.6",
+          "minimum": "1.27.0",
           "tested": [
-            "1.26.6"
+            "1.27.0"
           ]
         },
         "supported_platforms": [
@@ -124,7 +138,7 @@
           "faq": "docs/faq.md",
           "changelog": "CHANGELOG.md",
           "pkg_go_dev": "https://pkg.go.dev/github.com/faustbrian/go-prompts",
-          "ecosystem_index": "https://github.com/faustbrian/go-library-tools/blob/v1.4.0/docs/ecosystem/README.md"
+          "ecosystem_index": "https://github.com/faustbrian/go-library-tools/blob/v1.5.5/docs/ecosystem/README.md"
         },
         "known_good_compatibility_sets": [],
         "delivery": {
@@ -133,7 +147,7 @@
           "release": "not-started"
         }
       },
-      "version": "1.0.0",
+      "version": "1.1.0",
       "tag_prefix": "v",
       "owned_dependencies": [],
       "reverse_owned_dependencies": [
@@ -249,7 +263,7 @@
     {
       "directory": "benchmarks/comparison",
       "module_path": "github.com/faustbrian/go-prompts/benchmarks/comparison",
-      "go_version": "1.26.6",
+      "go_version": "1.27.0",
       "packages": [
         {
           "module_directory": "benchmarks/comparison",

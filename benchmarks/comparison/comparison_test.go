@@ -16,7 +16,7 @@ import (
 	expect "github.com/Netflix/go-expect"
 	"github.com/creack/pty"
 	prompts "github.com/faustbrian/go-prompts"
-	terminaladapter "github.com/faustbrian/go-prompts/terminal"
+	terminaladapter "github.com/faustbrian/go-prompts/adapters/terminal"
 	"github.com/hinshun/vt10x"
 	"github.com/manifoldco/promptui"
 )

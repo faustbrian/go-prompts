@@ -1,8 +1,9 @@
-// Package terminal provides an explicit application adapter for caller-owned
+// Package promptsterminal provides an explicit application adapter for caller-owned
 // terminal files. Importing it performs no detection or terminal mutation.
-package terminal
+package promptsterminal
 
 import (
+	"cmp"
 	"context"
 	"errors"
 	"io"
@@ -56,8 +57,11 @@ func New(input, output *os.File, config Config) (*Adapter, error) {
 			prompts.ErrInvalidDefinition,
 		)
 	}
-	if config.ReadBuffer == 0 {
+	switch config.ReadBuffer {
+	case 0:
 		config.ReadBuffer = defaultReadBuffer
+	case defaultReadBuffer:
+		// The explicit default is already normalized.
 	}
 	if config.PollInterval == 0 {
 		config.PollInterval = defaultPollInterval
@@ -266,7 +270,9 @@ func (adapter *Adapter) Next(ctx context.Context) (prompts.InputEvent, error) {
 				readErr,
 			)
 		}
-		if len(adapter.queued) > 0 {
+		switch len(adapter.queued) {
+		case 0:
+		default:
 			return adapter.dequeue(), nil
 		}
 		if adapter.eof {
@@ -294,7 +300,12 @@ func nextReadDeadline(ctx context.Context, pollInterval time.Duration, now time.
 }
 
 func hasReadBytes(count int) bool {
-	return count > 0
+	switch cmp.Compare(count, 0) {
+	case 1:
+		return true
+	default:
+		return false
+	}
 }
 
 func (adapter *Adapter) dequeue() prompts.InputEvent {

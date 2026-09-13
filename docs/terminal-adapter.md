@@ -1,12 +1,17 @@
 # Terminal adapter
 
-The `terminal` subpackage is the optional application boundary for real
-terminal files. Constructing it requires explicit caller-owned `*os.File`
-values. Importing the package performs no detection, reads, raw-mode changes,
-environment inspection, or package initialization.
+The `adapters/terminal` package is the optional application boundary for real
+terminal files. Its package identifier is `promptsterminal`. Constructing it
+requires explicit caller-owned `*os.File` values. Importing the package
+performs no detection, reads, raw-mode changes, environment inspection, or
+package initialization.
 
 ```go
-adapter, err := terminal.New(os.Stdin, os.Stdout, terminal.Config{})
+adapter, err := promptsterminal.New(
+    os.Stdin,
+    os.Stdout,
+    promptsterminal.Config{},
+)
 if err != nil {
     return err
 }
@@ -55,3 +60,9 @@ them.
 Applications that already own a terminal reactor may skip this package and
 provide their own cancellable `EventSource` and `TerminalController`. The core
 never requires the adapter.
+
+The original `terminal` import path remains available as a deprecated facade.
+It preserves the released `Config` and `Adapter` type identities while
+delegating behavior to the successor, so existing v1 callers retain the same
+method set, defaults, errors, ownership, cancellation, and concurrency
+behavior. New code should import the target-oriented path.

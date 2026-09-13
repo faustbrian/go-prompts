@@ -11,6 +11,11 @@ semantic rendering, forms, selection and search, secrets, progress and tasks,
 presentation values, and deterministic test support. Executable usage is in
 `example_test.go`; detailed contracts are linked from the README.
 
+`adapters/terminal` owns the optional real-terminal implementation. Its
+`promptsterminal.Config`, `promptsterminal.Adapter`, and
+`promptsterminal.New` API is also exposed through the deprecated `terminal`
+compatibility facade.
+
 Dynamic option providers use the separate `DynamicOptions[T]` session. Its
 caller-controlled schedule and resolve steps enforce deterministic debounce
 and stale-generation rejection without hidden workers or timers.

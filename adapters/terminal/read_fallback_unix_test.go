@@ -1,6 +1,6 @@
 //go:build linux || darwin
 
-package terminal
+package promptsterminal
 
 import (
 	"context"
@@ -15,8 +15,6 @@ import (
 )
 
 func TestAdapterPollsReadableFileWhenDeadlinesAreUnsupported(t *testing.T) {
-	t.Parallel()
-
 	reader, writer, err := os.Pipe()
 	if err != nil {
 		t.Fatalf("Pipe() error = %v", err)
@@ -41,8 +39,6 @@ func TestAdapterPollsReadableFileWhenDeadlinesAreUnsupported(t *testing.T) {
 }
 
 func TestReadWithoutDeadlineRejectsUnsafeAndFailedDescriptors(t *testing.T) {
-	t.Parallel()
-
 	t.Run(
 		"canceled",
 		func(t *testing.T) {

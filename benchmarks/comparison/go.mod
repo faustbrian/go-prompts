@@ -1,6 +1,6 @@
 module github.com/faustbrian/go-prompts/benchmarks/comparison
 
-go 1.26.6
+go 1.27.0
 
 require (
 	charm.land/bubbles/v2 v2.1.1
@@ -9,7 +9,7 @@ require (
 	github.com/AlecAivazis/survey/v2 v2.3.7
 	github.com/Netflix/go-expect v0.0.0-20220104043353-73e0943537d2
 	github.com/creack/pty v1.1.24
-	github.com/faustbrian/go-prompts v1.0.0
+	github.com/faustbrian/go-prompts v1.1.0
 	github.com/hinshun/vt10x v0.0.0-20220119200601-820417d04eec
 	github.com/manifoldco/promptui v0.9.0
 )

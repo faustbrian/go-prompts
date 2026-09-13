@@ -1,6 +1,6 @@
 //go:build linux || darwin
 
-package terminal
+package promptsterminal
 
 import (
 	"context"

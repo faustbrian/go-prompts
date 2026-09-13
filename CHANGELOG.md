@@ -4,8 +4,18 @@ All notable changes follow Keep a Changelog and Semantic Versioning.
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-09-09
+
+### Added
+
+- Add the target-oriented `adapters/terminal` package as the implementation
+  owner for explicit real-terminal integration.
+
 ### Changed
 
+- Deprecate the original `terminal` import path in favor of
+  `adapters/terminal` while retaining its v1 API and behavior as a compatibility
+  facade.
 - Adopt the checksum-verified `go-library-tools` v1.4.0 schema-v2 cohesion
   contract, local `make cohesion` gate, and immutable W14-enforcement workflow
   while retaining package-owned mutation, API, fuzz, benchmark, terminal
@@ -234,5 +244,6 @@ All notable changes follow Keep a Changelog and Semantic Versioning.
   and the Narrator review requirement. Supported platforms are Linux and
   macOS.
 
-[Unreleased]: https://github.com/faustbrian/go-prompts/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/faustbrian/go-prompts/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/faustbrian/go-prompts/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/faustbrian/go-prompts/releases/tag/v1.0.0
