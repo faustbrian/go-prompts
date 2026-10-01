@@ -4,6 +4,14 @@ All notable changes follow Keep a Changelog and Semantic Versioning.
 
 ## [Unreleased]
 
+## [1.1.2] - 2026-10-01
+
+### Security
+
+- Replace Unicode control and bidirectional control characters in formatted
+  prompt operation and identity fields, fulfilling the documented safe-error
+  contract. Error classification and wrapped causes remain unchanged.
+
 ## [1.1.0] - 2026-09-09
 
 ### Added
@@ -244,6 +252,7 @@ All notable changes follow Keep a Changelog and Semantic Versioning.
   and the Narrator review requirement. Supported platforms are Linux and
   macOS.
 
-[Unreleased]: https://github.com/faustbrian/go-prompts/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/faustbrian/go-prompts/compare/v1.1.2...HEAD
+[1.1.2]: https://github.com/faustbrian/go-prompts/compare/v1.1.1...v1.1.2
 [1.1.0]: https://github.com/faustbrian/go-prompts/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/faustbrian/go-prompts/releases/tag/v1.0.0

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"unicode"
 )
 
 // ErrorKind identifies a stable class of prompt failure.
@@ -97,7 +98,7 @@ func (err *Error) Unwrap() error {
 func safeText(value string) string {
 	return strings.Map(
 		func(char rune) rune {
-			if char < ' ' || char == '\u007f' {
+			if unicode.IsControl(char) || isBidiControl(char) {
 				return '\ufffd'
 			}
 
