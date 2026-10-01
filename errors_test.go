@@ -50,6 +50,43 @@ func TestErrorClassificationAndSafeFormatting(t *testing.T) {
 	}
 }
 
+func TestErrorFormattingPreservesSafeTextAndClassification(t *testing.T) {
+	t.Parallel()
+
+	cases := []struct {
+		name      string
+		operation string
+		promptID  string
+		want      string
+	}{
+		{"unicode control", "read\u0085input", "field\u009fname", "read�input: reader_failure (prompt \"field�name\")"},
+		{"bidirectional control", "read\u202einput", "field\u2066name", "read�input: reader_failure (prompt \"field�name\")"},
+		{"benign unicode", "lue 日本語", "kenttä café", "lue 日本語: reader_failure (prompt \"kenttä café\")"},
+	}
+	for _, test := range cases {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			cause := errors.New("private diagnostic")
+			err := &prompts.Error{
+				Kind:      prompts.ErrorReader,
+				Operation: test.operation,
+				PromptID:  test.promptID,
+				Cause:     cause,
+			}
+			if got := err.Error(); got != test.want {
+				t.Fatalf("Error() = %q, want %q", got, test.want)
+			}
+			if !errors.Is(err, prompts.ErrReader) || !errors.Is(err, cause) || err.Unwrap() != cause {
+				t.Fatal("formatting changed error classification or wrapped cause")
+			}
+			var typed *prompts.Error
+			if !errors.As(err, &typed) || typed != err {
+				t.Fatal("formatting changed the typed error contract")
+			}
+		})
+	}
+}
+
 func TestStableErrorSentinels(t *testing.T) {
 	t.Parallel()
 
