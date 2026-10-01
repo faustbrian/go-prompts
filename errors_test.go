@@ -76,7 +76,7 @@ func TestErrorFormattingPreservesSafeTextAndClassification(t *testing.T) {
 			if got := err.Error(); got != test.want {
 				t.Fatalf("Error() = %q, want %q", got, test.want)
 			}
-			if !errors.Is(err, prompts.ErrReader) || !errors.Is(err, cause) || err.Unwrap() != cause {
+			if !errors.Is(err, prompts.ErrReader) || !errors.Is(err, cause) || !errors.Is(err.Unwrap(), cause) {
 				t.Fatal("formatting changed error classification or wrapped cause")
 			}
 			var typed *prompts.Error
