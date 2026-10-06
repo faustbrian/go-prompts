@@ -14,7 +14,7 @@
 prompts and deterministic non-interactive fallbacks. Callers own the context,
 streams, terminal capabilities, interaction authority, and lifecycle.
 
-The published v1.1.0 release provides a stable v1 API. Its automated prompt,
+The v1.1.2 patch preserves the stable v1 API. Its automated prompt,
 rendering, terminal, headless, security, test, and release contracts are
 implemented and remain subject to compatibility review. The recorded manual
 terminal and assistive-technology matrix is available in
@@ -23,7 +23,7 @@ terminal and assistive-technology matrix is available in
 ## Installation
 
 ```sh
-go get github.com/faustbrian/go-prompts@v1.1.0
+go get github.com/faustbrian/go-prompts@v1.1.2
 ```
 
 The target-oriented terminal adapter described below is available in v1.1.0.
