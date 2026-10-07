@@ -4,6 +4,16 @@ All notable changes follow Keep a Changelog and Semantic Versioning.
 
 ## [Unreleased]
 
+## [1.1.3] - 2026-10-07
+
+### Changed
+
+- Adopt x/sys v0.48.0 and x/term v0.46.0 for caller-owned Linux and
+  macOS terminal integration, retaining the supported prompt and terminal
+  contracts. Refresh the isolated comparison and documentation dependencies.
+- Use the current immutable shared CI workflow for module assurance and
+  release rehearsal.
+
 ## [1.1.2] - 2026-10-01
 
 ### Security
@@ -252,7 +262,8 @@ All notable changes follow Keep a Changelog and Semantic Versioning.
   and the Narrator review requirement. Supported platforms are Linux and
   macOS.
 
-[Unreleased]: https://github.com/faustbrian/go-prompts/compare/v1.1.2...HEAD
+[Unreleased]: https://github.com/faustbrian/go-prompts/compare/v1.1.3...HEAD
+[1.1.3]: https://github.com/faustbrian/go-prompts/compare/v1.1.2...v1.1.3
 [1.1.2]: https://github.com/faustbrian/go-prompts/compare/v1.1.1...v1.1.2
 [1.1.0]: https://github.com/faustbrian/go-prompts/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/faustbrian/go-prompts/releases/tag/v1.0.0
