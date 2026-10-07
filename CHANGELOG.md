@@ -6,6 +6,11 @@ All notable changes follow Keep a Changelog and Semantic Versioning.
 
 ## [1.1.3] - 2026-10-07
 
+### Fixed
+
+- Build frozen release source archives from the repository root or a selected
+  module subtree, keeping all extracted files beneath the versioned directory.
+
 ### Changed
 
 - Adopt x/sys v0.48.0 and x/term v0.46.0 for caller-owned Linux and

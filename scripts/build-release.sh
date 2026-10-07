@@ -32,10 +32,16 @@ test ! -e "$output/$archive" && test ! -e "$output/$sbom" || {
 	exit 1
 }
 
-git -C "$repository" archive --format=tar "$commit" \
-	"$module_path" > "$temporary/source.tar"
+tree="$commit"
+if [ -n "$module_path" ]; then
+	tree="${commit}:${module_path}"
+fi
+archive_time="$(git -C "$repository" show -s --format=%cI "$commit")"
+git -C "$repository" archive --format=tar \
+	--mtime="$archive_time" --prefix="prompts-${version}/" \
+	"$tree" > "$temporary/source.tar"
 go run ./scripts/rewrite-archive.go "$temporary/source.tar" \
-	"$output/$archive" "$module_path" "prompts-${version}"
+	"$output/$archive" "prompts-${version}" "prompts-${version}"
 
 GOWORK=off go run \
 	github.com/CycloneDX/cyclonedx-gomod/cmd/cyclonedx-gomod@v1.10.0 \

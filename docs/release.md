@@ -12,6 +12,9 @@ commit, build archives from Git objects rather than a working tree, publish
 checksums and an SBOM, attest provenance, sign the release, and verify every
 artifact after download.
 
+The source archive builder requires Git 2.40 or newer so root and module
+subtree exports use the frozen commit timestamp rather than the build time.
+
 Comparative engine and binary-size evidence is recorded in the isolated
 benchmark module. The completed manual accessibility matrix and its exact claim
 boundary are recorded in `docs/accessibility-review.md`.
