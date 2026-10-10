@@ -169,8 +169,8 @@ func ansiColor(color Color, profile ColorProfile) string {
 
 func rgbToANSI256(red, green, blue uint8) uint8 {
 	// Each scaled channel is proven to be in [0,5].
-	return 16 + 36*uint8((uint16(red)*5+127)/255) + //nolint:gosec
-		6*uint8((uint16(green)*5+127)/255) + uint8((uint16(blue)*5+127)/255) //nolint:gosec
+	return 16 + 36*uint8((uint16(red)*5+127)/255) + //nolint:gosec // Each scaled uint8 channel is in [0,5].
+		6*uint8((uint16(green)*5+127)/255) + uint8((uint16(blue)*5+127)/255) //nolint:gosec // Each scaled uint8 channel is in [0,5].
 }
 
 func rgbToANSI16(red, green, blue uint8) uint8 {
