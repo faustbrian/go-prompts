@@ -1,7 +1,7 @@
 # Release process
 
 The stable v1 line began with v1.0.0. A release candidate must start from a
-clean clone with `GOWORK=off`, pass `make check`, retained fuzz budgets,
+clean clone with `GOWORK=off`, pass `make check-full`, retained fuzz budgets,
 mutation review, benchmark budgets, documentation and example checks, platform
 CI, dependency review, vulnerability and license review, SBOM generation,
 reproducibility, provenance, and signing.
@@ -19,10 +19,15 @@ Comparative engine and binary-size evidence is recorded in the isolated
 benchmark module. The completed manual accessibility matrix and its exact claim
 boundary are recorded in `docs/accessibility-review.md`.
 
-The local `make release-check` command adds retained fuzz budgets, the reviewed
-mutation threshold, and benchmark execution to the standard quality gates.
-`make api`, `make license`, `make sbom`, and `make reproducible` provide focused
-entry points. The API export baseline is intentionally exact; an intentional
+The local `golib release dry-run --module .` command exercises the complete
+release contract, including retained fuzz budgets, the reviewed mutation
+threshold and benchmark execution. `golib api check` validates the public
+baseline; `make -f verification/package.mk reproducible` retains source-archive
+determinism. Full checks retain the license, security and SBOM boundaries;
+`make -f verification/package.mk docs` includes the owned accessibility-review
+tool and examples. See [contributor verification](../CONTRIBUTING.md#verification)
+for a disposable-cache session and public-tool installation.
+The API export baseline is intentionally exact; an intentional
 public change must update it with review and follow the stable-major
 compatibility policy.
 

@@ -3,7 +3,7 @@
 [![CI](https://github.com/faustbrian/go-prompts/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/faustbrian/go-prompts/actions/workflows/ci.yml)
 [![CodeQL](https://img.shields.io/badge/CodeQL-required-blue)](https://github.com/faustbrian/go-prompts/actions/workflows/ci.yml)
 [![Coverage](https://img.shields.io/badge/coverage-100%25_required-blue)](CONTRIBUTING.md#verification)
-[![Mutation](https://img.shields.io/badge/mutation-100%25_required-blue)](CONTRIBUTING.md#verification)
+[![Mutation](https://img.shields.io/badge/mutation-full%2Frelease-blue)](CONTRIBUTING.md#verification)
 [![Documentation](https://img.shields.io/badge/docs-checked_in_CI-blue)](docs/)
 [![Go Reference](https://pkg.go.dev/badge/github.com/faustbrian/go-prompts.svg)](https://pkg.go.dev/github.com/faustbrian/go-prompts)
 [![Release](https://img.shields.io/github/v/release/faustbrian/go-prompts?sort=semver)](https://github.com/faustbrian/go-prompts/releases)
@@ -112,20 +112,23 @@ ambient terminal authority.
 
 ## Development
 
-Go 1.27.0 is the tested toolchain. All commands must run with
+Go 1.27.2 is the verification producer; the module minimum remains Go 1.27.0.
+Direct root tests run with
 `GOWORK=off` so the module is verified independently of sibling checkouts.
 
 ```sh
-make format
-make format-check
 make check
-make fuzz
-make benchmark
+make ci
+make check-full
 ```
 
-Formatting uses the exact Glippy development revision pinned in the module
-Makefile. Do not run gofmt, goimports, gofumpt, or golines over this module;
-their output is not compatible with the canonical Glippy layout.
+Ordinary checks use the published tool pinned in `.golib.yaml`, including
+deterministic secret/terminal cleanup and a targeted progress/task race.
+Base-free checks run fuzz seeds; changed-source CI selects active smoke.
+`check-full` retains packaging reproducibility, accessibility-tool checks,
+all full fuzz budgets and benchmarks. See
+[contributor verification](CONTRIBUTING.md#verification) for isolated tests,
+tool installation, disposable-cache sessions and explicit release rehearsal.
 
 ## Ecosystem
 
