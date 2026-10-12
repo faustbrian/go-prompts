@@ -1,5 +1,10 @@
 // Package promptsterminal provides an explicit application adapter for caller-owned
 // terminal files. Importing it performs no detection or terminal mutation.
+// Use New then caller-authorized prompts.Run, or explicitly Acquire/Release.
+// Linux/macOS are supported; BSD echo variants do not add unsupported-platform
+// read guarantees. Files remain borrowed and are never closed here. One active
+// prompt owns an adapter; IO and state operations share its mutex, without a
+// background reader. Secret-byte paste needs a dedicated ByteInput decoder.
 package promptsterminal
 
 import (
@@ -24,8 +29,14 @@ const (
 
 // Config bounds reads, cancellation polling, and byte decoding.
 type Config struct {
-	Decoder      prompts.DecoderConfig
-	ReadBuffer   int
+	// Decoder configures the owned incremental decoder; byte mode requires dedicated
+	// secret-byte use.
+	Decoder prompts.DecoderConfig
+	// ReadBuffer bounds each read allocation; zero selects 4096, valid range ends at 1
+	// MiB.
+	ReadBuffer int
+	// PollInterval bounds read polling/inter-byte flush; zero selects 50 ms, maximum is
+	// one second.
 	PollInterval time.Duration
 }
 
@@ -162,7 +173,10 @@ func (adapter *Adapter) SetEcho(enabled bool) error {
 	return nil
 }
 
-// Release restores the state captured by Acquire. It is idempotent.
+// Release attempts restoration and clears acquired state before calling restore.
+// Later Release calls are no-ops even after restoration failed; the caller must
+// recover the affected device rather than assuming a retry will repair it.
+// It neither closes files nor clears queued events/decoder state.
 func (adapter *Adapter) Release() error {
 	adapter.mutex.Lock()
 	defer adapter.mutex.Unlock()
@@ -180,7 +194,10 @@ func (adapter *Adapter) Release() error {
 }
 
 // Next reads and decodes one semantic event. Short file deadlines keep context
-// cancellation bounded without a hidden goroutine.
+// cancellation observable without a hidden goroutine on supported descriptors.
+// Queued events and retained EOF are returned before checking ctx.Err. Next
+// holds the adapter mutex across IO, so Release cannot interrupt another read.
+// Deadline reset is attempted on exit; its failure is not returned.
 func (adapter *Adapter) Next(ctx context.Context) (prompts.InputEvent, error) {
 	adapter.mutex.Lock()
 	defer adapter.mutex.Unlock()

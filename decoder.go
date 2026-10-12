@@ -22,9 +22,15 @@ const (
 
 // DecoderConfig bounds undecoded terminal bytes and bracketed paste content.
 type DecoderConfig struct {
-	MaxPasteBytes  int
+	// MaxPasteBytes caps one retained bracketed paste; zero selects 1 MiB and must not
+	// exceed MaxBufferBytes.
+	MaxPasteBytes int
+	// MaxBufferBytes caps buffered bytes plus each incoming chunk before copying; zero
+	// selects 4 MiB.
 	MaxBufferBytes int
-	ByteInput      bool
+	// ByteInput makes bracketed paste own SecretBytes rather than Text; callers must
+	// destroy unused events.
+	ByteInput bool
 }
 
 // Decoder incrementally translates common terminal byte sequences into
@@ -70,7 +76,10 @@ func NewDecoder(config DecoderConfig) (*Decoder, error) {
 }
 
 // Feed copies and decodes one byte chunk. Incomplete UTF-8 and escape
-// sequences remain buffered until a later Feed or Flush call.
+// sequences remain buffered until a later Feed or Flush call. Returned events
+// transfer byte-wrapper ownership to the caller; failures reset internal state
+// but do not return partial events. Buffer/paste limits do not cap total stream
+// volume or source IO. Use NewDecoder; do not copy this mutex-bearing value.
 func (decoder *Decoder) Feed(chunk []byte) ([]InputEvent, error) {
 	decoder.mutex.Lock()
 	defer decoder.mutex.Unlock()
@@ -252,6 +261,8 @@ func decodeEscape(input []byte) (InputEvent, int, escapeStatus) {
 	return InputEvent{}, 0, escapeInvalid
 }
 
+// Retain only a suffix that can still become the paste terminator across chunks;
+// counting it as payload would falsely reject split markers at the byte limit.
 func terminalPrefixSuffix(content, marker []byte) int {
 	maximum := min(len(content), len(marker)-1)
 	for offset := range maximum {

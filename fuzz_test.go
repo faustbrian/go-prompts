@@ -13,6 +13,8 @@ import (
 	prompts "github.com/faustbrian/go-prompts"
 )
 
+// FuzzSanitizeNeutralizesTerminalControls checks arbitrary text becomes valid UTF-8
+// without non-LF controls.
 func FuzzSanitizeNeutralizesTerminalControls(fuzz *testing.F) {
 	fuzz.Add("plain")
 	fuzz.Add("\x1b[31mred\x1b[0m\r\u202e")
@@ -32,6 +34,8 @@ func FuzzSanitizeNeutralizesTerminalControls(fuzz *testing.F) {
 	)
 }
 
+// FuzzPlainRenderingIsDeterministic checks repeated plain output is stable and never
+// retains ESC.
 func FuzzPlainRenderingIsDeterministic(fuzz *testing.F) {
 	fuzz.Add("label", "value", uint8(20))
 	fuzz.Add("\x1b[2J", "界e\u0301", uint8(1))
@@ -70,6 +74,8 @@ func FuzzPlainRenderingIsDeterministic(fuzz *testing.F) {
 	)
 }
 
+// FuzzHyperlinkNeverInjectsTerminalControls checks bounded link text/targets admit
+// only owned OSC 8 controls.
 func FuzzHyperlinkNeverInjectsTerminalControls(fuzz *testing.F) {
 	fuzz.Add("label", "https://example.com/guide")
 	fuzz.Add("first line\nsecond line", "https://example.com/guide")
@@ -104,6 +110,8 @@ func FuzzHyperlinkNeverInjectsTerminalControls(fuzz *testing.F) {
 	)
 }
 
+// FuzzDecoderBoundsArbitraryBytes checks split arbitrary bytes in both paste modes
+// fail safely and redact returned events.
 func FuzzDecoderBoundsArbitraryBytes(fuzz *testing.F) {
 	fuzz.Add([]byte("text\x1b[A"), uint8(3), false)
 	fuzz.Add([]byte("\x1b[200~paste\n\x1b[201~"), uint8(7), true)
@@ -147,6 +155,8 @@ func FuzzDecoderBoundsArbitraryBytes(fuzz *testing.F) {
 	)
 }
 
+// FuzzInteractiveSecretBytesNeverRendersInput checks bounded synthetic byte canaries
+// never enter virtual output.
 func FuzzInteractiveSecretBytesNeverRendersInput(fuzz *testing.F) {
 	fuzz.Add([]byte("token"))
 	fuzz.Add([]byte{0, 1, 2, 0xff})
@@ -189,6 +199,8 @@ func FuzzInteractiveSecretBytesNeverRendersInput(fuzz *testing.F) {
 	)
 }
 
+// FuzzInteractiveNormalizedEventSequence checks bounded normalized
+// key/paste/resize/EOF sequences terminate with accepted outcomes.
 func FuzzInteractiveNormalizedEventSequence(fuzz *testing.F) {
 	fuzz.Add([]byte{0, 1, 2, 3, 14})
 	fuzz.Add([]byte{8, 9, 10, 11, 12, 13, 14})
@@ -279,6 +291,8 @@ func FuzzInteractiveNormalizedEventSequence(fuzz *testing.F) {
 	)
 }
 
+// FuzzSearchOrderingIsDeterministic checks bounded repeated static queries retain
+// stable ranked identities.
 func FuzzSearchOrderingIsDeterministic(fuzz *testing.F) {
 	fuzz.Add("a")
 	fuzz.Add("production remote")
@@ -311,6 +325,8 @@ func FuzzSearchOrderingIsDeterministic(fuzz *testing.F) {
 	)
 }
 
+// FuzzInteractiveSecretNeverRendersInput checks bounded synthetic string canaries
+// never enter virtual output.
 func FuzzInteractiveSecretNeverRendersInput(fuzz *testing.F) {
 	fuzz.Add([]byte("token"))
 	fuzz.Add([]byte{0, 1, 2, 0xff})
@@ -350,6 +366,8 @@ func FuzzInteractiveSecretNeverRendersInput(fuzz *testing.F) {
 	)
 }
 
+// FuzzSecretEntryFailureNeverDiscloses checks synthetic secret
+// success/cancel/EOF/detach paths suppress output and restore the virtual terminal.
 func FuzzSecretEntryFailureNeverDiscloses(fuzz *testing.F) {
 	fuzz.Add([]byte("token"), uint8(0))
 	fuzz.Add([]byte{0, 1, 2, 0xff}, uint8(5))

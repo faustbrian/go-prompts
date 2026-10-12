@@ -15,34 +15,58 @@ import (
 type ProgressState uint8
 
 const (
+	// ProgressPending is the initial state before any update or finish.
 	ProgressPending ProgressState = iota
+	// ProgressRunning identifies the latest nonterminal update.
 	ProgressRunning
+	// ProgressSucceeded identifies successful finish; later terminal finishes are
+	// ignored.
 	ProgressSucceeded
+	// ProgressFailed identifies failed finish; later terminal finishes are ignored.
 	ProgressFailed
+	// ProgressCanceled identifies canceled finish; later terminal finishes are ignored.
 	ProgressCanceled
 )
 
 // ProgressConfig defines determinate or indeterminate caller-owned progress.
 // A zero total is indeterminate.
 type ProgressConfig struct {
-	ID, Label       string
-	Total           int64
+	// ID, Label are required stable identity and caller-localized display text.
+	ID, Label string
+	// Total is nonnegative; zero is indeterminate, positive totals bound current
+	// updates.
+	Total int64
+	// AllowRegression permits lower Update values and resets timing baselines; Increment
+	// still rejects negative deltas.
 	AllowRegression bool
-	Clock           Clock
+	// Clock is optional; Now runs under the progress mutex and must be prompt and
+	// non-reentrant.
+	Clock Clock
 }
 
 // ProgressSnapshot is an immutable state copy.
 type ProgressSnapshot struct {
+	// ID, Label, Message are copied identity, label and latest raw progress message.
 	ID, Label, Message string
-	Current, Total     int64
-	State              ProgressState
-	Elapsed            time.Duration
-	RatePerSecond      Optional[float64]
+	// Current, Total are latest progress and configured total; zero Total means
+	// indeterminate.
+	Current, Total int64
+	// State is latest lifecycle state; first terminal transition wins.
+	State ProgressState
+	// Elapsed is time since the current measurement baseline, not constructor wall time.
+	Elapsed time.Duration
+	// RatePerSecond is present only for positive elapsed time and progress delta.
+	RatePerSecond Optional[float64]
+	// EstimatedRemaining is optional bounded ETA when a determinate total has a usable
+	// rate.
 	EstimatedRemaining Optional[time.Duration]
 }
 
 // Progress stores only the latest update and never creates a goroutine or
-// queue. Update is non-blocking with respect to output; Render is explicit.
+// queue. Update does no output IO; Render is explicit. Use NewProgress and do
+// not copy this mutex-bearing value. Concurrent state operations are serialized,
+// but an optional Clock.Now runs under the mutex and must not block/reenter.
+// Rendering uses borrowed callbacks/output after snapshotting, without forced cancellation.
 type Progress struct {
 	mu              sync.RWMutex
 	snapshot        ProgressSnapshot
@@ -258,17 +282,23 @@ func (progress *Progress) Render(ctx context.Context, execution Execution) error
 
 // SpinnerConfig defines caller-advanced indeterminate status frames.
 type SpinnerConfig struct {
+	// ID, Label are required stable identity and caller-localized display text.
 	ID, Label string
-	Frames    []string
+	// Frames are copied; empty selects four ASCII frames, advances remain caller-driven.
+	Frames []string
 }
 
 // SpinnerSnapshot is an immutable spinner state copy.
 type SpinnerSnapshot struct {
 	ProgressSnapshot
+	// Frame is the current spinner glyph; rendering can omit it without animation
+	// capability.
 	Frame string
 }
 
-// Spinner advances only when the caller requests it and creates no timer.
+// Spinner is caller-advanced without timers. Use NewSpinner; do not copy its
+// mutex-bearing state. Snapshot/mutations are synchronized, while rendering
+// remains synchronous caller-owned IO.
 type Spinner struct {
 	mu       sync.RWMutex
 	snapshot ProgressSnapshot
@@ -320,14 +350,17 @@ func (spinner *Spinner) AdvanceContext(ctx context.Context, message string) erro
 	return nil
 }
 
+// Succeed records first successful spinner finish; later terminal calls do nothing.
 func (spinner *Spinner) Succeed(message string) {
 	spinner.finish(ProgressSucceeded, message)
 }
 
+// Fail records first failed spinner finish; later terminal calls do nothing.
 func (spinner *Spinner) Fail(message string) {
 	spinner.finish(ProgressFailed, message)
 }
 
+// Cancel records first canceled spinner finish; later terminal calls do nothing.
 func (spinner *Spinner) Cancel(message string) {
 	spinner.finish(ProgressCanceled, message)
 }
@@ -382,19 +415,30 @@ func (spinner *Spinner) Render(ctx context.Context, execution Execution) error {
 type StatusKind uint8
 
 const (
+	// StatusInfo selects informational presentation without changing operation
+	// execution.
 	StatusInfo StatusKind = iota
+	// StatusWarning selects warning presentation without changing operation execution.
 	StatusWarning
+	// StatusError selects error presentation without changing operation execution.
 	StatusError
+	// StatusSuccess selects successful presentation without changing operation
+	// execution.
 	StatusSuccess
 )
 
 // StatusEntry is a deterministic status-stream value.
 type StatusEntry struct {
+	// Kind selects fixed status role; values beyond StatusSuccess are rejected.
 	Kind StatusKind
+	// Text is raw caller message text; capacity bounds entries, not their bytes.
 	Text string
 }
 
-// StatusStream retains only its configured number of latest entries.
+// StatusStream retains a configured count of latest entries, not bounded text
+// bytes. Use NewStatusStream; do not copy its mutex. State operations are safe
+// concurrently, while rendering borrows caller-owned renderer/writer behavior.
+// Entries and dropped count are read separately, not one atomic render snapshot.
 type StatusStream struct {
 	mu       sync.RWMutex
 	capacity int

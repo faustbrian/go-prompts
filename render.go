@@ -14,22 +14,41 @@ import (
 type Role string
 
 const (
-	RoleLabel    Role = "label"
-	RoleValue    Role = "value"
-	RoleHint     Role = "hint"
-	RoleHelp     Role = "help"
-	RoleError    Role = "error"
-	RoleSuccess  Role = "success"
-	RoleWarning  Role = "warning"
-	RoleFocus    Role = "focus"
+	// RoleLabel selects label styling and textual markers independently of color.
+	RoleLabel Role = "label"
+	// RoleValue selects ordinary value styling and textual markers independently of
+	// color.
+	RoleValue Role = "value"
+	// RoleHint selects guidance styling and textual markers independently of color.
+	RoleHint Role = "hint"
+	// RoleHelp selects help styling and textual markers independently of color.
+	RoleHelp Role = "help"
+	// RoleError selects failure styling and textual markers independently of color.
+	RoleError Role = "error"
+	// RoleSuccess selects success styling and textual markers independently of color.
+	RoleSuccess Role = "success"
+	// RoleWarning selects warning styling and textual markers independently of color.
+	RoleWarning Role = "warning"
+	// RoleFocus selects focused option styling and textual markers independently of
+	// color.
+	RoleFocus Role = "focus"
+	// RoleSelected selects selected option styling and textual markers independently of
+	// color.
 	RoleSelected Role = "selected"
+	// RoleDisabled selects visible unavailable option styling and textual markers
+	// independently of color.
 	RoleDisabled Role = "disabled"
+	// RoleProgress selects caller-driven progress styling and textual markers
+	// independently of color.
 	RoleProgress Role = "progress"
 )
 
 // Segment is a semantic unit of untrusted caller-facing text.
 type Segment struct {
-	Role    Role
+	// Role selects semantic style/marker; unknown roles remain unstyled.
+	Role Role
+	// Content is raw caller text sanitized during owned rendering, without a universal
+	// size cap.
 	Content string
 	target  string
 }
@@ -115,32 +134,44 @@ func (frame Frame) Lines() []SemanticLine {
 
 // RenderOptions are explicit output capabilities.
 type RenderOptions struct {
-	Width      int
-	Color      ColorProfile
-	ASCIIOnly  bool
+	// Width is a nonnegative grapheme-cell wrapping target; zero disables wrapping.
+	Width int
+	// Color must be a valid profile even when rendering plain text.
+	Color ColorProfile
+	// ASCIIOnly renders non-ASCII runes as visible escapes after sanitization.
+	ASCIIOnly bool
+	// Hyperlinks permits owned OSC 8 in ANSI mode; plain mode prints targets.
 	Hyperlinks bool
 }
 
 // Renderer converts an owned semantic frame into terminal output.
 type Renderer interface {
+	// Render converts a frame synchronously under explicit capabilities; implementations
+	// own blocking and sanitization.
 	Render(Frame, RenderOptions) (string, error)
 }
 
 // PlainRenderer emits deterministic linear output without terminal controls.
 type PlainRenderer struct {
+	// Theme is immutable style/marker configuration; zero resolves to DefaultTheme.
 	Theme Theme
 }
 
+// Render validates capabilities and emits sanitized linear text without ANSI or
+// OSC controls; safe link targets appear textually. Width zero disables wrapping.
 func (renderer PlainRenderer) Render(frame Frame, options RenderOptions) (string, error) {
 	return renderSemantic(frame, options, renderer.Theme.resolved(), false, false)
 }
 
-// ANSIRenderer emits capability-limited ANSI styling and falls back to plain
-// output when color is unavailable.
+// ANSIRenderer emits capability-limited ANSI styling and safe OSC 8 hyperlinks.
+// ColorNone disables styling; explicitly permitted hyperlinks can still emit OSC.
 type ANSIRenderer struct {
+	// Theme is immutable style/marker configuration; zero resolves to DefaultTheme.
 	Theme Theme
 }
 
+// Render emits sanitized linear text with capability-selected ANSI/OSC controls.
+// ColorNone disables styling but Hyperlinks can still permit safe OSC 8 links.
 func (renderer ANSIRenderer) Render(frame Frame, options RenderOptions) (string, error) {
 	theme := renderer.Theme.resolved()
 
@@ -220,6 +251,10 @@ func appendCells(cells []renderCell, content string, role Role, target string) [
 	return cells
 }
 
+// Close styling/link state at every wrap and reopen it for the next cell; this
+// prevents terminal controls from leaking across owned semantic line boundaries.
+// Graphemes wider than the requested width remain intact, so Width is not an
+// absolute output-size ceiling. Width behavior follows pinned uniseg v0.4.7.
 func writeCells(
 	output *strings.Builder,
 	cells []renderCell,

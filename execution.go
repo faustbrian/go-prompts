@@ -9,42 +9,80 @@ import (
 
 // Timer is an owned, stoppable clock event.
 type Timer interface {
+	// C returns the owned event channel; Stop need not close it.
 	C() <-chan time.Time
+	// Stop reports whether an active event was stopped; an already buffered value
+	// can remain and the channel need not close.
 	Stop() bool
 }
 
 // Ticker is an owned, stoppable sequence of clock events.
 type Ticker interface {
+	// C returns the owned event channel; Stop need not close it.
 	C() <-chan time.Time
+	// Stop prevents future tick generation; already buffered values can remain
+	// and the channel need not close.
 	Stop()
 }
 
-// Clock is the animation and timeout seam used by interactive adapters.
+// Clock is an explicit caller-owned timing seam for sessions and presentation.
 type Clock interface {
+	// Now returns implementation time; callers choose its authority and concurrency.
 	Now() time.Time
+	// NewTimer creates an owned timer for caller stop/cleanup.
 	NewTimer(time.Duration) Timer
+	// NewTicker creates an owned ticker for caller stop/cleanup.
 	NewTicker(time.Duration) Ticker
 }
 
 // Execution contains every ambient resource a prompt is allowed to use.
 type Execution struct {
-	Input        io.Reader
-	Output       io.Writer
-	Error        io.Writer
+	// Input is for explicit adapter composition; core Run consumes Events, not this
+	// reader.
+	Input io.Reader
+	// Output is a borrowed synchronous writer; context checks cannot interrupt a
+	// blocking Write.
+	Output io.Writer
+	// Error is supplied diagnostic output for caller composition; core Run does not
+	// write it.
+	Error io.Writer
+	// Capabilities supplies initial terminal evidence, not interaction permission.
 	Capabilities Capabilities
-	Policy       InteractionPolicy
-	Clock        Clock
+	// Policy supplies caller authority for interaction, defaults and unlimited retries.
+	Policy InteractionPolicy
+	// Clock is an explicit timing seam for caller composition; core prompts add no
+	// timers.
+	Clock Clock
+	// Dependencies is passed through to callbacks without copying or container
+	// ownership.
 	Dependencies any
-	Events       EventSource
-	Terminal     TerminalController
-	Renderer     Renderer
-	Theme        Theme
-	Limits       InputLimits
-	Keys         KeyMap
+	// Events is borrowed; implementations must honor cancellation without a hidden core
+	// worker.
+	Events EventSource
+	// Terminal is acquired per interactive prompt; ordinary exits attempt restore/release.
+	// Cleanup must return promptly rather than block or panic.
+	Terminal TerminalController
+	// Renderer is synchronous and borrowed; nil selects the capability-driven owned
+	// renderer.
+	Renderer Renderer
+	// Theme is immutable default-renderer configuration; zero resolves to DefaultTheme.
+	Theme Theme
+	// Limits bounds interactive text/paste; nonpositive values select defaults, not
+	// explicit Parse budgets.
+	Limits InputLimits
+	// Keys is the immutable local remap; zero uses default semantic bindings.
+	Keys KeyMap
 }
 
 // Run executes a typed prompt without consulting process-wide streams or
-// environment state.
+// environment state. Nil/canceled contexts fail before execution. Headless
+// defaults need PermitDefaults, but fallback and explicit cancel/EOF resolutions
+// have their own configured authority. Validation failures can return a partial
+// typed value with an error; errors govern success. Arbitrary callbacks/writers
+// are synchronous and cannot be forcibly canceled; their retained values and
+// resource concurrency remain caller-owned. Ordinary acquired-session cleanup
+// attempts echo restoration and release; cleanup errors discard a successful
+// value. External event/renderer/terminal panics are not globally isolated.
 func Run[T any](ctx context.Context, prompt Prompt[T], execution Execution) (T, error) {
 	var zero T
 	if ctx == nil {
@@ -111,6 +149,10 @@ func Run[T any](ctx context.Context, prompt Prompt[T], execution Execution) (T, 
 	}
 }
 
+// Catch callback panics without exposing their values. This is not a sandbox:
+// callers can block or retain/reveal data, and a transformer replacing a mutable
+// secret must manage the replaced wrapper/copies itself. Context checks occur
+// after callbacks; no helper goroutine or callback deadline is introduced.
 func applyPipeline[T any](
 	ctx context.Context,
 	definition definition[T],

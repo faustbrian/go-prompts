@@ -29,7 +29,8 @@ func AsField[T any](prompt Prompt[T]) FormField {
 }
 
 // When returns a conditional copy of a field. The predicate observes only
-// answers from prior fields in this execution.
+// answers from prior fields in this execution; nil predicate keeps it hidden.
+// Predicates run synchronously under RunForm panic containment, not a deadline.
 func When(field FormField, predicate func(FormResult) bool) FormField {
 	if field == nil {
 		return nil
@@ -86,9 +87,16 @@ func (field conditionalFormField) condition(result FormResult) bool {
 
 // FormConfig defines an ordered grouped interaction.
 type FormConfig struct {
-	ID           string
-	Fields       []FormField
-	Validate     []FormValidator
+	// ID is the stable nonempty identity, independent of display text.
+	ID string
+	// Fields is copied in declaration order; fields need unique nonempty identities and
+	// come from AsField/When.
+	Fields []FormField
+	// Validate is copied ordered cross-field validation after enabled fields; callbacks
+	// are panic-contained.
+	Validate []FormValidator
+	// Dependencies is fallback for cross-field validators only, overridden by non-nil
+	// Execution.Dependencies.
 	Dependencies any
 }
 
@@ -175,7 +183,9 @@ func (result FormResult) DestroySecrets() {
 	}
 }
 
-// FormValue returns a typed defensive copy of one answer.
+// FormValue returns the answer using the prompt's clone policy: owned slice and
+// SecretBytes policies copy containers, but arbitrary generic references remain
+// shallow. Wrong identity/type returns zero,false. Reveal/byte copies need caller cleanup.
 func FormValue[T any](result FormResult, identity string) (T, bool) {
 	var zero T
 	stored, exists := result.values[identity]
@@ -190,7 +200,10 @@ func FormValue[T any](result FormResult, identity string) (T, bool) {
 }
 
 // RunForm executes fields in declaration order without retaining answers in
-// the reusable definition.
+// the reusable definition. Separate concurrent runs need safe callback state and
+// execution resources. Definition Dependencies apply to cross-field validation
+// only; per-field callbacks receive Execution.Dependencies. On failure accumulated
+// result-owned byte secrets are destroyed and no answer collection is returned.
 func RunForm(
 	ctx context.Context,
 	form Form,

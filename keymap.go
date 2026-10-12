@@ -28,7 +28,9 @@ var configurableKeys = [...]Key{
 // KeyBinding assigns one physical semantic key to an existing prompt meaning.
 // KeyRune is not configurable because text runes carry their own value.
 type KeyBinding struct {
-	Input   Key
+	// Input is a non-rune physical semantic key; duplicate bindings are rejected.
+	Input Key
+	// Meaning is an existing non-rune meaning whose prior shortcuts become inert.
 	Meaning Key
 }
 

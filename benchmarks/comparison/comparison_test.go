@@ -23,6 +23,9 @@ import (
 
 const benchmarkAnswer = "Ada"
 
+// BenchmarkInteractiveTextPTY includes terminal setup/reactors and the fixed Ada
+// submission for pinned peer engines; it does not measure current root-source
+// Prompts.
 func BenchmarkInteractiveTextPTY(benchmark *testing.B) {
 	engines := map[string]func() (
 		string,

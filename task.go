@@ -9,26 +9,34 @@ import (
 
 // TaskGroupConfig defines explicit ordered task presentation ownership.
 type TaskGroupConfig struct {
+	// ID, Label are required stable identity and caller-localized display text.
 	ID, Label string
-	MaxTasks  int
+	// MaxTasks caps group membership; zero selects 100, not worker count or text bytes.
+	MaxTasks int
 }
 
 // TaskConfig defines one caller-owned task state.
 type TaskConfig struct {
-	ID, Label       string
-	ParentID        string
-	Total           int64
+	// ID, Label are required stable identity and caller-localized display text.
+	ID, Label string
+	// ParentID is optional parent identity; Add requires the parent to already exist.
+	ParentID string
+	// Total is nonnegative; zero is indeterminate progress.
+	Total int64
+	// AllowRegression permits lower progress updates, not negative Increment values.
 	AllowRegression bool
 }
 
 // TaskSnapshot is a progress snapshot with explicit parent ownership.
 type TaskSnapshot struct {
 	ProgressSnapshot
+	// ParentID is optional parent identity; Add requires the parent to already exist.
 	ParentID string
 }
 
 // Task presents caller-owned work; it never schedules or retries that work.
 type Task struct {
+	// Progress is the group-owned state handle; callers must not replace it or copy its mutex.
 	*Progress
 	parentID string
 }
@@ -38,7 +46,9 @@ func (task *Task) Snapshot() TaskSnapshot {
 	return TaskSnapshot{ProgressSnapshot: task.Progress.Snapshot(), ParentID: task.parentID}
 }
 
-// TaskGroup preserves Add order and explicit nesting.
+// TaskGroup preserves Add order and explicit nesting without running work.
+// Use NewTaskGroup; do not copy its mutex. Membership is synchronized but each
+// task is snapshotted independently, not as one atomic group-wide progress view.
 type TaskGroup struct {
 	mu       sync.RWMutex
 	id       string

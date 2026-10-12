@@ -35,10 +35,14 @@ func RGB(red, green, blue uint8) Color {
 
 // Style assigns visual attributes to one semantic role.
 type Style struct {
+	// Foreground is semantic color; zero leaves the terminal default.
 	Foreground Color
-	Bold       bool
-	Underline  bool
-	Dim        bool
+	// Bold requests bold only under ANSI styling capability.
+	Bold bool
+	// Underline requests underline only under ANSI styling capability.
+	Underline bool
+	// Dim requests dim only under ANSI styling capability.
+	Dim bool
 }
 
 // Theme is an immutable role-to-style and role-to-text-marker mapping.

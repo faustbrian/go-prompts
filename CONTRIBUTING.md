@@ -52,8 +52,9 @@ boundary changes, using a disposable cache for each bounded session:
 The deterministic command executes fuzz seeds/corpus, not active fuzzing. It
 retains secret suppression, event/editor clearing, terminal restoration,
 accessibility metadata and allocation assertions.
-Install the verified public v2.1.1 binary archive for your platform from
-[go-library-tools releases](https://github.com/faustbrian/go-library-tools/releases/tag/v2.1.1),
+Install the verified public binary archive for the version declared in
+`.golib.yaml`, from
+[go-library-tools releases](https://github.com/faustbrian/go-library-tools/releases),
 checking `checksums.txt` against `.golib.yaml` and the archive against that
 checksum set. Add the extracted `golib` binary to `PATH`; do not build Tools
 from source. CI verifies the same public release while checking out its pinned

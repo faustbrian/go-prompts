@@ -20,7 +20,9 @@ type VirtualTerminal struct {
 }
 
 // NewVirtualTerminal creates a fixed-capability terminal with a bounded event
-// queue.
+// queue of 4096 events. Use the constructor; its zero value is not usable.
+// Closing input does not drain/destroy queued byte wrappers, which retain their
+// transferred lifetime until consumed or explicitly released by the owner.
 func NewVirtualTerminal(width, height int) *VirtualTerminal {
 	return &VirtualTerminal{
 		events:      make(chan InputEvent, 4096),
@@ -30,7 +32,9 @@ func NewVirtualTerminal(width, height int) *VirtualTerminal {
 	}
 }
 
-// Push queues deterministic events in declaration order.
+// Push queues events without copying byte wrappers. Capacity failure can follow
+// a successfully queued prefix; ownership of enqueued events has transferred.
+// Caller destroys unqueued byte payloads. Concurrent Push calls can interleave.
 func (terminal *VirtualTerminal) Push(events ...InputEvent) error {
 	terminal.mu.RLock()
 	defer terminal.mu.RUnlock()
@@ -133,48 +137,56 @@ func (terminal *VirtualTerminal) Output() string {
 	return terminal.output.String()
 }
 
+// Width returns latest virtual output width under the fixture lock.
 func (terminal *VirtualTerminal) Width() int {
 	terminal.mu.RLock()
 	defer terminal.mu.RUnlock()
 	return terminal.width
 }
 
+// Height returns latest virtual output height under the fixture lock.
 func (terminal *VirtualTerminal) Height() int {
 	terminal.mu.RLock()
 	defer terminal.mu.RUnlock()
 	return terminal.height
 }
 
+// Acquired reports latest successful virtual acquisition state.
 func (terminal *VirtualTerminal) Acquired() bool {
 	terminal.mu.RLock()
 	defer terminal.mu.RUnlock()
 	return terminal.acquired
 }
 
+// Released reports latest successful virtual release state.
 func (terminal *VirtualTerminal) Released() bool {
 	terminal.mu.RLock()
 	defer terminal.mu.RUnlock()
 	return terminal.released
 }
 
+// EchoEnabled reports latest virtual echo state.
 func (terminal *VirtualTerminal) EchoEnabled() bool {
 	terminal.mu.RLock()
 	defer terminal.mu.RUnlock()
 	return terminal.echoEnabled
 }
 
+// FailAcquire injects an acquisition failure; nil clears it.
 func (terminal *VirtualTerminal) FailAcquire(err error) {
 	terminal.mu.Lock()
 	defer terminal.mu.Unlock()
 	terminal.acquireErr = err
 }
 
+// FailEcho injects an echo failure; nil clears it.
 func (terminal *VirtualTerminal) FailEcho(err error) {
 	terminal.mu.Lock()
 	defer terminal.mu.Unlock()
 	terminal.echoErr = err
 }
 
+// FailRelease injects a release failure; nil clears it.
 func (terminal *VirtualTerminal) FailRelease(err error) {
 	terminal.mu.Lock()
 	defer terminal.mu.Unlock()

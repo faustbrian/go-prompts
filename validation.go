@@ -9,16 +9,25 @@ import (
 // ValidationContext supplies caller-owned dependencies to validation and
 // transformation callbacks.
 type ValidationContext struct {
+	// Dependencies is the exact borrowed callback dependency value; callers own
+	// synchronization.
 	Dependencies any
 }
 
-// Validator checks a typed value without transforming it.
+// Validator checks a typed value synchronously. Callbacks must cooperate with
+// context and avoid mutating retained caller data; pipeline panics become ErrAdapter.
+// Secret callbacks must not independently log or retain revealed input.
 type Validator[T any] func(context.Context, T, ValidationContext) error
 
-// Transformer returns the next typed value in a transformation pipeline.
+// Transformer returns the next pipeline value synchronously. Returned aliases,
+// replaced mutable secret wrappers and callback-owned copies remain its cleanup
+// responsibility; pipeline context checks cannot stop arbitrary blocked code.
 type Transformer[T any] func(context.Context, T, ValidationContext) (T, error)
 
-// ValidationIssue is a safe, stable, field-addressable validation failure.
+// ValidationIssue is a terminal-safe field-addressable validation failure.
+// It neither bounds message bytes nor identifies/redacts arbitrary secrets;
+// callers supply non-sensitive localized text. Dedicated secret prompts apply
+// their own generic failure replacement during execution.
 type ValidationIssue struct {
 	code    string
 	message string
@@ -40,6 +49,7 @@ func NewValidationIssue(code string, message string, fields ...string) *Validati
 	}
 }
 
+// Error returns message, then code, then generic text; nil is safe.
 func (issue *ValidationIssue) Error() string {
 	if issue == nil {
 		return "validation failed"

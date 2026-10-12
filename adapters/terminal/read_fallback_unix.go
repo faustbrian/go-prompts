@@ -21,6 +21,9 @@ func readWithoutDeadline(
 	return readWithoutDeadlineUsing(ctx, input, buffer, pollInterval, input.Stat, unix.Poll)
 }
 
+// Only supported pollable descriptor kinds reach the borrowed Read. Readiness
+// assumes exclusive input ownership; another reader can consume data between
+// poll and Read. There is no helper goroutine to forcibly stop that race.
 func readWithoutDeadlineUsing(
 	ctx context.Context,
 	input *os.File,

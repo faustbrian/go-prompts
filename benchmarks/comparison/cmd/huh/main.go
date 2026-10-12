@@ -1,3 +1,5 @@
+// Command huh constructs a pinned form for binary-size comparison without
+// running the form or qualifying terminal behavior.
 package main
 
 import "charm.land/huh/v2"

@@ -4,6 +4,11 @@ All notable changes follow Keep a Changelog and Semantic Versioning.
 
 ## [Unreleased]
 
+### Changed
+
+- Clarify prompt, terminal, secret, copying and callback-lifetime contracts
+  without changing execution behavior.
+
 ## [1.1.3] - 2026-10-07
 
 ### Fixed

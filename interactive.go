@@ -41,6 +41,9 @@ func runInteractive[T any](
 		}
 		return result, terminalFailure(prompt.ID(), "acquire terminal", err)
 	}
+	// Restore echo before releasing captured state, and attempt Release even if
+	// echo restoration failed. Cleanup failure invalidates a successful value and
+	// retains the earlier cause; it is not hidden behind successful validation.
 	defer func() {
 		var cleanupErr error
 		if err := execution.Terminal.SetEcho(true); err != nil {

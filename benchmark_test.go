@@ -11,6 +11,8 @@ import (
 	prompts "github.com/faustbrian/go-prompts"
 )
 
+// BenchmarkFirstSemanticRender measures rendering one fixed prebuilt three-line ANSI
+// frame.
 func BenchmarkFirstSemanticRender(benchmark *testing.B) {
 	frame := prompts.NewFrame(
 		prompts.Line(prompts.Text(prompts.RoleLabel, "Environment")),
@@ -27,6 +29,8 @@ func BenchmarkFirstSemanticRender(benchmark *testing.B) {
 	}
 }
 
+// BenchmarkInteractiveTextEditing includes per-iteration virtual terminal/events with
+// combining/emoji input; prompt setup is outside the loop.
 func BenchmarkInteractiveTextEditing(benchmark *testing.B) {
 	prompt, err := prompts.NewText(prompts.TextConfig{ID: "name", Label: "Name"})
 	if err != nil {
@@ -49,6 +53,8 @@ func BenchmarkInteractiveTextEditing(benchmark *testing.B) {
 	}
 }
 
+// BenchmarkInteractiveTextEditingMaximumBound includes virtual execution of a 64 KiB
+// paste at explicit limits, not arbitrary-size parsing.
 func BenchmarkInteractiveTextEditingMaximumBound(benchmark *testing.B) {
 	const maximum = 64 << 10
 	prompt, err := prompts.NewText(prompts.TextConfig{ID: "payload", Label: "Payload"})
@@ -72,6 +78,8 @@ func BenchmarkInteractiveTextEditingMaximumBound(benchmark *testing.B) {
 	}
 }
 
+// BenchmarkSearchLargeOptionSet measures static search over 10000 prebuilt options
+// with capped returned results; setup is excluded.
 func BenchmarkSearchLargeOptionSet(benchmark *testing.B) {
 	options := benchmarkOptions(benchmark, 10_000)
 	policy := prompts.SearchPolicy{MaxOptions: 10_000, MaxResults: 50, MaxQueryRunes: 64}
@@ -84,6 +92,8 @@ func BenchmarkSearchLargeOptionSet(benchmark *testing.B) {
 	}
 }
 
+// BenchmarkInteractiveSearchNavigationPagination includes virtual navigation/resize
+// over 1000 prebuilt options, not physical terminal latency.
 func BenchmarkInteractiveSearchNavigationPagination(benchmark *testing.B) {
 	options := benchmarkOptions(benchmark, 1_000)
 	prompt, err := prompts.NewSearchSelect(
@@ -122,6 +132,8 @@ func BenchmarkInteractiveSearchNavigationPagination(benchmark *testing.B) {
 	}
 }
 
+// BenchmarkFormValidationAndTransitions includes two-field virtual execution;
+// definitions and callbacks are prebuilt.
 func BenchmarkFormValidationAndTransitions(benchmark *testing.B) {
 	name, err := prompts.NewText(
 		prompts.TextConfig{
@@ -179,6 +191,8 @@ func BenchmarkFormValidationAndTransitions(benchmark *testing.B) {
 	}
 }
 
+// BenchmarkSemanticRenderProfiles compares the same prebuilt semantic frame under
+// explicit color/ASCII profiles.
 func BenchmarkSemanticRenderProfiles(benchmark *testing.B) {
 	frame := prompts.NewFrame(
 		prompts.Line(prompts.Text(prompts.RoleLabel, "Environment")),
@@ -222,6 +236,8 @@ func BenchmarkSemanticRenderProfiles(benchmark *testing.B) {
 	}
 }
 
+// BenchmarkInteractiveCancellationCleanup includes per-iteration context/virtual
+// execution and verifies terminal release.
 func BenchmarkInteractiveCancellationCleanup(benchmark *testing.B) {
 	prompt, err := prompts.NewText(prompts.TextConfig{ID: "name", Label: "Name"})
 	if err != nil {
@@ -251,6 +267,8 @@ func BenchmarkInteractiveCancellationCleanup(benchmark *testing.B) {
 	}
 }
 
+// BenchmarkProgressUpdateAndRender measures explicit update plus discard-output
+// render on an indeterminate progress value.
 func BenchmarkProgressUpdateAndRender(benchmark *testing.B) {
 	progress, err := prompts.NewProgress(
 		prompts.ProgressConfig{ID: "items", Label: "Items", AllowRegression: true},
@@ -270,6 +288,8 @@ func BenchmarkProgressUpdateAndRender(benchmark *testing.B) {
 	}
 }
 
+// BenchmarkProgressUpdateCoalescing measures batches of 1000 updates plus a snapshot,
+// without output or workers.
 func BenchmarkProgressUpdateCoalescing(benchmark *testing.B) {
 	progress, err := prompts.NewProgress(
 		prompts.ProgressConfig{ID: "items", Label: "Items", AllowRegression: true},

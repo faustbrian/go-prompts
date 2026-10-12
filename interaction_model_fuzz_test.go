@@ -11,6 +11,8 @@ import (
 	prompts "github.com/faustbrian/go-prompts"
 )
 
+// FuzzInteractiveSelectionPaginationMatchesModel checks bounded navigation/resize
+// sequences against an eight-option focus model.
 func FuzzInteractiveSelectionPaginationMatchesModel(fuzz *testing.F) {
 	fuzz.Add([]byte{0, 0, 2, 7, 5})
 	fuzz.Add([]byte{4, 1, 3, 6, 2})
@@ -107,6 +109,8 @@ func FuzzInteractiveSelectionPaginationMatchesModel(fuzz *testing.F) {
 	)
 }
 
+// FuzzFormNavigationAndVisibilityMatchesModel checks bounded draft revision removes
+// downstream hidden answers.
 func FuzzFormNavigationAndVisibilityMatchesModel(fuzz *testing.F) {
 	fuzz.Add([]byte("Ada"), []byte("retained"), true)
 	fuzz.Add([]byte{0, 0xff}, []byte("hidden"), false)
@@ -217,6 +221,8 @@ func FuzzFormNavigationAndVisibilityMatchesModel(fuzz *testing.F) {
 	)
 }
 
+// FuzzDynamicOptionGenerationsMatchModel checks explicit virtual time and scheduled
+// generations admit only current due results.
 func FuzzDynamicOptionGenerationsMatchModel(fuzz *testing.F) {
 	fuzz.Add([]byte{0, 1, 2, 3, 4, 5})
 	fuzz.Add([]byte{9, 9, 1, 7, 2})
@@ -329,6 +335,8 @@ func FuzzDynamicOptionGenerationsMatchModel(fuzz *testing.F) {
 	)
 }
 
+// FuzzProgressLifecycleMatchesModel checks bounded updates/increments/finishes
+// against first-terminal-wins state.
 func FuzzProgressLifecycleMatchesModel(fuzz *testing.F) {
 	fuzz.Add([]byte{0, 4, 1, 3, 2, 7, 4})
 	fuzz.Add([]byte{1, 31, 0, 32, 3})

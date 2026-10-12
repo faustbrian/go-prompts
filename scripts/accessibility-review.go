@@ -1,5 +1,8 @@
 //go:build ignore
 
+// Command accessibility-review runs a caller-invoked keyboard/announcement script on
+// process streams; native docs builds/tests it but does not qualify physical
+// terminals or assistive technology.
 package main
 
 import (

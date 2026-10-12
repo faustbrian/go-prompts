@@ -73,6 +73,9 @@ func (interaction *formInteraction) captureSelection(value selectionReplay) {
 	interaction.replace(&formReplay{kind: formReplaySelection, selection: value})
 }
 
+// Each field transfers its captured draft to RunForm; downstream answers are
+// invalidated on back navigation and byte drafts are destroyed when the run ends.
+// String draft references cannot be reliably erased.
 func (interaction *formInteraction) replace(replay *formReplay) {
 	interaction.captured = replay
 }

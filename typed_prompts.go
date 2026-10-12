@@ -23,16 +23,32 @@ type stringDefinitionConfig struct {
 
 // MultilineConfig defines a multiline text prompt.
 type MultilineConfig struct {
+	// ID, Label, Description, Placeholder, Hint, Help identify and describe the prompt;
+	// ID/Label are required, other text is optional and sanitized at owned presentation
+	// boundaries.
 	ID, Label, Description, Placeholder, Hint, Help string
-	Default, Fallback                               Optional[string]
-	Headless                                        HeadlessBehavior
-	Accessibility                                   Accessibility
-	PreValidate, PostValidate                       []Validator[string]
-	Transform                                       []Transformer[string]
-	Retry                                           RetryPolicy
-	Cancel                                          CancelBehavior
-	EndOfInput                                      EOFBehavior
-	Secret                                          SecretClass
+	// Default, Fallback distinguish present typed values from omission; execution
+	// follows the selected behavior and caller authority.
+	Default, Fallback Optional[string]
+	// Headless selects the noninteractive path; zero forbids headless execution.
+	Headless HeadlessBehavior
+	// Accessibility overrides localized label/description and adds textual navigation
+	// guidance.
+	Accessibility Accessibility
+	// PreValidate, PostValidate are ordered callbacks before/after transformations;
+	// slices are copied, callback state and context cooperation are not owned.
+	PreValidate, PostValidate []Validator[string]
+	// Transform contains ordered synchronous transformations; context cooperation and
+	// retained values remain caller-owned.
+	Transform []Transformer[string]
+	// Retry bounds invalid interactive submissions; zero selects three attempts.
+	Retry RetryPolicy
+	// Cancel selects explicit cancel resolution; zero returns ErrCanceled.
+	Cancel CancelBehavior
+	// EndOfInput selects EOF/Ctrl-D resolution; zero returns ErrEndOfInput.
+	EndOfInput EOFBehavior
+	// Secret selects display/error redaction, not string-memory erasure.
+	Secret SecretClass
 }
 
 // NewMultiline creates a multiline text prompt.
@@ -145,15 +161,30 @@ func newStringPrompt(
 
 // IntegerConfig defines a signed 64-bit integer prompt.
 type IntegerConfig struct {
+	// ID, Label, Description, Placeholder, Hint, Help identify and describe the prompt;
+	// ID/Label are required, other text is optional and sanitized at owned presentation
+	// boundaries.
 	ID, Label, Description, Placeholder, Hint, Help string
-	Default, Fallback                               Optional[int64]
-	Headless                                        HeadlessBehavior
-	Accessibility                                   Accessibility
-	PreValidate, PostValidate                       []Validator[int64]
-	Transform                                       []Transformer[int64]
-	Retry                                           RetryPolicy
-	Cancel                                          CancelBehavior
-	EndOfInput                                      EOFBehavior
+	// Default, Fallback distinguish present typed values from omission; execution
+	// follows the selected behavior and caller authority.
+	Default, Fallback Optional[int64]
+	// Headless selects the noninteractive path; zero forbids headless execution.
+	Headless HeadlessBehavior
+	// Accessibility overrides localized label/description and adds textual navigation
+	// guidance.
+	Accessibility Accessibility
+	// PreValidate, PostValidate are ordered callbacks before/after transformations;
+	// slices are copied, callback state and context cooperation are not owned.
+	PreValidate, PostValidate []Validator[int64]
+	// Transform contains ordered synchronous transformations; context cooperation and
+	// retained values remain caller-owned.
+	Transform []Transformer[int64]
+	// Retry bounds invalid interactive submissions; zero selects three attempts.
+	Retry RetryPolicy
+	// Cancel selects explicit cancel resolution; zero returns ErrCanceled.
+	Cancel CancelBehavior
+	// EndOfInput selects EOF/Ctrl-D resolution; zero returns ErrEndOfInput.
+	EndOfInput EOFBehavior
 }
 
 // NewInteger creates a signed 64-bit integer prompt.
@@ -184,15 +215,30 @@ func NewInteger(config IntegerConfig) (Prompt[int64], error) {
 
 // DecimalConfig defines an exact base-10 prompt.
 type DecimalConfig struct {
+	// ID, Label, Description, Placeholder, Hint, Help identify and describe the prompt;
+	// ID/Label are required, other text is optional and sanitized at owned presentation
+	// boundaries.
 	ID, Label, Description, Placeholder, Hint, Help string
-	Default, Fallback                               Optional[Decimal]
-	Headless                                        HeadlessBehavior
-	Accessibility                                   Accessibility
-	PreValidate, PostValidate                       []Validator[Decimal]
-	Transform                                       []Transformer[Decimal]
-	Retry                                           RetryPolicy
-	Cancel                                          CancelBehavior
-	EndOfInput                                      EOFBehavior
+	// Default, Fallback distinguish present typed values from omission; execution
+	// follows the selected behavior and caller authority.
+	Default, Fallback Optional[Decimal]
+	// Headless selects the noninteractive path; zero forbids headless execution.
+	Headless HeadlessBehavior
+	// Accessibility overrides localized label/description and adds textual navigation
+	// guidance.
+	Accessibility Accessibility
+	// PreValidate, PostValidate are ordered callbacks before/after transformations;
+	// slices are copied, callback state and context cooperation are not owned.
+	PreValidate, PostValidate []Validator[Decimal]
+	// Transform contains ordered synchronous transformations; context cooperation and
+	// retained values remain caller-owned.
+	Transform []Transformer[Decimal]
+	// Retry bounds invalid interactive submissions; zero selects three attempts.
+	Retry RetryPolicy
+	// Cancel selects explicit cancel resolution; zero returns ErrCanceled.
+	Cancel CancelBehavior
+	// EndOfInput selects EOF/Ctrl-D resolution; zero returns ErrEndOfInput.
+	EndOfInput EOFBehavior
 }
 
 // NewDecimal creates an exact base-10 decimal prompt.
@@ -223,15 +269,30 @@ func NewDecimal(config DecimalConfig) (Prompt[Decimal], error) {
 
 // DurationConfig defines a Go duration prompt.
 type DurationConfig struct {
+	// ID, Label, Description, Placeholder, Hint, Help identify and describe the prompt;
+	// ID/Label are required, other text is optional and sanitized at owned presentation
+	// boundaries.
 	ID, Label, Description, Placeholder, Hint, Help string
-	Default, Fallback                               Optional[time.Duration]
-	Headless                                        HeadlessBehavior
-	Accessibility                                   Accessibility
-	PreValidate, PostValidate                       []Validator[time.Duration]
-	Transform                                       []Transformer[time.Duration]
-	Retry                                           RetryPolicy
-	Cancel                                          CancelBehavior
-	EndOfInput                                      EOFBehavior
+	// Default, Fallback distinguish present typed values from omission; execution
+	// follows the selected behavior and caller authority.
+	Default, Fallback Optional[time.Duration]
+	// Headless selects the noninteractive path; zero forbids headless execution.
+	Headless HeadlessBehavior
+	// Accessibility overrides localized label/description and adds textual navigation
+	// guidance.
+	Accessibility Accessibility
+	// PreValidate, PostValidate are ordered callbacks before/after transformations;
+	// slices are copied, callback state and context cooperation are not owned.
+	PreValidate, PostValidate []Validator[time.Duration]
+	// Transform contains ordered synchronous transformations; context cooperation and
+	// retained values remain caller-owned.
+	Transform []Transformer[time.Duration]
+	// Retry bounds invalid interactive submissions; zero selects three attempts.
+	Retry RetryPolicy
+	// Cancel selects explicit cancel resolution; zero returns ErrCanceled.
+	Cancel CancelBehavior
+	// EndOfInput selects EOF/Ctrl-D resolution; zero returns ErrEndOfInput.
+	EndOfInput EOFBehavior
 }
 
 // NewDuration creates a Go duration prompt.
@@ -271,15 +332,30 @@ func NewDuration(config DurationConfig) (Prompt[time.Duration], error) {
 
 // DateConfig defines an ISO calendar-date prompt.
 type DateConfig struct {
+	// ID, Label, Description, Placeholder, Hint, Help identify and describe the prompt;
+	// ID/Label are required, other text is optional and sanitized at owned presentation
+	// boundaries.
 	ID, Label, Description, Placeholder, Hint, Help string
-	Default, Fallback                               Optional[Date]
-	Headless                                        HeadlessBehavior
-	Accessibility                                   Accessibility
-	PreValidate, PostValidate                       []Validator[Date]
-	Transform                                       []Transformer[Date]
-	Retry                                           RetryPolicy
-	Cancel                                          CancelBehavior
-	EndOfInput                                      EOFBehavior
+	// Default, Fallback distinguish present typed values from omission; execution
+	// follows the selected behavior and caller authority.
+	Default, Fallback Optional[Date]
+	// Headless selects the noninteractive path; zero forbids headless execution.
+	Headless HeadlessBehavior
+	// Accessibility overrides localized label/description and adds textual navigation
+	// guidance.
+	Accessibility Accessibility
+	// PreValidate, PostValidate are ordered callbacks before/after transformations;
+	// slices are copied, callback state and context cooperation are not owned.
+	PreValidate, PostValidate []Validator[Date]
+	// Transform contains ordered synchronous transformations; context cooperation and
+	// retained values remain caller-owned.
+	Transform []Transformer[Date]
+	// Retry bounds invalid interactive submissions; zero selects three attempts.
+	Retry RetryPolicy
+	// Cancel selects explicit cancel resolution; zero returns ErrCanceled.
+	Cancel CancelBehavior
+	// EndOfInput selects EOF/Ctrl-D resolution; zero returns ErrEndOfInput.
+	EndOfInput EOFBehavior
 }
 
 // NewDate creates an ISO calendar-date prompt.
@@ -310,15 +386,30 @@ func NewDate(config DateConfig) (Prompt[Date], error) {
 
 // TimeConfig defines a wall-clock time prompt.
 type TimeConfig struct {
+	// ID, Label, Description, Placeholder, Hint, Help identify and describe the prompt;
+	// ID/Label are required, other text is optional and sanitized at owned presentation
+	// boundaries.
 	ID, Label, Description, Placeholder, Hint, Help string
-	Default, Fallback                               Optional[TimeOfDay]
-	Headless                                        HeadlessBehavior
-	Accessibility                                   Accessibility
-	PreValidate, PostValidate                       []Validator[TimeOfDay]
-	Transform                                       []Transformer[TimeOfDay]
-	Retry                                           RetryPolicy
-	Cancel                                          CancelBehavior
-	EndOfInput                                      EOFBehavior
+	// Default, Fallback distinguish present typed values from omission; execution
+	// follows the selected behavior and caller authority.
+	Default, Fallback Optional[TimeOfDay]
+	// Headless selects the noninteractive path; zero forbids headless execution.
+	Headless HeadlessBehavior
+	// Accessibility overrides localized label/description and adds textual navigation
+	// guidance.
+	Accessibility Accessibility
+	// PreValidate, PostValidate are ordered callbacks before/after transformations;
+	// slices are copied, callback state and context cooperation are not owned.
+	PreValidate, PostValidate []Validator[TimeOfDay]
+	// Transform contains ordered synchronous transformations; context cooperation and
+	// retained values remain caller-owned.
+	Transform []Transformer[TimeOfDay]
+	// Retry bounds invalid interactive submissions; zero selects three attempts.
+	Retry RetryPolicy
+	// Cancel selects explicit cancel resolution; zero returns ErrCanceled.
+	Cancel CancelBehavior
+	// EndOfInput selects EOF/Ctrl-D resolution; zero returns ErrEndOfInput.
+	EndOfInput EOFBehavior
 }
 
 // NewTime creates a wall-clock time prompt.
@@ -349,16 +440,32 @@ func NewTime(config TimeConfig) (Prompt[TimeOfDay], error) {
 
 // PathConfig defines a path prompt without filesystem access.
 type PathConfig struct {
+	// ID, Label, Description, Placeholder, Hint, Help identify and describe the prompt;
+	// ID/Label are required, other text is optional and sanitized at owned presentation
+	// boundaries.
 	ID, Label, Description, Placeholder, Hint, Help string
-	Default, Fallback                               Optional[Path]
-	Headless                                        HeadlessBehavior
-	Accessibility                                   Accessibility
-	PreValidate, PostValidate                       []Validator[Path]
-	Transform                                       []Transformer[Path]
-	Retry                                           RetryPolicy
-	Cancel                                          CancelBehavior
-	EndOfInput                                      EOFBehavior
-	Kind                                            PathKind
+	// Default, Fallback distinguish present typed values from omission; execution
+	// follows the selected behavior and caller authority.
+	Default, Fallback Optional[Path]
+	// Headless selects the noninteractive path; zero forbids headless execution.
+	Headless HeadlessBehavior
+	// Accessibility overrides localized label/description and adds textual navigation
+	// guidance.
+	Accessibility Accessibility
+	// PreValidate, PostValidate are ordered callbacks before/after transformations;
+	// slices are copied, callback state and context cooperation are not owned.
+	PreValidate, PostValidate []Validator[Path]
+	// Transform contains ordered synchronous transformations; context cooperation and
+	// retained values remain caller-owned.
+	Transform []Transformer[Path]
+	// Retry bounds invalid interactive submissions; zero selects three attempts.
+	Retry RetryPolicy
+	// Cancel selects explicit cancel resolution; zero returns ErrCanceled.
+	Cancel CancelBehavior
+	// EndOfInput selects EOF/Ctrl-D resolution; zero returns ErrEndOfInput.
+	EndOfInput EOFBehavior
+	// Kind is filesystem intent only; parsing does not access the filesystem.
+	Kind PathKind
 }
 
 // NewPath creates a path prompt that performs no filesystem access.
@@ -404,16 +511,33 @@ func NewPath(config PathConfig) (Prompt[Path], error) {
 
 // ConfirmConfig defines a localized yes/no prompt.
 type ConfirmConfig struct {
+	// ID, Label, Description, Placeholder, Hint, Help identify and describe the prompt;
+	// ID/Label are required, other text is optional and sanitized at owned presentation
+	// boundaries.
 	ID, Label, Description, Placeholder, Hint, Help string
-	Default, Fallback                               Optional[bool]
-	Headless                                        HeadlessBehavior
-	Accessibility                                   Accessibility
-	PreValidate, PostValidate                       []Validator[bool]
-	Transform                                       []Transformer[bool]
-	Retry                                           RetryPolicy
-	Cancel                                          CancelBehavior
-	EndOfInput                                      EOFBehavior
-	Accept, Reject                                  []string
+	// Default, Fallback distinguish present typed values from omission; execution
+	// follows the selected behavior and caller authority.
+	Default, Fallback Optional[bool]
+	// Headless selects the noninteractive path; zero forbids headless execution.
+	Headless HeadlessBehavior
+	// Accessibility overrides localized label/description and adds textual navigation
+	// guidance.
+	Accessibility Accessibility
+	// PreValidate, PostValidate are ordered callbacks before/after transformations;
+	// slices are copied, callback state and context cooperation are not owned.
+	PreValidate, PostValidate []Validator[bool]
+	// Transform contains ordered synchronous transformations; context cooperation and
+	// retained values remain caller-owned.
+	Transform []Transformer[bool]
+	// Retry bounds invalid interactive submissions; zero selects three attempts.
+	Retry RetryPolicy
+	// Cancel selects explicit cancel resolution; zero returns ErrCanceled.
+	Cancel CancelBehavior
+	// EndOfInput selects EOF/Ctrl-D resolution; zero returns ErrEndOfInput.
+	EndOfInput EOFBehavior
+	// Accept, Reject are copied true/false spellings; empty slices use defaults, values
+	// trim/lowercase and must not overlap.
+	Accept, Reject []string
 }
 
 // NewConfirm creates a localized yes/no prompt.

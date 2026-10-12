@@ -52,3 +52,9 @@ for compatibility but necessarily starts from an immutable Go string. Typed
 rune events are encoded directly into mutable editor bytes. Clipboard and
 terminal driver buffers remain outside package control, and best-effort byte
 cleanup is not a claim of complete process-memory erasure.
+
+Explicit Parse and ParseBytes do not apply interactive InputLimits. Bound that
+input before parsing. Callback code is trusted: transformations that retain or
+replace secret wrappers must clean their own copies, and callback blocking is
+not forcibly canceled. A copied SecretBytes value must not duplicate its mutex;
+share the pointer and manage Reveal copies separately.

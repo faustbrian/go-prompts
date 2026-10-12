@@ -14,6 +14,7 @@ type Decimal struct {
 	negative bool
 }
 
+// String returns normalized exact base-10 text; the zero value formats as zero.
 func (decimal Decimal) String() string {
 	digits := decimal.digits
 	if digits == "" {
@@ -46,6 +47,7 @@ type Date struct {
 	day   int
 }
 
+// String formats stored calendar fields; the zero value is not a validated date.
 func (date Date) String() string {
 	return fmt.Sprintf("%04d-%02d-%02d", date.year, date.month, date.day)
 }
@@ -73,6 +75,7 @@ type TimeOfDay struct {
 	nanosecond int
 }
 
+// String formats wall-clock fields with trailing fractional zeroes removed.
 func (value TimeOfDay) String() string {
 	base := fmt.Sprintf("%02d:%02d:%02d", value.hour, value.minute, value.second)
 	if value.nanosecond == 0 {
@@ -109,8 +112,11 @@ func (value TimeOfDay) Nanosecond() int {
 type PathKind uint8
 
 const (
+	// PathAny retains path intent without inspecting its filesystem kind.
 	PathAny PathKind = iota
+	// PathFile retains file intent without checking existence or permissions.
 	PathFile
+	// PathDirectory retains directory intent without checking existence or permissions.
 	PathDirectory
 )
 
@@ -120,6 +126,7 @@ type Path struct {
 	kind  PathKind
 }
 
+// String returns unverified path text without filesystem access.
 func (path Path) String() string {
 	return path.value
 }

@@ -5,6 +5,8 @@ import (
 	"testing"
 )
 
+// FuzzLineEditorMatchesReferenceModel checks bounded grapheme/cursor edits against an
+// independent cell and byte-count model.
 func FuzzLineEditorMatchesReferenceModel(fuzz *testing.F) {
 	fuzz.Add([]byte{0, 1, 2, 6, 4, 7, 3, 10, 11})
 	fuzz.Add([]byte{3, 3, 8, 5, 9, 2})
@@ -123,6 +125,8 @@ func FuzzLineEditorMatchesReferenceModel(fuzz *testing.F) {
 	)
 }
 
+// FuzzSelectionFilterAndStateMatchesReferenceModel checks bounded focus/filter/toggle
+// sequences preserve enabled identities and selected state.
 func FuzzSelectionFilterAndStateMatchesReferenceModel(fuzz *testing.F) {
 	fuzz.Add([]byte{0, 1, 2, 6, 4, 8, 3})
 	fuzz.Add([]byte{7, 5, 1, 9, 2})

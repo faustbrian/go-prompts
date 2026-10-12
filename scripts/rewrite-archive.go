@@ -1,5 +1,8 @@
 //go:build ignore
 
+// Command rewrite-archive rewrites a trusted producer tar archive root and emits
+// deterministic gzip metadata. Invoke through scripts/build-release.sh; it does
+// not extract files or validate arbitrary archive provenance/size.
 package main
 
 import (
@@ -19,6 +22,8 @@ func main() {
 	}
 }
 
+// Exclusive output creation and failed-output removal keep partial publication
+// from being mistaken for a completed archive; the input remains caller-owned.
 func run() error {
 	if len(os.Args) != 5 {
 		return fmt.Errorf(

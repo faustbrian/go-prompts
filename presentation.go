@@ -12,15 +12,24 @@ import (
 type MessageKind uint8
 
 const (
+	// MessageInfo selects informational presentation without changing operation
+	// execution.
 	MessageInfo MessageKind = iota
+	// MessageWarning selects warning presentation without changing operation execution.
 	MessageWarning
+	// MessageError selects error presentation without changing operation execution.
 	MessageError
+	// MessageSuccess selects successful presentation without changing operation
+	// execution.
 	MessageSuccess
 )
 
 // Message is a caller-localized note or status message.
 type Message struct {
-	Kind        MessageKind
+	// Kind selects a fixed role; values beyond MessageSuccess are rejected.
+	Kind MessageKind
+	// Title, Body are localized message text; Title is required and Body may contain
+	// line-separated text.
 	Title, Body string
 }
 
@@ -51,8 +60,13 @@ func WriteMessage(ctx context.Context, message Message, execution Execution) err
 
 // Table is a bounded rectangular display model.
 type Table struct {
-	Headers             []string
-	Rows                [][]string
+	// Headers are borrowed required table labels; callers must not mutate during
+	// rendering.
+	Headers []string
+	// Rows are borrowed rectangular cells; callers bound text bytes.
+	Rows [][]string
+	// MaxRows, MaxColumns bound table counts; zero selects 1000 rows and 50 columns, not
+	// per-cell bytes.
 	MaxRows, MaxColumns int
 }
 
@@ -117,6 +131,8 @@ func tableLine(values []string, widths []int, role Role, asciiOnly bool) Semanti
 
 // KeyValue is one declaration-ordered summary entry.
 type KeyValue struct {
+	// Key, Value are ordered summary label/value text; Key is required and owned
+	// rendering sanitizes both.
 	Key, Value string
 }
 

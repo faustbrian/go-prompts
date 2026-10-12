@@ -13,14 +13,20 @@ import (
 
 // SearchPolicy bounds deterministic static option search.
 type SearchPolicy struct {
-	MaxOptions    int
-	MaxResults    int
+	// MaxOptions caps admitted options; all-zero SearchPolicy selects 10000.
+	MaxOptions int
+	// MaxResults caps returned ranked matches; all-zero SearchPolicy selects 50.
+	MaxResults int
+	// MaxQueryRunes caps query runes before normalization; all-zero SearchPolicy selects
+	// 256.
 	MaxQueryRunes int
 }
 
 // SearchSelectConfig defines a searchable single selection prompt.
 type SearchSelectConfig[T any] struct {
+	// Select supplies copied static options and single-selection behavior.
 	Select SelectConfig[T]
+	// Search supplies ranking bounds; partially zero policies are rejected.
 	Search SearchPolicy
 }
 
@@ -45,7 +51,10 @@ func NewSearchSelect[T any](config SearchSelectConfig[T]) (Prompt[T], error) {
 	return prompt, nil
 }
 
-// Search returns ranked option copies with stable declaration-order ties.
+// Search returns shallow option copies using NFKC/case folding, with exact,
+// prefix, token-prefix and token-substring ranking and declaration-order ties.
+// Disabled options remain in results. Count/query bounds do not cap label bytes
+// or all intermediate matches; callers own referenced generic values.
 func Search[T any](options []Option[T], query string, policy SearchPolicy) ([]Option[T], error) {
 	normalizedPolicy, err := normalizeSearchPolicy(policy)
 	if err != nil {

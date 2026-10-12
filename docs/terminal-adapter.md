@@ -66,3 +66,9 @@ It preserves the released `Config` and `Adapter` type identities while
 delegating behavior to the successor, so existing v1 callers retain the same
 method set, defaults, errors, ownership, cancellation, and concurrency
 behavior. New code should import the target-oriented path.
+
+Release clears adapter ownership before attempting restoration. After a failed
+restore, another Release is a no-op; the application must recover the terminal
+explicitly. Queued events and retained EOF precede cancellation checks in Next.
+One adapter owns input exclusively: its mutex remains held during reads, and
+Release cannot interrupt another blocked Next.

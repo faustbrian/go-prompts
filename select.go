@@ -8,12 +8,19 @@ import (
 
 // OptionConfig defines one stable selection identity and display value.
 type OptionConfig[T any] struct {
-	ID          string
-	Label       string
+	// ID is the stable nonempty identity, independent of display text.
+	ID string
+	// Label is caller-localized raw display text, sanitized by owned rendering.
+	Label string
+	// Description is optional raw explanatory text with no universal byte ceiling.
 	Description string
-	Group       string
-	Value       T
-	Disabled    bool
+	// Group is raw display grouping, not a sorting or identity key.
+	Group string
+	// Value is stored by ordinary assignment; referenced maps/slices/pointers are not
+	// deeply copied.
+	Value T
+	// Disabled keeps an option visible but unavailable for selection/default/fallback.
+	Disabled bool
 }
 
 // Option keeps stable identity separate from its display label and value.
@@ -26,7 +33,7 @@ type Option[T any] struct {
 	disabled    bool
 }
 
-// NewOption creates an immutable option value.
+// NewOption validates identity/label and stores Value shallowly, not deep-copying T.
 func NewOption[T any](config OptionConfig[T]) (Option[T], error) {
 	if config.ID == "" || config.Label == "" {
 		return Option[T]{}, invalidBehaviorDefinition(
@@ -49,44 +56,69 @@ func NewOption[T any](config OptionConfig[T]) (Option[T], error) {
 	}, nil
 }
 
+// ID returns stable option identity without display normalization.
 func (option Option[T]) ID() string {
 	return option.id
 }
 
+// Label returns raw display text sanitized only by owned rendering.
 func (option Option[T]) Label() string {
 	return option.label
 }
 
+// Description returns raw optional display description.
 func (option Option[T]) Description() string {
 	return option.description
 }
 
+// Group returns display grouping, not a sorting key.
 func (option Option[T]) Group() string {
 	return option.group
 }
 
+// Value returns stored generic data by assignment, preserving reference aliases.
 func (option Option[T]) Value() T {
 	return option.value
 }
 
+// Disabled reports selection unavailability.
 func (option Option[T]) Disabled() bool {
 	return option.disabled
 }
 
 // SelectConfig defines a single selection prompt.
 type SelectConfig[T any] struct {
+	// ID, Label, Description, Placeholder, Hint, Help identify and describe the prompt;
+	// ID/Label are required, other text is optional and sanitized at owned presentation
+	// boundaries.
 	ID, Label, Description, Placeholder, Hint, Help string
-	DefaultID, FallbackID                           Optional[string]
-	Headless                                        HeadlessBehavior
-	Accessibility                                   Accessibility
-	PreValidate, PostValidate                       []Validator[T]
-	Transform                                       []Transformer[T]
-	Retry                                           RetryPolicy
-	Cancel                                          CancelBehavior
-	EndOfInput                                      EOFBehavior
-	Options                                         []Option[T]
-	InitialID                                       string
-	MaxOptions                                      int
+	// DefaultID, FallbackID select enabled option identities; omission does not
+	// implicitly choose an option.
+	DefaultID, FallbackID Optional[string]
+	// Headless selects the noninteractive path; zero forbids headless execution.
+	Headless HeadlessBehavior
+	// Accessibility overrides localized label/description and adds textual navigation
+	// guidance.
+	Accessibility Accessibility
+	// PreValidate, PostValidate are ordered callbacks before/after transformations;
+	// slices are copied, callback state and context cooperation are not owned.
+	PreValidate, PostValidate []Validator[T]
+	// Transform contains ordered synchronous transformations; context cooperation and
+	// retained values remain caller-owned.
+	Transform []Transformer[T]
+	// Retry bounds invalid interactive submissions; zero selects three attempts.
+	Retry RetryPolicy
+	// Cancel selects explicit cancel resolution; zero returns ErrCanceled.
+	Cancel CancelBehavior
+	// EndOfInput selects EOF/Ctrl-D resolution; zero returns ErrEndOfInput.
+	EndOfInput EOFBehavior
+	// Options is copied as a slice; unique nonempty identities are required, generic
+	// values stay shallow.
+	Options []Option[T]
+	// InitialID is optional enabled initial focus/selection, not headless fallback.
+	InitialID string
+	// MaxOptions caps static option count; zero selects 10000.
+	MaxOptions int
 }
 
 type selectionOption struct {
@@ -238,19 +270,41 @@ func resolveOption[T any](
 // MultiSelectConfig defines a bounded multiple-selection prompt. Results are
 // always returned in option declaration order.
 type MultiSelectConfig[T any] struct {
+	// ID, Label, Description, Placeholder, Hint, Help identify and describe the prompt;
+	// ID/Label are required, other text is optional and sanitized at owned presentation
+	// boundaries.
 	ID, Label, Description, Placeholder, Hint, Help string
-	DefaultIDs, FallbackIDs                         Optional[[]string]
-	Headless                                        HeadlessBehavior
-	Accessibility                                   Accessibility
-	PreValidate, PostValidate                       []Validator[[]T]
-	Transform                                       []Transformer[[]T]
-	Retry                                           RetryPolicy
-	Cancel                                          CancelBehavior
-	EndOfInput                                      EOFBehavior
-	Options                                         []Option[T]
-	InitialIDs                                      []string
-	Min, Max                                        int
-	MaxOptions                                      int
+	// DefaultIDs, FallbackIDs select unique enabled identities resolved in declaration
+	// order; generic option values remain shallow.
+	DefaultIDs, FallbackIDs Optional[[]string]
+	// Headless selects the noninteractive path; zero forbids headless execution.
+	Headless HeadlessBehavior
+	// Accessibility overrides localized label/description and adds textual navigation
+	// guidance.
+	Accessibility Accessibility
+	// PreValidate, PostValidate are ordered callbacks before/after transformations;
+	// slices are copied, callback state and context cooperation are not owned.
+	PreValidate, PostValidate []Validator[[]T]
+	// Transform contains ordered synchronous transformations; context cooperation and
+	// retained values remain caller-owned.
+	Transform []Transformer[[]T]
+	// Retry bounds invalid interactive submissions; zero selects three attempts.
+	Retry RetryPolicy
+	// Cancel selects explicit cancel resolution; zero returns ErrCanceled.
+	Cancel CancelBehavior
+	// EndOfInput selects EOF/Ctrl-D resolution; zero returns ErrEndOfInput.
+	EndOfInput EOFBehavior
+	// Options is copied as a slice; unique nonempty identities are required, generic
+	// values stay shallow.
+	Options []Option[T]
+	// InitialIDs are copied initial selections checked against enabled identities and
+	// bounds.
+	InitialIDs []string
+	// Min, Max bound selected cardinality; zero Max means all options and Min must be
+	// nonnegative.
+	Min, Max int
+	// MaxOptions caps static option count; zero selects 10000.
+	MaxOptions int
 }
 
 // NewMultiSelect creates a bounded multiple-selection prompt.

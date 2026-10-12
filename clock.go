@@ -6,7 +6,9 @@ import (
 )
 
 // VirtualClock is a deterministic parallel-safe clock with no goroutines or
-// real sleeps. Advance is the only way positive-duration events fire.
+// real sleeps. Advance is the only way positive-duration events fire. Use
+// NewVirtualClock; its zero value cannot register positive-duration events.
+// Do not copy its mutex. Stopping leaves buffered ticks and channels intact.
 type VirtualClock struct {
 	mu     sync.Mutex
 	now    time.Time

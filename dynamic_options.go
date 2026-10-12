@@ -21,15 +21,27 @@ type OptionProvider[T any] func(context.Context, string) ([]Option[T], error)
 // DynamicOptionsConfig defines a caller-driven, deterministic dynamic-option
 // session. Debouncing is checked against Clock without timers or goroutines.
 type DynamicOptionsConfig[T any] struct {
-	Clock         Clock
-	Provider      OptionProvider[T]
-	Debounce      time.Duration
-	MaxOptions    int
+	// Clock is borrowed; Now runs under session locks and must be prompt and
+	// non-reentrant.
+	Clock Clock
+	// Provider is called synchronously outside session locks; cancellation and shallow
+	// value ownership remain caller-owned.
+	Provider OptionProvider[T]
+	// Debounce is a nonnegative minimum delay checked against Clock; zero is immediate.
+	Debounce time.Duration
+	// MaxOptions caps admitted provider results after the call; zero selects 10000, not
+	// a provider allocation budget.
+	MaxOptions int
+	// MaxQueryRunes caps validated query rune count; zero selects 256.
 	MaxQueryRunes int
 }
 
 // DynamicOptions owns scheduling and generation-safe option replacement. The
 // caller schedules a query and calls Resolve after the debounce deadline.
+// Use NewDynamicOptions; the zero value is unusable. Scheduling does not cancel
+// previous caller contexts, nor coalesce concurrent same-generation Resolve
+// calls. Clock.Now runs under session locks; providers run outside them and
+// must cooperate with cancellation. Snapshots copy slices but not referenced T.
 type DynamicOptions[T any] struct {
 	mutex          sync.RWMutex
 	clock          Clock
@@ -137,6 +149,8 @@ func (dynamic *DynamicOptions[T]) Resolve(
 			Cause:     ErrAdapter,
 		}
 	}
+	// Admission occurs after caller-owned provider work; generation checking below
+	// discards stale results but does not bound provider allocations or cancel work.
 	owned := append([]Option[T](nil), options...)
 
 	dynamic.mutex.Lock()

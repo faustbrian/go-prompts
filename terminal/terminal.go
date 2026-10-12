@@ -17,8 +17,13 @@ import (
 //
 // Deprecated: use promptsterminal.Config.
 type Config struct {
-	Decoder      prompts.DecoderConfig
-	ReadBuffer   int
+	// Decoder configures the owned decoder; byte mode needs a dedicated secret-byte
+	// adapter.
+	Decoder prompts.DecoderConfig
+	// ReadBuffer caps each read allocation; zero selects 4096, maximum is 1 MiB.
+	ReadBuffer int
+	// PollInterval bounds polling/inter-byte flush; zero selects 50 ms, maximum is one
+	// second.
 	PollInterval time.Duration
 }
 
@@ -77,7 +82,8 @@ func (adapter *Adapter) SetEcho(enabled bool) error {
 	return adapter.target().SetEcho(enabled)
 }
 
-// Release restores the state captured by Acquire. It is idempotent.
+// Release delegates restoration; acquired state clears even when restore fails,
+// so another call is a no-op rather than a recovery retry.
 //
 // Deprecated: use promptsterminal.Adapter.Release.
 func (adapter *Adapter) Release() error {
@@ -85,7 +91,8 @@ func (adapter *Adapter) Release() error {
 }
 
 // Next reads and decodes one semantic event. Short file deadlines keep context
-// cancellation bounded without a hidden goroutine.
+// cancellation observable without a hidden goroutine. Queued events/retained
+// EOF precede cancellation checks, and release cannot interrupt another read.
 //
 // Deprecated: use promptsterminal.Adapter.Next.
 func (adapter *Adapter) Next(ctx context.Context) (prompts.InputEvent, error) {

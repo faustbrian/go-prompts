@@ -58,3 +58,8 @@ byte draft copies are destroyed when the form returns. Revising an earlier
 answer removes downstream results and reevaluates conditional fields, so hidden
 answers cannot survive a changed condition. Navigation state is never retained
 by the reusable `Form` or prompt definitions.
+
+Form-local Dependencies are used only by cross-field validators after the field
+loop. Individual prompt callbacks receive Execution.Dependencies, even when it
+is nil. Generic option values remain shallow unless the prompt defines a clone
+policy; conditions must not mutate referenced caller data.
