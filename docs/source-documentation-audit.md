@@ -1,5 +1,8 @@
 # Source documentation audit
 
+[Documentation map](index.md) · [Repository README](../README.md)
+[Next: API](api.md)
+
 ## Acceptance, ownership and named risks
 
 This Tier A pass owns truthful source comments and directly contradicted current

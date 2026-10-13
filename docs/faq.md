@@ -1,5 +1,8 @@
 # FAQ
 
+[Documentation map](index.md) · [Repository README](../README.md)
+[Next: API](api.md)
+
 ## Why is interactivity not automatic?
 
 A terminal detector cannot know whether a command, CI job, JSON mode, or

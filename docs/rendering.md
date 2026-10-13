@@ -1,5 +1,8 @@
 # Semantic rendering
 
+[Documentation map](index.md) · [Repository README](../README.md)
+[Next: API](api.md)
+
 `Frame`, `SemanticLine`, and `Segment` are the authoritative screen model.
 Tests should assert roles and content at this layer before optionally checking
 rendered terminal bytes. Constructors and accessors deeply copy their slices,

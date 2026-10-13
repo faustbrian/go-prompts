@@ -1,5 +1,8 @@
 # Compatibility
 
+[Documentation map](index.md) · [Repository README](../README.md)
+[Next: API](api.md)
+
 The initial minimum toolchain is Go 1.26.6. CI and local gates use Go 1.27.0;
 CI also runs the current stable Go
 toolchain. The supported operating systems are Linux and macOS. CI tests the

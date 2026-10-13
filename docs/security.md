@@ -1,5 +1,8 @@
 # Security model
 
+[Documentation map](index.md) · [Repository README](../README.md)
+[Next: Accessibility review evidence](accessibility-review.md)
+
 **Model version:** 1.1
 
 **Reviewed:** 2026-10-01

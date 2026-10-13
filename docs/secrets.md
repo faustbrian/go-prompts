@@ -1,5 +1,8 @@
 # Secret handling
 
+[Documentation map](index.md) · [Repository README](../README.md)
+[Next: API](api.md)
+
 Secret prompts require an explicit `SecretClass`. `NewSecret` returns a
 `SecretValue`; `NewSecretBytesPrompt` returns caller-owned `*SecretBytes`.
 Both redact `fmt` output, JSON, text marshaling, and `slog` values. Prompt

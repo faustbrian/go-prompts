@@ -1,5 +1,8 @@
 # Architecture
 
+[Documentation map](index.md) · [Repository README](../README.md)
+[Next: API](api.md)
+
 The core module owns prompt definitions, typed results, semantic rendering,
 interaction policy, errors, and deterministic execution. It accepts every
 ambient resource through `Execution`; it does not inspect the process

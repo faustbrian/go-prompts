@@ -1,5 +1,8 @@
 # Documentation
 
+[Documentation map](index.md) · [Repository README](../README.md)
+[Next: Documentation map](index.md)
+
 `prompts` provides typed, bounded terminal interaction and deterministic
 non-interactive parsing. It does not own command dispatch, configuration
 loading, application lifecycle, or ambient terminal access.

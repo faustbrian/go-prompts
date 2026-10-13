@@ -1,5 +1,8 @@
 # Terminal adapter
 
+[Documentation map](index.md) · [Repository README](../README.md)
+[Next: API](api.md)
+
 The `adapters/terminal` package is the optional application boundary for real
 terminal files. Its package identifier is `promptsterminal`. Constructing it
 requires explicit caller-owned `*os.File` values. Importing the package

@@ -1,5 +1,8 @@
 # Hardening evidence
 
+[Documentation map](index.md) · [Repository README](../README.md)
+[Next: API](api.md)
+
 This report maps the mandatory hardening evidence to reproducible source,
 test, and command evidence. It records automated guarantees separately from
 manual or remote release evidence. Unless stated otherwise, the automated

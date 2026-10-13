@@ -1,5 +1,8 @@
 # Interactive engine evaluation
 
+[Documentation map](index.md) · [Repository README](../README.md)
+[Next: API](api.md)
+
 This evaluation was captured on 2026-07-22 with Go 1.26.5. Version evidence
 came from `go list -m -versions`, module metadata, and the projects' GitHub API
 repository and release records. Reproducible comparative pseudo-terminal and

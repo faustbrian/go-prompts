@@ -1,5 +1,8 @@
 # Interactive input
 
+[Documentation map](index.md) · [Repository README](../README.md)
+[Next: API](api.md)
+
 Terminal detection does not authorize interaction. `Run` enters interactive
 mode only when `InteractionPolicy` permits it and the caller-supplied
 capabilities satisfy the selected mode. It then requires three explicit

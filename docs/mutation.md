@@ -1,5 +1,8 @@
 # Mutation testing
 
+[Documentation map](index.md) · [Repository README](../README.md)
+[Next: API](api.md)
+
 Run the canonical content-addressed campaign with:
 
 ```sh

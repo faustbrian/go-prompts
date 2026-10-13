@@ -1,5 +1,8 @@
 # Benchmarks
 
+[Documentation map](index.md) · [Repository README](../README.md)
+[Next: API](api.md)
+
 Core benchmarks use fixed semantic frames, event streams, terminal dimensions,
 capabilities, validation boundaries, and option counts. They report allocations
 and include setup consistently within or outside the timed loop as documented

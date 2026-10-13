@@ -1,5 +1,8 @@
 # API
 
+[Documentation map](index.md) · [Repository README](../README.md)
+[Next: Security model](security.md)
+
 Prompt constructors validate and defensively copy definitions. `Prompt[T]`
 retains the typed result and exposes only stable identity and descriptive
 metadata. `Parse` handles explicit non-interactive input. `Run` applies caller

@@ -1,5 +1,8 @@
 # Accessibility review evidence
 
+[Documentation map](index.md) · [Repository README](../README.md)
+[Next: API](api.md)
+
 ## Automated evidence
 
 The 2026-07-22 automated review ran on macOS 27.0 with iTerm2 3.6.11,

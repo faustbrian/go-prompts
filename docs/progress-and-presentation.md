@@ -1,5 +1,8 @@
 # Progress and presentation
 
+[Documentation map](index.md) · [Repository README](../README.md)
+[Next: API](api.md)
+
 `Progress` stores one latest snapshot. `Update` and `Increment` are concurrent,
 bounded state mutations that never write output, enqueue work, create a timer,
 or start a goroutine. The caller invokes `Render` at its chosen cadence. This

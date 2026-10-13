@@ -1,5 +1,8 @@
 # Prompt comparison benchmarks
 
+[Documentation map](../../docs/index.md) · [Repository README](../../README.md)
+[Next: Documentation map](../../docs/index.md)
+
 This module is an engineering-only benchmark harness. It is not a public
 package, supported application dependency, or independently releasable module.
 It compares equivalent single-line prompt flows across `prompts`, Huh, Survey,

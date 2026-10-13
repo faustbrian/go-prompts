@@ -1,5 +1,8 @@
 # Integrations
 
+[Documentation map](index.md) · [Repository README](../README.md)
+[Next: API](api.md)
+
 `cli` may construct `Execution` after command parsing explicitly permits
 interaction. It should pass already parsed flag or configuration values to
 `Parse` in non-interactive mode and must not make a prompt the only way to

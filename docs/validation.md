@@ -1,5 +1,8 @@
 # Validation and transformation
 
+[Documentation map](index.md) · [Repository README](../README.md)
+[Next: API](api.md)
+
 Every typed prompt has three ordered callback phases:
 
 1. pre-validation sees the parsed or explicitly supplied value;

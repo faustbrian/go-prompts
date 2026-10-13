@@ -1,5 +1,8 @@
 # Accessibility
 
+[Documentation map](index.md) · [Repository README](../README.md)
+[Next: API](api.md)
+
 Every essential role has a textual marker. Focus uses `>`, selection uses
 `[x]`, disabled options say `[disabled]`, and errors, warnings, successes,
 hints, and progress have words in plain output. Color and animation are never

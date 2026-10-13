@@ -1,5 +1,8 @@
 # Release process
 
+[Documentation map](index.md) · [Repository README](../README.md)
+[Next: API](api.md)
+
 The stable v1 line began with v1.0.0. A release candidate must start from a
 clean clone with `GOWORK=off`, pass `make check-full`, retained fuzz budgets,
 mutation review, benchmark budgets, documentation and example checks, platform

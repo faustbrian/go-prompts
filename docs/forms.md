@@ -1,5 +1,8 @@
 # Forms
 
+[Documentation map](index.md) · [Repository README](../README.md)
+[Next: API](api.md)
+
 `Form` groups heterogeneous typed prompts without erasing their execution or
 result contracts. `AsField` wraps a prompt, `When` adds a condition evaluated
 against prior answers, and `RunForm` executes enabled fields in declaration

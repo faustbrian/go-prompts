@@ -1,5 +1,8 @@
 # Troubleshooting
 
+[Documentation map](index.md) · [Repository README](../README.md)
+[Next: API](api.md)
+
 `interaction_not_permitted` means policy did not authorize interaction or the
 prompt had no permitted headless value. `terminal_unavailable` means required
 input or output terminal capability or explicit terminal resources were absent.

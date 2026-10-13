@@ -1,5 +1,8 @@
 # Typed prompt definitions
 
+[Documentation map](index.md) · [Repository README](../README.md)
+[Next: API](api.md)
+
 Every definition has a stable identity, localized display metadata,
 accessibility metadata, an explicit default and fallback, bounded or explicitly
 unlimited retry policy, cancellation behavior, EOF behavior, secret

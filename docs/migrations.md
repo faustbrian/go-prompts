@@ -1,5 +1,8 @@
 # Migrations
 
+[Documentation map](index.md) · [Repository README](../README.md)
+[Next: API](api.md)
+
 From Huh, keep Huh models out of application contracts. Define a `Prompt[T]`,
 construct explicit execution resources, and move non-interactive values to
 `Parse` or a declared fallback. Huh-specific translation belongs in an

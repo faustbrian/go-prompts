@@ -1,5 +1,8 @@
 # Selection and search
 
+[Documentation map](index.md) · [Repository README](../README.md)
+[Next: API](api.md)
+
 `Option` keeps its stable identity separate from label, description, group,
 value, and disabled state. Identities must be unique within a prompt. Duplicate
 labels and duplicate values are allowed because identity remains unambiguous.
