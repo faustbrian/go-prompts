@@ -354,3 +354,26 @@ reproducible; changelog and compatibility records are current; and no known
 global-state leak, terminal corruption, secret disclosure, unbounded work,
 concurrency defect, inaccessible essential state, or misleading benchmark
 claim remains.
+
+## Scope Disposition — 2026-10-14
+
+User-approved disposition: retain cooperative callbacks. The original
+Validation And Provider Audit wording, "slow or blocked validators/providers
+cannot prevent session cancellation," is preserved above as history. Its
+unconditional application to arbitrary caller-supplied code is unsupported,
+not a satisfied guarantee.
+
+[`Run` and its callback pipeline](../execution.go) invoke caller code
+synchronously; [`OptionProvider` and `DynamicOptions`](../dynamic_options.go)
+likewise require provider cooperation. Slow or blocked callbacks must honor
+their context and return. If they do not, cancellation and session cleanup
+cannot finish until that caller code returns. Maintainers own this documented
+limitation; integrators own callback responsiveness and retained resources.
+
+The [product goal](GOAL.md) forbids hidden goroutines and requires lifecycle
+cleanup. Returning on cancellation by abandoning a callback goroutine would
+leave its work, resources, or secrets without guaranteed cleanup. Arbitrary
+Go callback preemption is therefore outside the retained contract. Subprocess
+isolation would require a different lifecycle and API design and was not
+selected. This disposition changes no runtime behavior or public API; revisit
+the limitation only with a separately authorized cancellation design.
